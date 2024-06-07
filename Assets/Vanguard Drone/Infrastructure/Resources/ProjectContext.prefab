@@ -110,6 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerConfig: {fileID: 11400000, guid: 3467baef0c2da7447bed34617c2762fd, type: 2}
   EnemyConfig: {fileID: 11400000, guid: 928574d0e7607e34b922405bfed03866, type: 2}
+  RoundsConfig: {fileID: 11400000, guid: 08338847aa8ea5f4a9cb6fc7b868e01e, type: 2}
 --- !u!114 &-4416623294905022587
 MonoBehaviour:
   m_ObjectHideFlags: 0

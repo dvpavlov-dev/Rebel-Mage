@@ -1,6 +1,7 @@
 using PushItOut.UI.Gameplay;
 using PushItOut.UI.Spell_Window;
 using UnityEngine;
+using Vanguard_Drone.Enemy;
 using Zenject;
 
 namespace Vanguard_Drone.Infrastructure
@@ -11,6 +12,7 @@ namespace Vanguard_Drone.Infrastructure
         [SerializeField] private GameplayUI _gameplayUI;
         [SerializeField] private SpellWindowController _spellWindowController;
         [SerializeField] private CameraManager _cameraManager;
+        [SerializeField] private EnemySpawner _enemySpawner;
 
         public override void InstallBindings()
         {
@@ -18,7 +20,17 @@ namespace Vanguard_Drone.Infrastructure
             BindSpellWindow();
             BindGameplayUI();
             BindCameraManager();
+            BindEnemySpawner();
         }
+
+        private void BindEnemySpawner()
+        {
+            Container
+                .Bind<EnemySpawner>()
+                .FromInstance(_enemySpawner)
+                .AsSingle();
+        }
+        
         private void BindCameraManager()
         {
             Container

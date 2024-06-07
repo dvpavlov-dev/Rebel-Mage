@@ -1,13 +1,16 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Vanguard_Drone.Configs;
 using Vanguard_Drone.Infrastructure;
+using Random = UnityEngine.Random;
 
 namespace Vanguard_Drone.Enemy
 {
     public class EnemySpawner : MonoBehaviour
     {
-        private List<GameObject> _enemyOnScene = new();
+        private readonly List<GameObject> _enemyOnScene = new();
+        
         private Factory _factory;
         private GameObject _target;
 
@@ -23,8 +26,8 @@ namespace Vanguard_Drone.Enemy
             {
                 for (int i = 0; i < enemyParameters.EnemyCount; i++)
                 {
-                    Vector3 position = SetPositionEnemy(enemyParameters.SpawnType);
-                    _factory.CreateEnemy(enemyParameters.EnemyType, position, _target);
+                    Vector3 position = SetPositionEnemy(enemyParameters.SpawnType); 
+                    _enemyOnScene.Add(_factory.CreateEnemy(enemyParameters.EnemyType, position, _target));
                 }
             }
         }
@@ -34,15 +37,16 @@ namespace Vanguard_Drone.Enemy
             switch (spawnType)
             {
                 case SpawnType.CIRCLE:
-                    return new Vector3(0, 0, 0);
+                    transform.rotation = new Quaternion(0, Random.Range(0,360), 0, 1);
+                    return new Vector3(20, 1, 0);
                     break;
             
                 case SpawnType.ONE_SIDE:
-                    return new Vector3(0, 0, 0);
+                    return new Vector3(20, 1, 0);
                     break;
             
                 default:
-                    return new Vector3(0, 0, 0);
+                    return new Vector3(20, 1, 0);
             }
         }
     }

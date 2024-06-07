@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using PushItOut.UI.Gameplay;
 using PushItOut.UI.Spell_Window;
 using UnityEngine;
-using Vanguard_Drone.Configs;
+using Vanguard_Drone.Enemy;
 
 namespace Vanguard_Drone.Infrastructure 
 {
@@ -11,13 +11,13 @@ namespace Vanguard_Drone.Infrastructure
         private readonly Dictionary<TypeState, IState> States;
         private IState activeState;
 
-        public GameStateMachine(RoundProcess roundProcess, Factory factory, SpellWindowController spellWindowController, GameplayUI gameplayUI)
+        public GameStateMachine(RoundProcess roundProcess, Factory factory, SpellWindowController spellWindowController, GameplayUI gameplayUI, EnemySpawner enemySpawner)
         {
             States = new Dictionary<TypeState, IState>
             {
                 [TypeState.START_GAME] = new StartGame(this),
                 [TypeState.CHANGE_ABILITY] = new ChangeAbility(this, spellWindowController),
-                [TypeState.START_ROUND] = new StartRound(this, factory, roundProcess, gameplayUI),
+                [TypeState.START_ROUND] = new StartRound(this, factory, roundProcess, gameplayUI, enemySpawner),
                 [TypeState.END_ROUND] = new EndRound(this),
                 [TypeState.PLAYER_LOOSE] = new PlayerLoose(this),
             };
@@ -103,13 +103,15 @@ namespace Vanguard_Drone.Infrastructure
         private readonly Factory _factory;
         private readonly RoundProcess _roundProcess;
         private readonly GameplayUI _gameplayUI;
+        private readonly EnemySpawner _enemySpawner;
 
-        public StartRound(GameStateMachine gameStateMachine, Factory factory, RoundProcess roundProcess, GameplayUI gameplayUI)
+        public StartRound(GameStateMachine gameStateMachine, Factory factory, RoundProcess roundProcess, GameplayUI gameplayUI, EnemySpawner enemySpawner)
         {
             _gameStateMachine = gameStateMachine;
             _factory = factory;
             _roundProcess = roundProcess;
             _gameplayUI = gameplayUI;
+            _enemySpawner = enemySpawner;
         }
         
         public void Enter()
@@ -117,7 +119,8 @@ namespace Vanguard_Drone.Infrastructure
             _gameplayUI.SpellsPanel.SetActive(true);
 
             GameObject player = _factory.CreatePlayer(new Vector3(0, 1, 0));
-            _factory.CreateEnemy(EnemyType.BASE_ENEMY ,new Vector3(20, 1, 0), player);
+            _enemySpawner.InitEnemySpawner(_factory, player);
+            // _factory.CreateEnemy(EnemyType.BASE_ENEMY ,new Vector3(20, 1, 0), player);
             
             _roundProcess.StartRound();
         }
