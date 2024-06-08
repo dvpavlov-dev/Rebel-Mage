@@ -31,7 +31,7 @@ namespace Vanguard_Drone.Player
 
         private void Update()
         {
-            if (!_isPlayerSetup && !_roundProcess.IsRoundInProgress) return;
+            if (!_isPlayerSetup || !_roundProcess.IsRoundInProgress) return;
 
             RotatePlayer();
             CalcMove();

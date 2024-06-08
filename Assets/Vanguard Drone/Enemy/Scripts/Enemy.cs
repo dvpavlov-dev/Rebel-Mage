@@ -1,3 +1,4 @@
+using System;
 using PushItOut.Spell_system;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ namespace Vanguard_Drone.Enemy
     [RequireComponent(typeof(DamageController))]
     public class Enemy : MonoBehaviour
     {
+        public Action OnDead;
+        
         protected EnemyAI EnemyAI;
         protected EnemyAbilities EnemyAbilities;
         
@@ -16,6 +19,13 @@ namespace Vanguard_Drone.Enemy
             Target = target;
             
             GetComponent<DamageController>().InitHealthPoints(configs.EnemyConfig.BaseEnemy_Hp);
+        }
+
+        private void OnDisable()
+        {
+            if (!gameObject.scene.isLoaded) return;
+            
+            OnDead?.Invoke();
         }
     }
 }

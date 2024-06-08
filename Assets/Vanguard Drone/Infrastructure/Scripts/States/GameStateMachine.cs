@@ -11,15 +11,16 @@ namespace Vanguard_Drone.Infrastructure
         private readonly Dictionary<TypeState, IState> States;
         private IState activeState;
 
-        public GameStateMachine(RoundProcess roundProcess, Factory factory, SpellWindowController spellWindowController, GameplayUI gameplayUI, EnemySpawner enemySpawner)
+        public GameStateMachine(RoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI)
         {
             States = new Dictionary<TypeState, IState>
             {
                 [TypeState.START_GAME] = new StartGame(this),
                 [TypeState.CHANGE_ABILITY] = new ChangeAbility(this, spellWindowController),
-                [TypeState.START_ROUND] = new StartRound(this, factory, roundProcess, gameplayUI, enemySpawner),
+                [TypeState.START_ROUND] = new StartRound(this, roundProcess, gameplayUI),
                 [TypeState.END_ROUND] = new EndRound(this),
-                [TypeState.PLAYER_LOOSE] = new PlayerLoose(this),
+                [TypeState.END_GAME] = new EndGame(this),
+                [TypeState.PLAYER_LOST] = new PlayerLoose(this),
             };
             
             ChangeState(TypeState.START_GAME);
@@ -45,7 +46,8 @@ namespace Vanguard_Drone.Infrastructure
         CHANGE_ABILITY,
         START_ROUND,
         END_ROUND,
-        PLAYER_LOOSE,
+        END_GAME,
+        PLAYER_LOST,
     }
 
     public class StartGame : IState
@@ -100,66 +102,122 @@ namespace Vanguard_Drone.Infrastructure
     public class StartRound : IState
     {
         private readonly GameStateMachine _gameStateMachine;
-        private readonly Factory _factory;
         private readonly RoundProcess _roundProcess;
         private readonly GameplayUI _gameplayUI;
-        private readonly EnemySpawner _enemySpawner;
 
-        public StartRound(GameStateMachine gameStateMachine, Factory factory, RoundProcess roundProcess, GameplayUI gameplayUI, EnemySpawner enemySpawner)
+        public StartRound(GameStateMachine gameStateMachine, RoundProcess roundProcess, GameplayUI gameplayUI)
         {
             _gameStateMachine = gameStateMachine;
-            _factory = factory;
             _roundProcess = roundProcess;
             _gameplayUI = gameplayUI;
-            _enemySpawner = enemySpawner;
         }
         
         public void Enter()
         {
             _gameplayUI.SpellsPanel.SetActive(true);
-
-            GameObject player = _factory.CreatePlayer(new Vector3(0, 1, 0));
-            _enemySpawner.InitEnemySpawner(_factory, player);
-            // _factory.CreateEnemy(EnemyType.BASE_ENEMY ,new Vector3(20, 1, 0), player);
-            
             _roundProcess.StartRound();
+            SubscribeToEvents();
         }
         
         public void Exit()
         {
             _gameplayUI.SpellsPanel.SetActive(false);
         }
+        
+        private void SubscribeToEvents()
+        {
+            _roundProcess.OnEndRound += FinishTheRound;
+            _roundProcess.OnEndGame += EndingGame;
+            _roundProcess.OnPlayerLost += PlayerLost;
+        }
+        
+        private void UnsubscribeFromEvents()
+        {
+            _roundProcess.OnEndRound -= FinishTheRound;
+            _roundProcess.OnEndGame -= EndingGame;
+            _roundProcess.OnPlayerLost -= PlayerLost;
+        }
+
+        private void PlayerLost()
+        {
+            UnsubscribeFromEvents();
+            
+            _gameStateMachine.ChangeState(TypeState.PLAYER_LOST);
+        }
+
+        private void EndingGame()
+        {
+            UnsubscribeFromEvents();
+
+            _gameStateMachine.ChangeState(TypeState.END_GAME);
+        }
+
+        private void FinishTheRound()
+        {
+            UnsubscribeFromEvents();
+            
+            _gameStateMachine.ChangeState(TypeState.END_ROUND);
+        }
     }
 
     public class EndRound : IState
     {
+        private readonly GameStateMachine _gameStateMachine;
+        
         public EndRound(GameStateMachine gameStateMachine)
         {
+            _gameStateMachine = gameStateMachine;
         }
         
         public void Enter()
         {
-            throw new System.NotImplementedException();
+            Debug.Log("End Round");
+            _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
         }
+        
         public void Exit()
         {
-            throw new System.NotImplementedException();
         }
     }
     
-    public class PlayerLoose : IState
+    public class EndGame : IState
     {
-        public PlayerLoose(GameStateMachine gameStateMachine)
+        private readonly GameStateMachine _gameStateMachine;
+        
+        public EndGame(GameStateMachine gameStateMachine)
         {
+            _gameStateMachine = gameStateMachine;
+
         }
         
         public void Enter()
         {
-            throw new System.NotImplementedException();
+            Debug.Log("End Game");
+            _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
         }
+        
         public void Exit()
         {
-            throw new System.NotImplementedException();
+        }
+    }
+
+    public class PlayerLoose : IState
+    {
+        private readonly GameStateMachine _gameStateMachine;
+        
+        public PlayerLoose(GameStateMachine gameStateMachine)
+        {
+            _gameStateMachine = gameStateMachine;
+        }
+        
+        public void Enter()
+        {
+            Debug.Log("Player Lost");
+            _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
+        }
+        
+        public void Exit()
+        {
         }
     }
 }
