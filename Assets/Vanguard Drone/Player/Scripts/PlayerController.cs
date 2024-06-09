@@ -31,7 +31,16 @@ namespace Vanguard_Drone.Player
 
         private void Update()
         {
-            if (!_isPlayerSetup || !_roundProcess.IsRoundInProgress) return;
+            if (!_isPlayerSetup || !_roundProcess.IsRoundInProgress || _isBlockedControl)
+            {
+                if (!_isPlayerSetup || !_roundProcess.IsRoundInProgress)
+                {
+                    _movement.Set(0, 0, 0);
+                    _rb.velocity = _movement;
+                }
+                
+                return;
+            }
 
             RotatePlayer();
             CalcMove();
@@ -105,8 +114,6 @@ namespace Vanguard_Drone.Player
 
         private void CalcMove()
         {
-            if (_isBlockedControl) return;
-
             float deltaX = Input.GetAxis("Horizontal");
             float deltaZ = Input.GetAxis("Vertical");
             Vector3 move = new Vector3(deltaX, 0, deltaZ);

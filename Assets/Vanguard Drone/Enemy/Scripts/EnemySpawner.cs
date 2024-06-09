@@ -35,19 +35,41 @@ namespace Vanguard_Drone.Enemy
         {
             foreach (RoundsConfigSource.EnemyParameters enemyParameters in roundParameters.EnemyParameters)
             {
-                StartCoroutine(SpawnWave(enemyParameters.EnemyCount, enemyParameters.EnemyType, enemyParameters.SpawnType));
+                CreateEnemy(enemyParameters.EnemyCount, enemyParameters.EnemyType, enemyParameters.SpawnType);
+            }
+            
+            foreach (RoundsConfigSource.EnemyParameters _ in roundParameters.EnemyParameters)
+            {
+                StartCoroutine(SpawnWave());
+            }
+        }
+
+        private void CreateEnemy(int enemyCount, EnemyType enemyType, SpawnType spawnType)
+        {
+            for (int i = 0; i < enemyCount; i++)
+            {
+                Vector3 position = SetPositionEnemy(spawnType);
+
+                GameObject enemy = _factory.CreateEnemy(enemyType, position, _target);
+                _enemyOnScene.Add(enemy);
+                
+                enemy.SetActive(false);
+                enemy.GetComponent<Enemy>().OnDead += SyncEnemyCount;
             }
         }
 
         public void ClearEnemyList()
         {
-            foreach (GameObject enemy in _enemyOnScene)
+            Debug.Log($"_enemyOnScene.Count: {_enemyOnScene.Count}");
+            for (int i = _enemyOnScene.Count - 1; i >= 0; i--)
             {
-                Destroy(enemy);
+                Destroy(_enemyOnScene[i]);
             }
             
             _enemyOnScene.Clear();
             _enemyDestroyed = 0;
+            
+            StopAllCoroutines();
         }
 
         private void SyncEnemyCount()
@@ -57,7 +79,6 @@ namespace Vanguard_Drone.Enemy
             if (_enemyDestroyed > _enemyOnScene.Count - 1)
             {
                 OnAllEnemyDestroyed?.Invoke();
-                ClearEnemyList();
             }
         }
 
@@ -79,16 +100,12 @@ namespace Vanguard_Drone.Enemy
             }
         }
         
-        private IEnumerator SpawnWave(int enemyCount, EnemyType enemyType, SpawnType spawnType)
+        private IEnumerator SpawnWave()
         {
-            for (int i = 0; i < enemyCount; i++)
+            foreach (GameObject enemy in _enemyOnScene)
             {
-                Vector3 position = SetPositionEnemy(spawnType);
+                enemy.SetActive(true);
 
-                GameObject enemy = _factory.CreateEnemy(enemyType, position, _target);
-                enemy.GetComponent<Enemy>().OnDead += SyncEnemyCount;
-                _enemyOnScene.Add(enemy);
-                
                 yield return new WaitForSeconds(0.2f);
             }
 
