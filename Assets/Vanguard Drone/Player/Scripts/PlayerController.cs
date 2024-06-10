@@ -1,3 +1,4 @@
+using System.Collections;
 using Bizniz;
 using PushItOut.Configs;
 using PushItOut.Spell_system;
@@ -12,7 +13,6 @@ namespace Vanguard_Drone.Player
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour, IImpact
     {
-        [Space]
         public GameObject MousePoint;
         public SpellsAction SpellsAction;
 
@@ -20,6 +20,8 @@ namespace Vanguard_Drone.Player
         private CameraManager _cameraManager;
         private float _currentSpeed;
         private GameplayUI _gameplayUI;
+
+        private Coroutine _timerForSpeedEffects;
 
         private bool _isBlockedControl;
         private bool _isPlayerSetup;
@@ -65,6 +67,7 @@ namespace Vanguard_Drone.Player
         {
             if(!gameObject.scene.isLoaded) return;
             
+            StopAllCoroutines();
             _cameraManager.SwitchCamera(TypeCamera.ENVIRONMENT_CAMERA);
         }
 
@@ -77,8 +80,16 @@ namespace Vanguard_Drone.Player
 
         public void ChangeSpeedImpact(float slowdown, float timeSlowdown)
         {
+            if (!gameObject.activeSelf) return;
+            
             _currentSpeed = _moveSpeed - _moveSpeed * slowdown;
-            Invoke(nameof(ReturnSpeed), timeSlowdown);
+            
+            if (_timerForSpeedEffects != null)
+            {
+                StopCoroutine(_timerForSpeedEffects);
+            }
+            
+            _timerForSpeedEffects = StartCoroutine(ReturnSpeed(timeSlowdown));
         }
 
         [Inject]
@@ -204,8 +215,9 @@ namespace Vanguard_Drone.Player
             _isBlockedControl = false;
         }
 
-        private void ReturnSpeed()
+        private IEnumerator ReturnSpeed(float timeWhenReturn)
         {
+            yield return new WaitForSeconds(timeWhenReturn);
             _currentSpeed = _moveSpeed;
         }
     }

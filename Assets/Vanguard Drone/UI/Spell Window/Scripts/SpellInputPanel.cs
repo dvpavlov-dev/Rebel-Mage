@@ -86,6 +86,8 @@ namespace PushItOut.UI.Spell_Window
                             
                             _currentSelectedSlot.SetSlot(_spellWindowController.ChoosingSpell);
                         }
+                        
+                        _currentSelectedSlot = null;
                     }
                     
                     break;
@@ -170,7 +172,6 @@ namespace PushItOut.UI.Spell_Window
                     else
                     {
                         slot.UnselectedSlot();
-                        // _currentSelectedSlot = null;
                     }
                     
                     _currentSelectedSlot = null;

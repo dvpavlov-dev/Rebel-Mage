@@ -17,9 +17,14 @@ MonoBehaviour:
     EnemyParameters:
     - SpawnType: 1
       EnemyType: 0
-      EnemyCount: 9
+      EnemyCount: 10
   - RoundName: Round 2
     EnemyParameters:
     - SpawnType: 0
       EnemyType: 0
       EnemyCount: 20
+  - RoundName: Round 3
+    EnemyParameters:
+    - SpawnType: 0
+      EnemyType: 0
+      EnemyCount: 100

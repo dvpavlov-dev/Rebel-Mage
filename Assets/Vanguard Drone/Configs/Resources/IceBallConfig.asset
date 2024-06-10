@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fed1da3dace41ffa2e58397855ac56d, type: 3}
   m_Name: IceBallConfig
   m_EditorClassIdentifier: 
+  Path: 
   SpellName: Iceball
   SpellPrefab: {fileID: 7848233865219699297, guid: 9adccd2036e19e0488a4694d8c2592f8, type: 3}
   Cooldown: 2
   SpellImage: {fileID: 21300000, guid: 4184495d79c523148bd19006e6e88b2d, type: 3}
-  Damage: 0.5
+  Damage: 5
   Speed: 25
   ExplosionRadius: 10
   SlowdownPercentage: 50

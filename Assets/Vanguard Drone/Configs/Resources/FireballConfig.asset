@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aa2aa83450c461abbb5a3d9b776a17f, type: 3}
   m_Name: FireballConfig
   m_EditorClassIdentifier: 
+  Path: 
   SpellName: Fireball
   SpellPrefab: {fileID: 7848233865219699297, guid: 873b4fa9d769e44429e88a776a626730, type: 3}
   Cooldown: 1
   SpellImage: {fileID: 21300000, guid: 9f69b220176e6964fbd87f5f158d45e3, type: 3}
-  Damage: 1
+  Damage: 5
   Speed: 50
   ExplosionRadius: 7
   ExplosionForce: 1000

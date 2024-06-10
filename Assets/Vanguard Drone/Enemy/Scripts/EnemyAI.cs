@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using PushItOut.Spell_system;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,7 +16,7 @@ namespace Vanguard_Drone.Enemy
         private bool _isBlockedControl;
         private Rigidbody _rb;
         private float _moveSpeed;
-        private float _currentSpeed;
+        private Coroutine _timerForSpeedEffects;
 
         public virtual void SetupEnemyAI(float moveSpeed, GameObject target)
         {
@@ -36,13 +38,29 @@ namespace Vanguard_Drone.Enemy
     
         public void ChangeSpeedImpact(float slowdownPercentage, float timeSlowdown)
         {
+            if (!gameObject.activeSelf) return;
+            
             Agent.speed = _moveSpeed - _moveSpeed * slowdownPercentage;
-            Invoke(nameof(ReturnSpeed), timeSlowdown);
+            
+            if (_timerForSpeedEffects != null)
+            {
+                StopCoroutine(_timerForSpeedEffects);
+            }
+            
+            _timerForSpeedEffects = StartCoroutine(ReturnSpeed(timeSlowdown));
         }
     
-        private void ReturnSpeed()
+        private IEnumerator ReturnSpeed(float timeWhenReturn)
         {
+            yield return new WaitForSeconds(timeWhenReturn);
             Agent.speed = _moveSpeed;
+        }
+
+        private void OnDisable()
+        {
+            if (!gameObject.scene.isLoaded) return;
+            
+            StopAllCoroutines();
         }
     }
 }

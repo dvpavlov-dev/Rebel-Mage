@@ -84,6 +84,7 @@ namespace PushItOut.UI.Spell_Window
                         _currentSelectedSpellCell.UnselectedCell();
                         cell.SelectedCell();
                         _currentSelectedSpellCell = cell;
+                        _spellWindowController.ChoosingSpell = cell.GetSpell();
                     }
                     else
                     {

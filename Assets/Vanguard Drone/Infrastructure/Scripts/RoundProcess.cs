@@ -35,8 +35,7 @@ namespace Vanguard_Drone.Infrastructure
             if (_player == null)
             {
                 _player = _factory.CreatePlayer(new Vector3(0, 1, 0));
-                _player.GetComponent<Player.Player>().OnDead = () => 
-                {
+                _player.GetComponent<Player.Player>().OnDead = () => {
                     EndRound(TypeEndRound.PLAYER_LOST);
                 };
             }
@@ -46,7 +45,7 @@ namespace Vanguard_Drone.Infrastructure
                 _player.SetActive(true);
                 _player.GetComponent<Player.Player>().InitPlayer();
             }
-            
+
             Debug.Log($"_roundCount: {_roundCount}");
             _enemySpawner.InitEnemySpawner(_factory, _player);
             _enemySpawner.SpawnEnemy(_configs.RoundsConfig.RoundParametersList[_roundCount]);
@@ -58,31 +57,34 @@ namespace Vanguard_Drone.Infrastructure
         {
             EndRound(TypeEndRound.END_ROUND);
         }
-        
+
         private void EndRound(TypeEndRound typeEndRound)
         {
-            IsRoundInProgress = false;
-            
-            _enemySpawner.ClearEnemyList();
-            _player.transform.position = new Vector3(0, 1, 0);
-
-            switch (typeEndRound)
+            if (IsRoundInProgress)
             {
-                case TypeEndRound.END_ROUND:
-                    if (_roundCount >= _configs.RoundsConfig.RoundParametersList.Count)
-                    {
-                        OnEndGame?.Invoke();
-                    }
-                    else
-                    {
-                        _roundCount++;
-                        OnEndRound?.Invoke();
-                    }
-                    break;
-                
-                case TypeEndRound.PLAYER_LOST:
-                    OnPlayerLost?.Invoke();
-                    break;
+                IsRoundInProgress = false;
+
+                _enemySpawner.ClearEnemyList();
+                _player.transform.position = new Vector3(0, 1, 0);
+
+                switch (typeEndRound)
+                {
+                    case TypeEndRound.END_ROUND:
+                        if (_roundCount >= _configs.RoundsConfig.RoundParametersList.Count)
+                        {
+                            OnEndGame?.Invoke();
+                        }
+                        else
+                        {
+                            _roundCount++;
+                            OnEndRound?.Invoke();
+                        }
+                        break;
+
+                    case TypeEndRound.PLAYER_LOST:
+                        OnPlayerLost?.Invoke();
+                        break;
+                }
             }
         }
     }
