@@ -25,6 +25,6 @@ MonoBehaviour:
       EnemyCount: 20
   - RoundName: Round 3
     EnemyParameters:
-    - SpawnType: 0
+    - SpawnType: 1
       EnemyType: 0
       EnemyCount: 100

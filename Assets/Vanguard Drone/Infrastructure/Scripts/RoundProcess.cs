@@ -17,6 +17,7 @@ namespace Vanguard_Drone.Infrastructure
 
         private GameObject _player;
         private int _roundCount;
+        private int _difficultyModifier;
 
         public bool IsRoundInProgress { get; private set; }
 
@@ -70,8 +71,10 @@ namespace Vanguard_Drone.Infrastructure
                 switch (typeEndRound)
                 {
                     case TypeEndRound.END_ROUND:
-                        if (_roundCount >= _configs.RoundsConfig.RoundParametersList.Count)
+                        if (_roundCount >= _configs.RoundsConfig.RoundParametersList.Count - 1)
                         {
+                            _roundCount = 0;
+                            _difficultyModifier++;
                             OnEndGame?.Invoke();
                         }
                         else
