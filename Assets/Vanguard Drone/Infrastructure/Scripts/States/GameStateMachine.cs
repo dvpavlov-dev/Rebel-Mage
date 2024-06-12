@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using PushItOut.UI.Gameplay;
 using PushItOut.UI.Spell_Window;
 using UnityEngine;
-using Vanguard_Drone.Enemy;
 
 namespace Vanguard_Drone.Infrastructure 
 {
@@ -18,9 +17,9 @@ namespace Vanguard_Drone.Infrastructure
                 [TypeState.START_GAME] = new StartGame(this),
                 [TypeState.CHANGE_ABILITY] = new ChangeAbility(this, spellWindowController),
                 [TypeState.START_ROUND] = new StartRound(this, roundProcess, gameplayUI),
-                [TypeState.END_ROUND] = new EndRound(this),
-                [TypeState.END_GAME] = new EndGame(this),
-                [TypeState.PLAYER_LOST] = new PlayerLoose(this),
+                [TypeState.END_ROUND] = new EndRound(this, gameplayUI),
+                [TypeState.END_GAME] = new EndGame(this, gameplayUI),
+                [TypeState.PLAYER_LOST] = new PlayerLoose(this, gameplayUI),
             };
             
             ChangeState(TypeState.START_GAME);
@@ -163,16 +162,19 @@ namespace Vanguard_Drone.Infrastructure
     public class EndRound : IState
     {
         private readonly GameStateMachine _gameStateMachine;
-        
-        public EndRound(GameStateMachine gameStateMachine)
+        private readonly GameplayUI _gameplayUI;
+
+        public EndRound(GameStateMachine gameStateMachine, GameplayUI gameplayUI)
         {
             _gameStateMachine = gameStateMachine;
+            _gameplayUI = gameplayUI;
         }
         
         public void Enter()
         {
             Debug.Log("End Round");
-            _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
+            _gameplayUI.RoundOver();
+            _gameplayUI.OnContinuePlay = () => _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
         }
         
         public void Exit()
@@ -183,17 +185,20 @@ namespace Vanguard_Drone.Infrastructure
     public class EndGame : IState
     {
         private readonly GameStateMachine _gameStateMachine;
-        
-        public EndGame(GameStateMachine gameStateMachine)
+        private readonly GameplayUI _gameplayUI;
+
+        public EndGame(GameStateMachine gameStateMachine, GameplayUI gameplayUI)
         {
             _gameStateMachine = gameStateMachine;
+            _gameplayUI = gameplayUI;
 
         }
         
         public void Enter()
         {
             Debug.Log("End Game");
-            _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
+            _gameplayUI.RoundOver();
+            _gameplayUI.OnContinuePlay = () => _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
         }
         
         public void Exit()
@@ -204,16 +209,19 @@ namespace Vanguard_Drone.Infrastructure
     public class PlayerLoose : IState
     {
         private readonly GameStateMachine _gameStateMachine;
-        
-        public PlayerLoose(GameStateMachine gameStateMachine)
+        private readonly GameplayUI _gameplayUI;
+
+        public PlayerLoose(GameStateMachine gameStateMachine, GameplayUI gameplayUI)
         {
             _gameStateMachine = gameStateMachine;
+            _gameplayUI = gameplayUI;
         }
         
         public void Enter()
         {
             Debug.Log("Player Lost");
-            _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
+            _gameplayUI.RoundOver();
+            _gameplayUI.OnContinuePlay = () => _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
         }
         
         public void Exit()

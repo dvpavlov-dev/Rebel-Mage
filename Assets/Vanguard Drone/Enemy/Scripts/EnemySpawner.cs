@@ -21,21 +21,24 @@ namespace Vanguard_Drone.Enemy
         private SpawnOneSide _spawnOneSide;
         private GameObject _target;
         private int _enemyDestroyed;
+        private int _difficultyModifier;
         
-        public void InitEnemySpawner(Factory factory, GameObject target)
+        public void InitEnemySpawner(Factory factory, GameObject target, int difficultyModifier)
         {
             _factory = factory;
             _target = target;
 
             _rnd = new Random();
             _spawnOneSide = new SpawnOneSide();
+
+            _difficultyModifier = difficultyModifier;
         }
 
         public void SpawnEnemy(RoundsConfigSource.RoundParameters roundParameters)
         {
             foreach (RoundsConfigSource.EnemyParameters enemyParameters in roundParameters.EnemyParameters)
             {
-                CreateEnemy(enemyParameters.EnemyCount, enemyParameters.EnemyType, enemyParameters.SpawnType);
+                CreateEnemy(enemyParameters.EnemyCount * _difficultyModifier, enemyParameters.EnemyType, enemyParameters.SpawnType);
             }
             
             foreach (RoundsConfigSource.EnemyParameters _ in roundParameters.EnemyParameters)

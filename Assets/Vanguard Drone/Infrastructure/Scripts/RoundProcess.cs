@@ -17,7 +17,7 @@ namespace Vanguard_Drone.Infrastructure
 
         private GameObject _player;
         private int _roundCount;
-        private int _difficultyModifier;
+        private int _difficultyModifier = 1;
 
         public bool IsRoundInProgress { get; private set; }
 
@@ -48,7 +48,7 @@ namespace Vanguard_Drone.Infrastructure
             }
 
             Debug.Log($"_roundCount: {_roundCount}");
-            _enemySpawner.InitEnemySpawner(_factory, _player);
+            _enemySpawner.InitEnemySpawner(_factory, _player, _difficultyModifier);
             _enemySpawner.SpawnEnemy(_configs.RoundsConfig.RoundParametersList[_roundCount]);
 
             IsRoundInProgress = true;

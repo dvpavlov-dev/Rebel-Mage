@@ -9,5 +9,6 @@ namespace PushItOut.Configs
         public float BaseEnemy_Hp;
         public float BaseEnemy_MoveSpeed;
         public float BaseEnemy_Damage;
+        public int BaseEnemy_Points;
     }
 }

@@ -14,11 +14,14 @@ namespace Vanguard_Drone.Enemy
         
         protected GameObject Target;
 
+        private int _pointsForEnemy;
+
         public virtual void InitEnemy(Infrastructure.Configs configs, GameObject target)
         {
             Target = target;
             
             GetComponent<DamageController>().InitHealthPoints(configs.EnemyConfig.BaseEnemy_Hp);
+            _pointsForEnemy = configs.EnemyConfig.BaseEnemy_Points;
         }
 
         private void OnDisable()
