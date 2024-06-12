@@ -8,6 +8,8 @@ namespace Vanguard_Drone.Enemy.Scripts
         {
             base.InitEnemy(configs, target);
 
+            _pointsForEnemy = configs.EnemyConfig.BaseEnemy_Points;
+
             EnemyAI = gameObject.AddComponent<BaseEnemyAI>();
             EnemyAbilities = gameObject.AddComponent<BaseEnemyAbilities>();
             

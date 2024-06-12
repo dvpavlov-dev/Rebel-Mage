@@ -10,7 +10,7 @@ namespace Vanguard_Drone.Enemy
 {
     public class EnemySpawner : MonoBehaviour
     {
-        public Action OnAllEnemyDestroyed;
+        public Action<int> OnAllEnemyDestroyed;
         
         private const float DISTANCE_SPAWN = 30;
 
@@ -21,6 +21,7 @@ namespace Vanguard_Drone.Enemy
         private SpawnOneSide _spawnOneSide;
         private GameObject _target;
         private int _enemyDestroyed;
+        private int _pointsForRound;
         private int _difficultyModifier;
         
         public void InitEnemySpawner(Factory factory, GameObject target, int difficultyModifier)
@@ -49,6 +50,8 @@ namespace Vanguard_Drone.Enemy
 
         private void CreateEnemy(int enemyCount, EnemyType enemyType, SpawnType spawnType)
         {
+            _pointsForRound = 0;
+            
             for (int i = 0; i < enemyCount; i++)
             {
                 Vector3 position = SetPositionEnemy(spawnType);
@@ -57,13 +60,14 @@ namespace Vanguard_Drone.Enemy
                 _enemyOnScene.Add(enemy);
                 
                 enemy.SetActive(false);
-                enemy.GetComponent<Enemy>().OnDead += SyncEnemyCount;
+                Enemy enemyController = enemy.GetComponent<Enemy>();
+                enemyController.OnDead += SyncEnemyCount;
+                _pointsForRound += enemyController._pointsForEnemy;
             }
         }
 
         public void ClearEnemyList()
         {
-            Debug.Log($"_enemyOnScene.Count: {_enemyOnScene.Count}");
             for (int i = _enemyOnScene.Count - 1; i >= 0; i--)
             {
                 Destroy(_enemyOnScene[i]);
@@ -81,7 +85,7 @@ namespace Vanguard_Drone.Enemy
 
             if (_enemyDestroyed > _enemyOnScene.Count - 1)
             {
-                OnAllEnemyDestroyed?.Invoke();
+                OnAllEnemyDestroyed?.Invoke(_pointsForRound);
             }
         }
 

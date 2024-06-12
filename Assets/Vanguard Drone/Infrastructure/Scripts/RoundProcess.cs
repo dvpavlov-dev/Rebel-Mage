@@ -20,6 +20,7 @@ namespace Vanguard_Drone.Infrastructure
         private int _difficultyModifier = 1;
 
         public bool IsRoundInProgress { get; private set; }
+        public int PointsForAllRounds { get; private set; }
 
         [Inject]
         private void Constructor(EnemySpawner enemySpawner, Configs configs, Factory factory)
@@ -54,8 +55,10 @@ namespace Vanguard_Drone.Infrastructure
             IsRoundInProgress = true;
         }
 
-        private void EndRound()
+        private void EndRound(int pointsForRound)
         {
+            PointsForAllRounds += pointsForRound;
+            
             EndRound(TypeEndRound.END_ROUND);
         }
 

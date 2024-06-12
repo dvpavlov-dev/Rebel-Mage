@@ -7,21 +7,20 @@ namespace Vanguard_Drone.Enemy
     [RequireComponent(typeof(DamageController))]
     public class Enemy : MonoBehaviour
     {
+        public int _pointsForEnemy { get; protected set; }
         public Action OnDead;
-        
+
         protected EnemyAI EnemyAI;
         protected EnemyAbilities EnemyAbilities;
-        
+
         protected GameObject Target;
 
-        private int _pointsForEnemy;
 
         public virtual void InitEnemy(Infrastructure.Configs configs, GameObject target)
         {
             Target = target;
             
             GetComponent<DamageController>().InitHealthPoints(configs.EnemyConfig.BaseEnemy_Hp);
-            _pointsForEnemy = configs.EnemyConfig.BaseEnemy_Points;
         }
 
         private void OnDisable()

@@ -12,10 +12,12 @@ namespace PushItOut.UI.Gameplay
 
         public Action OnContinuePlay;
 
-        public void RoundOver()
+        public void RoundOver(int currentPointsCollected)
         {
             Menu.SetActive(false);
             RoundEnd.SetActive(true);
+            
+            RoundEnd.GetComponent<RoundEndView>().ShowCurrentPoints(currentPointsCollected);
         }
 
         public void OnClickContinue()
