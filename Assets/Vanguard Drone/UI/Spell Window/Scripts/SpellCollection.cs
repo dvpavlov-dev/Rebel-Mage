@@ -3,7 +3,7 @@ using ModestTree;
 using PushItOut.Spell_system;
 using PushItOut.Spell_system.Configs;
 using UnityEngine;
-using Zenject;
+using Vanguard_Drone.Infrastructure;
 
 namespace PushItOut.UI.Spell_Window
 {
@@ -14,12 +14,7 @@ namespace PushItOut.UI.Spell_Window
         private List<SpellCollectionСell> _spellSetСells = new();
         private SpellWindowController _spellWindowController;
         private SpellCollectionСell _currentSelectedSpellCell;
-
-        [Inject]
-        public void Constructor(SpellWindowController spellWindowController)
-        {
-            _spellWindowController = spellWindowController;
-        }
+        private RoundProcess _roundProcess;
 
         private void ClearSpellCollection()
         {
@@ -36,8 +31,11 @@ namespace PushItOut.UI.Spell_Window
             _spellSetСells.Clear();
         }
 
-        public void InitSpellCollection(Spells spells)
+        public void InitSpellCollection(SpellWindowController spellWindowController, Spells spells, RoundProcess roundProcess)
         {
+            _spellWindowController = spellWindowController;
+            _roundProcess = roundProcess;
+            
             ClearSpellCollection();
             
             foreach (SpellConfig spell in spells.AllSpells)
@@ -62,6 +60,8 @@ namespace PushItOut.UI.Spell_Window
 
         public void CellAction(SpellCollectionСell cell)
         {
+            if (cell.GetSpell().OpenAfterRound > _roundProcess.RoundsCompleted) return;
+            
             switch (_spellWindowController.WindowState)
             {
                 case SpellWindowState.IDLE:

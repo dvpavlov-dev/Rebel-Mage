@@ -21,6 +21,7 @@ namespace Vanguard_Drone.Infrastructure
 
         public bool IsRoundInProgress { get; private set; }
         public int PointsForAllRounds { get; private set; }
+        public int RoundsCompleted { get; private set; }
 
         [Inject]
         private void Constructor(EnemySpawner enemySpawner, Configs configs, Factory factory)
@@ -85,6 +86,8 @@ namespace Vanguard_Drone.Infrastructure
                             _roundCount++;
                             OnEndRound?.Invoke();
                         }
+
+                        RoundsCompleted++;
                         break;
 
                     case TypeEndRound.PLAYER_LOST:

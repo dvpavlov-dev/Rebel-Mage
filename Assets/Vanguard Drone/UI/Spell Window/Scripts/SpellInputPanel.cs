@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using PushItOut.Spell_system;
 using PushItOut.Spell_system.Configs;
 using UnityEngine;
-using Zenject;
 
 namespace PushItOut.UI.Spell_Window
 {
@@ -13,15 +12,11 @@ namespace PushItOut.UI.Spell_Window
         private SpellWindowController _spellWindowController;
         private SlotSpellInput _currentSelectedSlot;
         private Spells _spells;
-
-        [Inject]
-        public void Constructor(SpellWindowController spellWindowController)
+        
+        public void InitInputPanel(SpellWindowController spellWindowController, Spells spells)
         {
             _spellWindowController = spellWindowController;
-        }
-
-        public void InitInputPanel(Spells spells)
-        {
+            
             Slots[0].SpellSlotInit("Left mouse", TypeSpell.BASE_ATTACK);
             Slots[1].SpellSlotInit("Right mouse", TypeSpell.SUPPORT_ATTACK);
             Slots[2].SpellSlotInit("Q", TypeSpell.FIRST_SPELL);

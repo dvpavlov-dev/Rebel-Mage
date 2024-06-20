@@ -15,3 +15,4 @@ MonoBehaviour:
   BaseEnemy_Hp: 10
   BaseEnemy_MoveSpeed: 10
   BaseEnemy_Damage: 10
+  BaseEnemy_Points: 13

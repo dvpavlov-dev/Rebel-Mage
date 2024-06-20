@@ -29,8 +29,8 @@ namespace PushItOut.UI.Spell_Window
 
         public void InitSpellWindow()
         {
-            SpellCollection.InitSpellCollection(_spells);
-            InputPanel.InitInputPanel(_spells);
+            SpellCollection.InitSpellCollection(this, _spells, _roundProcess);
+            InputPanel.InitInputPanel(this, _spells);
         }
 
         public void SyncWindowState(SpellWindowState state)
