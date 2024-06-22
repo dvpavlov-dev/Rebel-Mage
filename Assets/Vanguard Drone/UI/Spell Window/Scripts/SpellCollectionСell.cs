@@ -2,6 +2,7 @@ using PushItOut.Spell_system.Configs;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Vanguard_Drone.Infrastructure;
 
 namespace PushItOut.UI.Spell_Window
 {
@@ -14,13 +15,21 @@ namespace PushItOut.UI.Spell_Window
 
         private SpellCollection _collection;
         private SpellConfig _spell;
+        private RoundProcess _roundProcess;
 
-        public void InitSpellSetCell(SpellConfig spell, SpellCollection collection)
+        public void InitSpellSetCell(SpellConfig spell, SpellCollection collection, RoundProcess roundProcess)
         {
             SpellName.text = spell.SpellName;
             SpellImage.sprite = spell.SpellImage;
             _collection = collection;
             _spell = spell;
+
+            _roundProcess = roundProcess;
+
+            if (_spell.OpenAfterRound > _roundProcess.RoundsCompleted)
+            {
+                GetComponent<Image>().color = new Color(1, 0.5f, 0.5f, 1);
+            }
         }
 
         public SpellConfig GetSpell()
@@ -30,6 +39,8 @@ namespace PushItOut.UI.Spell_Window
 
         public void OnSelectedCell()
         {
+            if (_spell.OpenAfterRound > _roundProcess.RoundsCompleted) return;
+            
             _collection.CellAction(this);
         }
 

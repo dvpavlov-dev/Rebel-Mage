@@ -14,7 +14,6 @@ namespace PushItOut.UI.Spell_Window
         private List<SpellCollectionСell> _spellSetСells = new();
         private SpellWindowController _spellWindowController;
         private SpellCollectionСell _currentSelectedSpellCell;
-        private RoundProcess _roundProcess;
 
         private void ClearSpellCollection()
         {
@@ -34,7 +33,6 @@ namespace PushItOut.UI.Spell_Window
         public void InitSpellCollection(SpellWindowController spellWindowController, Spells spells, RoundProcess roundProcess)
         {
             _spellWindowController = spellWindowController;
-            _roundProcess = roundProcess;
             
             ClearSpellCollection();
             
@@ -42,7 +40,7 @@ namespace PushItOut.UI.Spell_Window
             {
                 GameObject spellSetCellObj = Instantiate(SpellCollectionCellPrefab, transform);
                 SpellCollectionСell spellCollectionCell = spellSetCellObj.GetComponent<SpellCollectionСell>();
-                spellCollectionCell.InitSpellSetCell(spell, this);
+                spellCollectionCell.InitSpellSetCell(spell, this, roundProcess);
                 _spellSetСells.Add(spellCollectionCell);
             }
         }
@@ -60,8 +58,6 @@ namespace PushItOut.UI.Spell_Window
 
         public void CellAction(SpellCollectionСell cell)
         {
-            if (cell.GetSpell().OpenAfterRound > _roundProcess.RoundsCompleted) return;
-            
             switch (_spellWindowController.WindowState)
             {
                 case SpellWindowState.IDLE:
