@@ -8,6 +8,7 @@ namespace PushItOut.UI.Spell_Window
 {
     public class SpellCollectionСell : MonoBehaviour
     {
+        public TextMeshProUGUI LevelDescription;
         public TextMeshProUGUI SpellName;
         public Image SpellImage;
 
@@ -26,6 +27,7 @@ namespace PushItOut.UI.Spell_Window
 
             _roundProcess = roundProcess;
 
+            LevelDescription.text = $"Откроется после {_spell.OpenAfterRound} раунда";
             if (_spell.OpenAfterRound > _roundProcess.RoundsCompleted)
             {
                 GetComponent<Image>().color = new Color(1, 0.5f, 0.5f, 1);

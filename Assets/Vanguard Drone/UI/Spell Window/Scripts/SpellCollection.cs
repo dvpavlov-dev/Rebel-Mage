@@ -4,6 +4,7 @@ using PushItOut.Spell_system;
 using PushItOut.Spell_system.Configs;
 using UnityEngine;
 using Vanguard_Drone.Infrastructure;
+using System.Linq;
 
 namespace PushItOut.UI.Spell_Window
 {
@@ -11,23 +12,28 @@ namespace PushItOut.UI.Spell_Window
     {
         public GameObject SpellCollectionCellPrefab;
 
-        private List<SpellCollectionСell> _spellSetСells = new();
+        private List<SpellCollectionСell> _spellCollectionСells = new();
         private SpellWindowController _spellWindowController;
         private SpellCollectionСell _currentSelectedSpellCell;
 
         private void ClearSpellCollection()
         {
-            if (_spellSetСells.IsEmpty())
+            if (_spellCollectionСells.IsEmpty())
             {
                 return;
             }
             
-            foreach (SpellCollectionСell spellCell in _spellSetСells)
+            foreach (SpellCollectionСell spellCell in _spellCollectionСells)
             {
                 Destroy(spellCell.gameObject);
             }
             
-            _spellSetСells.Clear();
+            _spellCollectionСells.Clear();
+        }
+
+        private List<SpellConfig> SortByOpenRound(List<SpellConfig> spells)
+        {
+            return spells.OrderBy(x => x.OpenAfterRound).ToList();
         }
 
         public void InitSpellCollection(SpellWindowController spellWindowController, Spells spells, RoundProcess roundProcess)
@@ -36,12 +42,12 @@ namespace PushItOut.UI.Spell_Window
             
             ClearSpellCollection();
             
-            foreach (SpellConfig spell in spells.AllSpells)
+            foreach (SpellConfig spell in SortByOpenRound(spells.AllSpells))
             {
                 GameObject spellSetCellObj = Instantiate(SpellCollectionCellPrefab, transform);
                 SpellCollectionСell spellCollectionCell = spellSetCellObj.GetComponent<SpellCollectionСell>();
                 spellCollectionCell.InitSpellSetCell(spell, this, roundProcess);
-                _spellSetСells.Add(spellCollectionCell);
+                _spellCollectionСells.Add(spellCollectionCell);
             }
         }
 
@@ -49,7 +55,7 @@ namespace PushItOut.UI.Spell_Window
         {
             if (state == SpellWindowState.IDLE)
             {
-                foreach (SpellCollectionСell collectionCell in _spellSetСells)
+                foreach (SpellCollectionСell collectionCell in _spellCollectionСells)
                 {
                     collectionCell.UnselectedCell();
                 }
