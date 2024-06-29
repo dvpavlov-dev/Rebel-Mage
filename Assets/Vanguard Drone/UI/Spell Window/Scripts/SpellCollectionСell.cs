@@ -15,8 +15,8 @@ namespace PushItOut.UI.Spell_Window
         private Image _backgroundCell;
 
         private SpellCollection _collection;
-        private SpellConfig _spell;
         private RoundProcess _roundProcess;
+        private SpellConfig _spell;
 
         public void InitSpellSetCell(SpellConfig spell, SpellCollection collection, RoundProcess roundProcess)
         {
@@ -28,6 +28,7 @@ namespace PushItOut.UI.Spell_Window
             _roundProcess = roundProcess;
 
             LevelDescription.text = $"Откроется после {_spell.OpenAfterRound} раунда";
+            
             if (_spell.OpenAfterRound > _roundProcess.RoundsCompleted)
             {
                 GetComponent<Image>().color = new Color(1, 0.5f, 0.5f, 1);
@@ -42,7 +43,7 @@ namespace PushItOut.UI.Spell_Window
         public void OnSelectedCell()
         {
             if (_spell.OpenAfterRound > _roundProcess.RoundsCompleted) return;
-            
+
             _collection.CellAction(this);
         }
 
@@ -57,7 +58,14 @@ namespace PushItOut.UI.Spell_Window
         {
             _backgroundCell ??= GetComponent<Image>();
 
-            _backgroundCell.color = Color.white;
+            if (_spell.OpenAfterRound > _roundProcess.RoundsCompleted)
+            {
+                GetComponent<Image>().color = new Color(1, 0.5f, 0.5f, 1);
+            }
+            else
+            {
+                _backgroundCell.color = Color.white;
+            }
         }
     }
 }

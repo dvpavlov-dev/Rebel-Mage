@@ -31,7 +31,7 @@ namespace PushItOut.UI.Spell_Window
         {
             _panel = panel;
 
-            ClickableButton.OnClickButton += OnSelectedSlot;
+            ClickableButton.OnClickButton ??= OnSelectedSlot;
         }
 
         public void SetSlot(SpellConfig spell)
