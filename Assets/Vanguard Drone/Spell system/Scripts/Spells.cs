@@ -13,17 +13,6 @@ namespace PushItOut.Spell_system
         private readonly Dictionary<TypeSpell, SpellConfig> _activeSpells = new();
         private readonly Dictionary<SpellConfig, float> _coolDown = new();
 
-        // void Start()
-        // {
-        //     TestSetSpells();
-        // }
-        // void TestSetSpells()
-        // {
-        //     SetSpell(AllSpells[0], TypeSpell.SHIFT_SPELL);
-        //     SetSpell(AllSpells[1], TypeSpell.BASE_ATTACK);
-        //     SetSpell(AllSpells[2], TypeSpell.SUPPORT_ATTACK);
-        // }
-
         public void ClearSpells()
         {
             _activeSpells.Clear();

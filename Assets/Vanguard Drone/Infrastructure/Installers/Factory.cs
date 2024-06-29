@@ -1,20 +1,15 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Vanguard_Drone.Configs;
-using Vanguard_Drone.Enemy.Scripts;
-using Zenject;
 
 namespace Vanguard_Drone.Infrastructure
 {
-    public class Factory
+    public class Factory : IFactory
     {
-        private readonly DiContainer _diContainer;
         private readonly Prefabs _prefabs;
         private readonly Configs _configs;
 
-        public Factory(DiContainer diContainer, Prefabs prefabs, Configs configs)
+        public Factory(Prefabs prefabs, Configs configs)
         {
-            _diContainer = diContainer;
             _prefabs = prefabs;
             _configs = configs;
         }
@@ -47,5 +42,12 @@ namespace Vanguard_Drone.Infrastructure
 
             return baseEnemy;
         }
+    }
+
+    public interface IFactory
+    {
+        GameObject CreatePlayer(Vector3 position);
+
+        GameObject CreateEnemy(EnemyType enemyType, Vector3 position, GameObject target);
     }
 }

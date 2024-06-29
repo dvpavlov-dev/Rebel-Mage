@@ -26,7 +26,7 @@ namespace Vanguard_Drone.Infrastructure
         private void BindEnemySpawner()
         {
             Container
-                .Bind<EnemySpawner>()
+                .Bind<IEnemySpawner>()
                 .FromInstance(_enemySpawner)
                 .AsSingle();
         }
@@ -37,8 +37,6 @@ namespace Vanguard_Drone.Infrastructure
                 .Bind<CameraManager>()
                 .FromInstance(_cameraManager)
                 .AsSingle();
-            
-            _cameraManager.InitCameras();
         }
 
         private void BindRoundProcess()

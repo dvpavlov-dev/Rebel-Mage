@@ -43,8 +43,8 @@ namespace Vanguard_Drone.Infrastructure
         private void BindFactories()
         {
             Container
-                .Bind<Factory>()
-                .FromInstance(new Factory(Container, _prefabs, _configs))
+                .Bind<IFactory>()
+                .FromInstance(new Factory(_prefabs, _configs))
                 .AsSingle();
         }
     }

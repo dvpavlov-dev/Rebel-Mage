@@ -7,24 +7,25 @@ namespace Vanguard_Drone.Infrastructure
 {
     public class RoundProcess : MonoBehaviour
     {
-        public Action OnEndRound;
-        public Action OnEndGame;
-        public Action OnPlayerLost;
-
-        private EnemySpawner _enemySpawner;
         private Configs _configs;
-        private Factory _factory;
+        private int _difficultyModifier = 1;
+
+        private IEnemySpawner _enemySpawner;
+        private IFactory _factory;
 
         private GameObject _player;
         private int _roundCount;
-        private int _difficultyModifier = 1;
+        
+        public Action OnEndRound { get; set; }
+        public Action OnEndGame { get; set; }
+        public Action OnPlayerLost { get; set; }
 
         public bool IsRoundInProgress { get; private set; }
         public int PointsForAllRounds { get; private set; }
         public int RoundsCompleted { get; private set; }
 
         [Inject]
-        private void Constructor(EnemySpawner enemySpawner, Configs configs, Factory factory)
+        private void Constructor(IEnemySpawner enemySpawner, Configs configs, IFactory factory)
         {
             _enemySpawner = enemySpawner;
             _configs = configs;
@@ -49,9 +50,7 @@ namespace Vanguard_Drone.Infrastructure
                 _player.GetComponent<Player.Player>().InitPlayer();
             }
 
-            Debug.Log($"_roundCount: {_roundCount}");
-            _enemySpawner.InitEnemySpawner(_factory, _player, _difficultyModifier);
-            _enemySpawner.SpawnEnemy(_configs.RoundsConfig.RoundParametersList[_roundCount]);
+            _enemySpawner.SpawnEnemy(_factory, _configs.RoundsConfig.RoundParametersList[_roundCount], _difficultyModifier, _player);
 
             IsRoundInProgress = true;
         }
@@ -59,7 +58,7 @@ namespace Vanguard_Drone.Infrastructure
         private void EndRound(int pointsForRound)
         {
             PointsForAllRounds += pointsForRound;
-            
+
             EndRound(TypeEndRound.END_ROUND);
         }
 
@@ -69,7 +68,6 @@ namespace Vanguard_Drone.Infrastructure
             {
                 IsRoundInProgress = false;
 
-                _enemySpawner.ClearEnemyList();
                 _player.transform.position = new Vector3(0, 1, 0);
 
                 switch (typeEndRound)

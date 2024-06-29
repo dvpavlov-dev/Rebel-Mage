@@ -10,7 +10,7 @@ namespace Vanguard_Drone.Infrastructure
 
         private List<GameObject> _cameras;
 
-        public void InitCameras()
+        private void Awake()
         {
             _cameras = new List<GameObject>
             {

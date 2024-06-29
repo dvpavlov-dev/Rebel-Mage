@@ -8,75 +8,71 @@ using Random = System.Random;
 
 namespace Vanguard_Drone.Enemy
 {
-    public class EnemySpawner : MonoBehaviour
+    public class EnemySpawner : MonoBehaviour, IEnemySpawner
     {
-        public Action<int> OnAllEnemyDestroyed;
+        public Action<int> OnAllEnemyDestroyed { get; set; }
         
         private const float DISTANCE_SPAWN = 30;
 
         private readonly List<GameObject> _enemyOnScene = new();
+        private int _enemyDestroyed;
 
-        private Factory _factory;
+        private IFactory _factory;
+        private int _pointsForRound;
         private Random _rnd;
         private SpawnOneSide _spawnOneSide;
-        private GameObject _target;
-        private int _enemyDestroyed;
-        private int _pointsForRound;
-        private int _difficultyModifier;
-        
-        public void InitEnemySpawner(Factory factory, GameObject target, int difficultyModifier)
-        {
-            _factory = factory;
-            _target = target;
 
+        private void Awake()
+        {
             _rnd = new Random();
             _spawnOneSide = new SpawnOneSide();
-
-            _difficultyModifier = difficultyModifier;
         }
 
-        public void SpawnEnemy(RoundsConfigSource.RoundParameters roundParameters)
+        public void SpawnEnemy(IFactory factory, RoundsConfigSource.RoundParameters roundParameters, int difficultyModifier, GameObject target)
         {
+            _factory ??= factory;
+            ClearEnemyList();
+
             foreach (RoundsConfigSource.EnemyParameters enemyParameters in roundParameters.EnemyParameters)
             {
-                CreateEnemy(enemyParameters.EnemyCount * _difficultyModifier, enemyParameters.EnemyType, enemyParameters.SpawnType);
+                CreateEnemy(enemyParameters.EnemyCount * difficultyModifier, enemyParameters.EnemyType, enemyParameters.SpawnType, target);
             }
-            
+
             foreach (RoundsConfigSource.EnemyParameters _ in roundParameters.EnemyParameters)
             {
                 StartCoroutine(SpawnWave());
             }
         }
 
-        private void CreateEnemy(int enemyCount, EnemyType enemyType, SpawnType spawnType)
-        {
-            _pointsForRound = 0;
-            
-            for (int i = 0; i < enemyCount; i++)
-            {
-                Vector3 position = SetPositionEnemy(spawnType);
-
-                GameObject enemy = _factory.CreateEnemy(enemyType, position, _target);
-                _enemyOnScene.Add(enemy);
-                
-                enemy.SetActive(false);
-                Enemy enemyController = enemy.GetComponent<Enemy>();
-                enemyController.OnDead += SyncEnemyCount;
-                _pointsForRound += enemyController._pointsForEnemy;
-            }
-        }
-
-        public void ClearEnemyList()
+        private void ClearEnemyList()
         {
             for (int i = _enemyOnScene.Count - 1; i >= 0; i--)
             {
                 Destroy(_enemyOnScene[i]);
             }
-            
+
             _enemyOnScene.Clear();
             _enemyDestroyed = 0;
-            
+
             StopAllCoroutines();
+        }
+
+        private void CreateEnemy(int enemyCount, EnemyType enemyType, SpawnType spawnType, GameObject target)
+        {
+            _pointsForRound = 0;
+
+            for (int i = 0; i < enemyCount; i++)
+            {
+                Vector3 position = SetPositionEnemy(spawnType);
+
+                GameObject enemy = _factory.CreateEnemy(enemyType, position, target);
+                _enemyOnScene.Add(enemy);
+
+                enemy.SetActive(false);
+                Enemy enemyController = enemy.GetComponent<Enemy>();
+                enemyController.OnDead += SyncEnemyCount;
+                _pointsForRound += enemyController._pointsForEnemy;
+            }
         }
 
         private void SyncEnemyCount()
@@ -106,7 +102,7 @@ namespace Vanguard_Drone.Enemy
                     return new Vector3(DISTANCE_SPAWN, 1, 0);
             }
         }
-        
+
         private IEnumerator SpawnWave()
         {
             foreach (GameObject enemy in _enemyOnScene)
@@ -120,11 +116,11 @@ namespace Vanguard_Drone.Enemy
         }
     }
 
-    class SpawnOneSide
+    internal class SpawnOneSide
     {
-        private readonly Random _rnd;
 
-        private int _countPerSide = 3;
+        private readonly int _countPerSide = 3;
+        private readonly Random _rnd;
         private int _currentCountPerSide;
         private int _currentRandAngle;
 
@@ -152,5 +148,12 @@ namespace Vanguard_Drone.Enemy
                 return GetPositionSpawnOneSide(distanceSpawn);
             }
         }
+    }
+
+    internal interface IEnemySpawner
+    {
+        public Action<int> OnAllEnemyDestroyed { get; set; }
+
+        void SpawnEnemy(IFactory factory, RoundsConfigSource.RoundParameters roundParameters, int difficultyModifier, GameObject target);
     }
 }

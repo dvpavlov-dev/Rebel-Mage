@@ -12,13 +12,12 @@ namespace PushItOut.UI.Spell_Window
         public SpellCollection SpellCollection;
         public SpellInputPanel InputPanel;
 
-        public Action OnFinishedChooseSpells;
-        
+        private RoundProcess _roundProcess;
+        private Spells _spells;
+
+        public Action OnFinishedChooseSpells { get; set; }
         public SpellWindowState WindowState { get; private set; }
         public SpellConfig ChoosingSpell { get; set; }
-
-        private Spells _spells;
-        private RoundProcess _roundProcess;
 
         [Inject]
         public void Constructor(Spells spells, RoundProcess roundProcess)
