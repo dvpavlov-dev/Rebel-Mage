@@ -174,8 +174,8 @@ namespace Vanguard_Drone.Infrastructure
         
         public void Enter()
         {
-            Debug.Log("End Round");
-            _gameplayUI.RoundOver(_roundProcess.PointsForAllRounds);
+            string textTitle = "Round over";
+            _gameplayUI.RoundOver(textTitle, _roundProcess.PointsForAllRounds);
             _gameplayUI.OnContinuePlay = () => _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
         }
         
@@ -200,8 +200,8 @@ namespace Vanguard_Drone.Infrastructure
         
         public void Enter()
         {
-            Debug.Log("End Game");
-            _gameplayUI.RoundOver(_roundProcess.PointsForAllRounds);
+            string textTitle = "The cycle is over, the difficulty modifier is increased";
+            _gameplayUI.RoundOver(textTitle, _roundProcess.PointsForAllRounds);
             _gameplayUI.OnContinuePlay = () => _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
         }
         
@@ -225,8 +225,8 @@ namespace Vanguard_Drone.Infrastructure
         
         public void Enter()
         {
-            Debug.Log("Player Lost");
-            _gameplayUI.RoundOver(_roundProcess.PointsForAllRounds);
+            string textTitle = "You are dead, try again?";
+            _gameplayUI.RoundOver(textTitle, _roundProcess.PointsForAllRounds);
             _gameplayUI.OnContinuePlay = () => _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
         }
         

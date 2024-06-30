@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Gameplay scene.unity
+    path: Assets/Vanguard Drone/Scenes/Gameplay scene.unity
     guid: d8c91e579d77f6f44a5b2dd79afdab7c
   m_configObjects: {}
