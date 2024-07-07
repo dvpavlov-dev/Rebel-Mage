@@ -30,6 +30,29 @@ namespace Vanguard_Drone.Player
         private Rigidbody _rb;
 
         private RoundProcess _roundProcess;
+        
+        [Inject]
+        private void Constructor(RoundProcess roundProcess, GameplayUI gameplayUI, CameraManager cameraManager)
+        {
+            _roundProcess = roundProcess;
+            _gameplayUI = gameplayUI;
+            _cameraManager = cameraManager;
+        }
+
+        public void SetupPlayerController(float moveSpeed)
+        {
+            _moveSpeed = moveSpeed;
+
+            _rb = GetComponent<Rigidbody>();
+            _cameraManager.SwitchCamera(TypeCamera.PLAYER_CAMERA);
+            _camera = _cameraManager.CameraPlayer.GetComponent<Camera>();
+            _camera.GetComponent<CameraController>().FollowTarget = transform;
+            _currentSpeed = _moveSpeed;
+
+            SpellsAction.OnSpellActivate += ActivateSpellOnSelf;
+
+            _isPlayerSetup = true;
+        }
 
         private void Update()
         {
@@ -91,30 +114,7 @@ namespace Vanguard_Drone.Player
             
             _timerForSpeedEffects = StartCoroutine(ReturnSpeed(timeSlowdown));
         }
-
-        [Inject]
-        private void Constructor(RoundProcess roundProcess, GameplayUI gameplayUI, CameraManager cameraManager)
-        {
-            _roundProcess = roundProcess;
-            _gameplayUI = gameplayUI;
-            _cameraManager = cameraManager;
-        }
-
-        public void SetupPlayerController(float moveSpeed)
-        {
-            _moveSpeed = moveSpeed;
-
-            _rb = GetComponent<Rigidbody>();
-            _cameraManager.SwitchCamera(TypeCamera.PLAYER_CAMERA);
-            _camera = _cameraManager.CameraPlayer.GetComponent<Camera>();
-            _camera.GetComponent<CameraController>().FollowTarget = transform;
-            _currentSpeed = _moveSpeed;
-
-            SpellsAction.OnSpellActivate += ActivateSpellOnSelf;
-
-            _isPlayerSetup = true;
-        }
-
+        
         private void ActivateSpellOnSelf(SpellConfig spell)
         {
             if (spell is DashConfigSource)
@@ -127,7 +127,7 @@ namespace Vanguard_Drone.Player
         {
             float deltaX = Input.GetAxis("Horizontal");
             float deltaZ = Input.GetAxis("Vertical");
-            Vector3 move = new Vector3(deltaX, 0, deltaZ);
+            Vector3 move = new (deltaX, 0, deltaZ);
 
             move.Normalize();
 
@@ -139,14 +139,16 @@ namespace Vanguard_Drone.Player
         {
             _isBlockedControl = true;
 
+            Debug.Log($"dictionary: {dictionary}, explosionPosition: {transform.position - dictionary}");
             _rb.AddExplosionForce(100000, transform.position - dictionary, 10);
             Invoke(nameof(UnblockControl), 0.1f);
         }
+        
         private void ActivateDash()
         {
             float x = Input.GetAxis("Horizontal") == 0 ? 0 : Input.GetAxis("Horizontal") > 0 ? 1 : -1;
             float z = Input.GetAxis("Vertical") == 0 ? 0 : Input.GetAxis("Vertical") > 0 ? 1 : -1;
-            Vector3 moveDictionary = new Vector3(x, 0, z);
+            Vector3 moveDictionary = new (x, 0, z);
 
             Push(moveDictionary);
         }
