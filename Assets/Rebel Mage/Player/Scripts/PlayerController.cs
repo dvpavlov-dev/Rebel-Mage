@@ -1,5 +1,4 @@
 using System.Collections;
-using Bizniz;
 using PushItOut.Configs;
 using PushItOut.Spell_system;
 using PushItOut.Spell_system.Configs;
@@ -46,7 +45,7 @@ namespace Vanguard_Drone.Player
             _rb = GetComponent<Rigidbody>();
             _cameraManager.SwitchCamera(TypeCamera.PLAYER_CAMERA);
             _camera = _cameraManager.CameraPlayer.GetComponent<Camera>();
-            _camera.GetComponent<CameraController>().FollowTarget = transform;
+            // _camera.GetComponent<CameraController>().FollowTarget = transform;
             _currentSpeed = _moveSpeed;
 
             SpellsAction.OnSpellActivate += ActivateSpellOnSelf;
