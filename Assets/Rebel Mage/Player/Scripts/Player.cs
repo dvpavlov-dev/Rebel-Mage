@@ -6,23 +6,26 @@ using Zenject;
 
 namespace Vanguard_Drone.Player
 {
-    [RequireComponent(typeof(DamageController), typeof(PlayerController))]
+    [RequireComponent(typeof(DamageController), typeof(PlayerMoveController))]
+    [RequireComponent(typeof(ZenAutoInjecter), typeof(PlayerSpellController))]
+    [RequireComponent(typeof(PlayerUIController))]
     public class Player : MonoBehaviour
     {
         public Action OnDead;
         
-        private PlayerConfigSource _playerConfig;
-    
+        private PlayerConfigSource m_PlayerConfig;
+
         [Inject]
         private void Constructor(Infrastructure.Configs configs)
         {
-            _playerConfig = configs.PlayerConfig;
+            m_PlayerConfig = configs.PlayerConfig;
         }
 
         public void InitPlayer()
         {
-            GetComponent<DamageController>().InitHealthPoints(_playerConfig.Hp);
-            GetComponent<PlayerController>().SetupPlayerController(_playerConfig.MoveSpeed);
+            GetComponent<DamageController>().InitHealthPoints(m_PlayerConfig.Hp);
+            GetComponent<PlayerMoveController>().Init(m_PlayerConfig.MoveSpeed);
+            GetComponent<PlayerSpellController>().Init();
         }
 
         private void OnDisable()

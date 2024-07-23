@@ -12,7 +12,7 @@ namespace PushItOut.UI.Spell_Window
         public SpellCollection SpellCollection;
         public SpellInputPanel InputPanel;
 
-        private RoundProcess _roundProcess;
+        private IRoundProcess _roundProcess;
         private Spells _spells;
 
         public Action OnFinishedChooseSpells { get; set; }
@@ -20,7 +20,7 @@ namespace PushItOut.UI.Spell_Window
         public SpellConfig ChoosingSpell { get; set; }
 
         [Inject]
-        public void Constructor(Spells spells, RoundProcess roundProcess)
+        public void Constructor(Spells spells, IRoundProcess roundProcess)
         {
             _spells = spells;
             _roundProcess = roundProcess;

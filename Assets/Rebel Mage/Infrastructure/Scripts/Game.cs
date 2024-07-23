@@ -9,12 +9,12 @@ namespace Vanguard_Drone.Infrastructure
     {
         private GameStateMachine _stateMachine;
 
-        private RoundProcess _roundProcess;
+        private IRoundProcess _roundProcess;
         private SpellWindowController _spellWindowController;
         private GameplayUI _gameplayUI;
 
         [Inject]
-        private void Constructor(RoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI)
+        private void Constructor(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI)
         {
             _roundProcess = roundProcess;
             _spellWindowController = spellWindowController;

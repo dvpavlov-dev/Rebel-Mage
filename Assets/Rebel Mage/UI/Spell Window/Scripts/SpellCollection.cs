@@ -36,7 +36,7 @@ namespace PushItOut.UI.Spell_Window
             return spells.OrderBy(x => x.OpenAfterRound).ToList();
         }
 
-        public void InitSpellCollection(SpellWindowController spellWindowController, Spells spells, RoundProcess roundProcess)
+        public void InitSpellCollection(SpellWindowController spellWindowController, Spells spells, IRoundProcess roundProcess)
         {
             _spellWindowController = spellWindowController;
             

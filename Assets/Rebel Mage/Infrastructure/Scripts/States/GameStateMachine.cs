@@ -9,7 +9,7 @@ namespace Vanguard_Drone.Infrastructure
         private readonly Dictionary<TypeState, IState> States;
         private IState activeState;
 
-        public GameStateMachine(RoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI)
+        public GameStateMachine(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI)
         {
             States = new Dictionary<TypeState, IState>
             {
@@ -100,10 +100,10 @@ namespace Vanguard_Drone.Infrastructure
     public class StartRound : IState
     {
         private readonly GameStateMachine _gameStateMachine;
-        private readonly RoundProcess _roundProcess;
+        private readonly IRoundProcess _roundProcess;
         private readonly GameplayUI _gameplayUI;
 
-        public StartRound(GameStateMachine gameStateMachine, RoundProcess roundProcess, GameplayUI gameplayUI)
+        public StartRound(GameStateMachine gameStateMachine, IRoundProcess roundProcess, GameplayUI gameplayUI)
         {
             _gameStateMachine = gameStateMachine;
             _roundProcess = roundProcess;
@@ -162,9 +162,9 @@ namespace Vanguard_Drone.Infrastructure
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly GameplayUI _gameplayUI;
-        private readonly RoundProcess _roundProcess;
+        private readonly IRoundProcess _roundProcess;
 
-        public EndRound(GameStateMachine gameStateMachine, GameplayUI gameplayUI, RoundProcess roundProcess)
+        public EndRound(GameStateMachine gameStateMachine, GameplayUI gameplayUI, IRoundProcess roundProcess)
         {
             _gameStateMachine = gameStateMachine;
             _gameplayUI = gameplayUI;
@@ -187,9 +187,9 @@ namespace Vanguard_Drone.Infrastructure
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly GameplayUI _gameplayUI;
-        private readonly RoundProcess _roundProcess;
+        private readonly IRoundProcess _roundProcess;
 
-        public EndGame(GameStateMachine gameStateMachine, GameplayUI gameplayUI, RoundProcess roundProcess)
+        public EndGame(GameStateMachine gameStateMachine, GameplayUI gameplayUI, IRoundProcess roundProcess)
         {
             _gameStateMachine = gameStateMachine;
             _gameplayUI = gameplayUI;
@@ -213,9 +213,9 @@ namespace Vanguard_Drone.Infrastructure
     {
         private readonly GameStateMachine _gameStateMachine;
         private readonly GameplayUI _gameplayUI;
-        private readonly RoundProcess _roundProcess;
+        private readonly IRoundProcess _roundProcess;
 
-        public PlayerLoose(GameStateMachine gameStateMachine, GameplayUI gameplayUI, RoundProcess roundProcess)
+        public PlayerLoose(GameStateMachine gameStateMachine, GameplayUI gameplayUI, IRoundProcess roundProcess)
         {
             _gameStateMachine = gameStateMachine;
             _gameplayUI = gameplayUI;

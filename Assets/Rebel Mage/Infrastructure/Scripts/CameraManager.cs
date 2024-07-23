@@ -29,7 +29,14 @@ namespace Vanguard_Drone.Infrastructure
             switch (typeCamera)
             {
                 case TypeCamera.PLAYER_CAMERA:
-                    CameraPlayer.SetActive(true);
+                    try
+                    {
+                        CameraPlayer.SetActive(true);
+                    }
+                    catch
+                    {
+                        Debug.LogError("Камеры для игрока нет, установите ее в CameraManager");
+                    }
                     break;
             
                 case TypeCamera.ENVIRONMENT_CAMERA:

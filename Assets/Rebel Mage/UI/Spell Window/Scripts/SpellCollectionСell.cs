@@ -15,10 +15,10 @@ namespace PushItOut.UI.Spell_Window
         private Image _backgroundCell;
 
         private SpellCollection _collection;
-        private RoundProcess _roundProcess;
+        private IRoundProcess _roundProcess;
         private SpellConfig _spell;
 
-        public void InitSpellSetCell(SpellConfig spell, SpellCollection collection, RoundProcess roundProcess)
+        public void InitSpellSetCell(SpellConfig spell, SpellCollection collection, IRoundProcess roundProcess)
         {
             SpellName.text = spell.SpellName;
             SpellImage.sprite = spell.SpellImage;

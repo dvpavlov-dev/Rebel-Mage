@@ -42,7 +42,7 @@ namespace Vanguard_Drone.Infrastructure
         private void BindRoundProcess()
         {
             Container
-                .Bind<RoundProcess>()
+                .Bind<IRoundProcess>()
                 .FromInstance(_roundProcess)
                 .AsSingle();
         }

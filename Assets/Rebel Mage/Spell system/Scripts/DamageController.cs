@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace PushItOut.Spell_system
 {
+    [RequireComponent(typeof(BoxCollider))]
     public class DamageController : MonoBehaviour, IDamage
     {
         public float MaxHealth = 1;

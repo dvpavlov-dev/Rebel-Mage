@@ -5,8 +5,16 @@ using Zenject;
 
 namespace Vanguard_Drone.Infrastructure
 {
-    public class RoundProcess : MonoBehaviour
+    public class RoundProcess : MonoBehaviour, IRoundProcess
     {
+        public Action OnEndRound { get; set; }
+        public Action OnEndGame { get; set; }
+        public Action OnPlayerLost { get; set; }
+
+        public bool IsRoundInProgress { get; set; }
+        public int PointsForAllRounds { get; set; }
+        public int RoundsCompleted { get; set; }
+        
         private Configs _configs;
         private int _difficultyModifier = 1;
 
@@ -15,14 +23,6 @@ namespace Vanguard_Drone.Infrastructure
 
         private GameObject _player;
         private int _roundCount;
-        
-        public Action OnEndRound { get; set; }
-        public Action OnEndGame { get; set; }
-        public Action OnPlayerLost { get; set; }
-
-        public bool IsRoundInProgress { get; private set; }
-        public int PointsForAllRounds { get; private set; }
-        public int RoundsCompleted { get; private set; }
 
         [Inject]
         private void Constructor(IEnemySpawner enemySpawner, Configs configs, IFactory factory)
@@ -94,6 +94,18 @@ namespace Vanguard_Drone.Infrastructure
                 }
             }
         }
+    }
+    public interface IRoundProcess
+    {
+        public Action OnEndRound { get; set; }
+        public Action OnEndGame { get; set; }
+        public Action OnPlayerLost { get; set; }
+
+        public bool IsRoundInProgress { get; set; }
+        public int PointsForAllRounds { get; set; }
+        public int RoundsCompleted { get; set; }
+
+        void StartRound();
     }
 
     internal enum TypeEndRound

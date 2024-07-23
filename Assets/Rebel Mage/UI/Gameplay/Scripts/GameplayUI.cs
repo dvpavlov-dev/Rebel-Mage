@@ -22,6 +22,11 @@ namespace PushItOut.UI.Gameplay
             roundEndView.ShowCurrentPoints(currentPointsCollected);
         }
 
+        public void OpenMenu()
+        {
+            Menu.SetActive(true);
+        }
+
         public void OnClickContinue()
         {
             Menu.SetActive(false);
