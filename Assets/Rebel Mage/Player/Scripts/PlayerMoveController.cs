@@ -1,6 +1,8 @@
 using System.Collections;
+using PushItOut.Configs;
 using PushItOut.Spell_system;
 using PushItOut.UI.Gameplay;
+using UnityEditor;
 using UnityEngine;
 using Vanguard_Drone.Infrastructure;
 using Zenject;
@@ -15,52 +17,56 @@ namespace Vanguard_Drone.Player
             set => m_IsBlockedControl = value;
         }
 
+        public Animator AnimMove;
+
         // public GameObject MousePoint;
         private SpellsAction m_SpellsAction;
 
-        private Camera _camera;
-        private CameraManager _cameraManager;
-        private float _currentSpeed;
-        private GameplayUI _gameplayUI;
+        private Camera m_Camera;
+        private CameraManager m_CameraManager;
+        private float m_CurrentSpeed;
+        private float m_CooldownDash;
 
         private bool m_IsBlockedControl;
-        private bool _isPlayerSetup;
-        private Vector3 _movement;
-        private float _moveSpeed;
-        private Rigidbody _rb;
+        private bool m_IsPlayerSetup;
+        private Vector3 m_Movement;
+        private float m_MoveSpeed;
+        private Rigidbody m_Rb;
 
-        private IRoundProcess _roundProcess;
+        private IRoundProcess m_RoundProcess;
 
-        private Coroutine _timerForSpeedEffects;
+        private Coroutine m_TimerForSpeedEffects;
+        private PlayerConfigSource m_PlayerConfig;
 
         [Inject]
         private void Constructor(CameraManager cameraManager)
         {
-            _cameraManager = cameraManager;
+            m_CameraManager = cameraManager;
         }
 
-        public void Init(float moveSpeed)
+        public void Init(PlayerConfigSource playerConfig)
         {
-            _moveSpeed = moveSpeed;
+            m_PlayerConfig = playerConfig;
+            m_MoveSpeed = m_PlayerConfig.MoveSpeed;
 
-            _rb = GetComponent<Rigidbody>();
+            m_Rb = GetComponent<Rigidbody>();
 
-            _cameraManager.SwitchCamera(TypeCamera.PLAYER_CAMERA);
-            _camera = _cameraManager.CameraPlayer.GetComponent<Camera>();
+            m_CameraManager.SwitchCamera(TypeCamera.PLAYER_CAMERA);
+            m_Camera = m_CameraManager.CameraPlayer.GetComponent<Camera>();
 
-            _currentSpeed = _moveSpeed;
+            m_CurrentSpeed = m_MoveSpeed;
 
-            _isPlayerSetup = true;
+            m_IsPlayerSetup = true;
         }
 
         private void Update()
         {
-            if (m_IsBlockedControl || !_isPlayerSetup) return;
+            if (m_IsBlockedControl || !m_IsPlayerSetup) return;
 
-            if (_roundProcess is { IsRoundInProgress: false })
+            if (m_RoundProcess is { IsRoundInProgress: false })
             {
-                _movement.Set(0, 0, 0);
-                _rb.velocity = _movement;
+                m_Movement.Set(0, 0, 0);
+                m_Rb.velocity = m_Movement;
                 return;
             }
 
@@ -78,11 +84,24 @@ namespace Vanguard_Drone.Player
             if (!gameObject.scene.isLoaded) return;
 
             StopAllCoroutines();
-            _cameraManager.SwitchCamera(TypeCamera.ENVIRONMENT_CAMERA);
+            m_CameraManager.SwitchCamera(TypeCamera.ENVIRONMENT_CAMERA);
+        }
+        
+        private bool CheckCooldown()
+        {
+            if (m_CooldownDash <= Time.time)
+            {
+                m_CooldownDash = Time.time + m_PlayerConfig.Dash_CooldownTime;
+                return true;
+            }
+
+            return false;
         }
 
         private void ActivateDash()
         {
+            if (!CheckCooldown()) return;
+            
             float x = Input.GetAxis("Horizontal") == 0 ? 0 : Input.GetAxis("Horizontal") > 0 ? 1 : -1;
             float z = Input.GetAxis("Vertical") == 0 ? 0 : Input.GetAxis("Vertical") > 0 ? 1 : -1;
             Vector3 moveDictionary = new(x, 0, z);
@@ -94,14 +113,14 @@ namespace Vanguard_Drone.Player
         {
             m_IsBlockedControl = true;
 
-            _rb.AddExplosionForce(100000, transform.position - dictionary, 10);
+            m_Rb.AddExplosionForce(100000, transform.position - dictionary, 10);
             Invoke(nameof(UnblockControl), 0.1f);
         }
 
         public void ExplosionImpact(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
             m_IsBlockedControl = true;
-            _rb.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
+            m_Rb.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
             Invoke(nameof(UnblockControl), 0.1f);
         }
 
@@ -109,32 +128,46 @@ namespace Vanguard_Drone.Player
         {
             if (!gameObject.activeSelf) return;
 
-            _currentSpeed = _moveSpeed - _moveSpeed * slowdown;
+            m_CurrentSpeed = m_MoveSpeed - m_MoveSpeed * slowdown;
 
-            if (_timerForSpeedEffects != null)
+            if (m_TimerForSpeedEffects != null)
             {
-                StopCoroutine(_timerForSpeedEffects);
+                StopCoroutine(m_TimerForSpeedEffects);
             }
 
-            _timerForSpeedEffects = StartCoroutine(ReturnSpeed(timeSlowdown));
+            m_TimerForSpeedEffects = StartCoroutine(ReturnSpeed(timeSlowdown));
         }
 
         private void CalcMove()
         {
             float deltaX = Input.GetAxis("Horizontal");
             float deltaZ = Input.GetAxis("Vertical");
+            
             Vector3 move = new(deltaX, 0, deltaZ);
-
             move.Normalize();
 
-            _movement.Set(_currentSpeed * move.x, 0, _currentSpeed * move.z);
-            _rb.velocity = _movement;
+            AnimTransform(move);
+
+            m_Movement.Set(m_CurrentSpeed * move.x, 0, m_CurrentSpeed * move.z);
+            m_Rb.velocity = m_Movement;
+        }
+
+        private void AnimTransform(Vector3 directionMove)
+        {
+            Vector3 forward = transform.forward;
+            Vector3 right = transform.right;
+
+            float animVert = directionMove.z * forward.z + directionMove.x * forward.x;
+            float animHor = directionMove.x * right.x + directionMove.z * right.z;
+            
+            AnimMove.SetFloat("Vertical", animVert);
+            AnimMove.SetFloat("Horizontal", animHor);
         }
 
         private void RotatePlayer()
         {
             var groundPlane = new Plane(Vector3.up, Vector3.zero);
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
 
             if (groundPlane.Raycast(ray, out float position))
             {
@@ -159,7 +192,7 @@ namespace Vanguard_Drone.Player
         private IEnumerator ReturnSpeed(float timeWhenReturn)
         {
             yield return new WaitForSeconds(timeWhenReturn);
-            _currentSpeed = _moveSpeed;
+            m_CurrentSpeed = m_MoveSpeed;
         }
     }
 }

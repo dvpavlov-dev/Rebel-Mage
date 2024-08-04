@@ -95,7 +95,6 @@ MonoBehaviour:
   AllSpells:
   - {fileID: 11400000, guid: d404d3a797b9b3741a92f74686951ad3, type: 2}
   - {fileID: 11400000, guid: b40f5be749f0b724eb53adbbdc243ae3, type: 2}
-  - {fileID: 11400000, guid: 5547a02a19bb2524188b474e993bbd52, type: 2}
 --- !u!114 &-131553019137547936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,5 +122,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcb0fe6c86f5e7a44a2ddac6b37563bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerPref: {fileID: 7262800786979652449, guid: dccdc04c3acf1d6499e8755e3cbfd4b4, type: 3}
+  PlayerPref: {fileID: 6553823866756482685, guid: 6aebd1944fbd6be43a3141112923e63b, type: 3}
   BaseEnemyPref: {fileID: 2271899163048147823, guid: 16be38c4f7e27e74f99848d8c183d56f, type: 3}

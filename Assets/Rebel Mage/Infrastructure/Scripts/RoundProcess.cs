@@ -38,7 +38,7 @@ namespace Vanguard_Drone.Infrastructure
         {
             if (_player == null)
             {
-                _player = _factory.CreatePlayer(new Vector3(0, 1, 0));
+                _player = _factory.CreatePlayer(new Vector3(0, 0, 0));
                 _player.GetComponent<Player.Player>().OnDead = () => {
                     EndRound(TypeEndRound.PLAYER_LOST);
                 };
@@ -50,7 +50,7 @@ namespace Vanguard_Drone.Infrastructure
                 _player.GetComponent<Player.Player>().InitPlayer();
             }
 
-            _enemySpawner.SpawnEnemy(_factory, _configs.RoundsConfig.RoundParametersList[_roundCount], _difficultyModifier, _player);
+            //_enemySpawner.SpawnEnemy(_factory, _configs.RoundsConfig.RoundParametersList[_roundCount], _difficultyModifier, _player);
 
             IsRoundInProgress = true;
         }
