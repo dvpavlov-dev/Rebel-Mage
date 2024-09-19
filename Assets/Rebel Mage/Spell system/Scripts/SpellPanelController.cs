@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using PushItOut.Spell_system.Configs;
+using Rebel_Mage.Spell_system.Configs;
 using UnityEngine;
 using Zenject;
 
-namespace PushItOut.Spell_system
+namespace Rebel_Mage.Spell_system
 {
     public class SpellPanelController : MonoBehaviour
     {

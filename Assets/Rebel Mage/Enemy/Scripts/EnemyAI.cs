@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using PushItOut.Spell_system;
+using Rebel_Mage.Spell_system;
 using UnityEngine;
 using UnityEngine.AI;
 

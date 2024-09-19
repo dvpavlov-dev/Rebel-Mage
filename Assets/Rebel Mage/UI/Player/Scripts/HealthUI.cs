@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace PushItOut.Player
+namespace Rebel_Mage.Player
 {
     public class HealthUI : MonoBehaviour
     {

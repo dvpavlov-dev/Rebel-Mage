@@ -1,6 +1,6 @@
 using System;
-using PushItOut.Configs;
-using PushItOut.Spell_system;
+using Rebel_Mage.Configs;
+using Rebel_Mage.Spell_system;
 using UnityEngine;
 using Zenject;
 

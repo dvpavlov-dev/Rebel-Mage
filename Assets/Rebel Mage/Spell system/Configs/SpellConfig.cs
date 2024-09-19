@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PushItOut.Spell_system.Configs
+namespace Rebel_Mage.Spell_system.Configs
 {
     public class SpellConfig : ScriptableObject
     {
@@ -9,5 +9,7 @@ namespace PushItOut.Spell_system.Configs
         public float Cooldown;
         public Sprite SpellImage;
         public int OpenAfterRound;
+        public string AnimationName;
+        public float AnimationTime;
     }
 }

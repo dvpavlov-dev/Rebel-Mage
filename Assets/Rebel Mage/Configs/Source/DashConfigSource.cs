@@ -1,7 +1,7 @@
-﻿using PushItOut.Spell_system.Configs;
+﻿using Rebel_Mage.Spell_system.Configs;
 using UnityEngine;
 
-namespace PushItOut.Configs
+namespace Rebel_Mage.Configs
 {
     [CreateAssetMenu(fileName = "DashConfig", menuName = "Configs/Dash Config")]
     public class DashConfigSource : SpellConfig

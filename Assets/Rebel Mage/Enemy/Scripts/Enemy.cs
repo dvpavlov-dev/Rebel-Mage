@@ -1,5 +1,5 @@
 using System;
-using PushItOut.Spell_system;
+using Rebel_Mage.Spell_system;
 using UnityEngine;
 
 namespace Vanguard_Drone.Enemy

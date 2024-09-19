@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PushItOut.Spell_system
+namespace Rebel_Mage.Spell_system
 {
     public interface IImpact
     {

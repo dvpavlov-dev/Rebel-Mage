@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace PushItOut.UI.Gameplay
+namespace Rebel_Mage.UI.Gameplay
 {
     public class GameplayUI : MonoBehaviour
     {

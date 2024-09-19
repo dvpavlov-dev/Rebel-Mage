@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using PushItOut.Spell_system;
-using PushItOut.Spell_system.Configs;
+using Rebel_Mage.Spell_system;
+using Rebel_Mage.Spell_system.Configs;
 using UnityEngine;
 
-namespace PushItOut.UI.Spell_Window
+namespace Rebel_Mage.UI.Spell_Window
 {
     public class SpellInputPanel : MonoBehaviour
     {

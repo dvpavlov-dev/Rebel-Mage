@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using PushItOut.UI.Gameplay;
-using PushItOut.UI.Spell_Window;
+using Rebel_Mage.UI.Gameplay;
+using Rebel_Mage.UI.Spell_Window;
 
 namespace Vanguard_Drone.Infrastructure 
 {

@@ -1,4 +1,4 @@
-using PushItOut.Configs;
+using Rebel_Mage.Configs;
 using UnityEngine;
 using Vanguard_Drone.Configs;
 

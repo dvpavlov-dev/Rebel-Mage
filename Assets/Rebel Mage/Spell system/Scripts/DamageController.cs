@@ -1,8 +1,8 @@
 using System.Collections;
-using PushItOut.Player;
+using Rebel_Mage.Player;
 using UnityEngine;
 
-namespace PushItOut.Spell_system
+namespace Rebel_Mage.Spell_system
 {
     [RequireComponent(typeof(BoxCollider))]
     public class DamageController : MonoBehaviour, IDamage

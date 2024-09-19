@@ -1,12 +1,12 @@
-using PushItOut.Configs.Source;
+using Rebel_Mage.Configs.Source;
 using UnityEngine;
 
-namespace PushItOut.Spell_system
+namespace Rebel_Mage.Spell_system
 {
     [RequireComponent(typeof(Rigidbody))]
     public abstract class BallProjectile : Projectile
     {
-        public BallConfigSource BallConfig;
+        private BallConfigSource BallConfig => Config as BallConfigSource;
 
         void Start()
         {
@@ -15,13 +15,18 @@ namespace PushItOut.Spell_system
 
         private void Update()
         {
-            transform.Translate(new Vector3(0, 0, 1) * BallConfig.Speed * Time.deltaTime);
+            MoveProjectile(BallConfig);
+        }
+
+        private void MoveProjectile(BallConfigSource config)
+        {
+            transform.Translate(new Vector3(0, 0, 1) * config.Speed * Time.deltaTime);
         }
 
         private void OnDestroy()
         {
-            if(!gameObject.scene.isLoaded) return;
-            
+            if (!gameObject.scene.isLoaded) return;
+
             OnDestroyProjectile();
         }
 
@@ -49,6 +54,7 @@ namespace PushItOut.Spell_system
                 ImpactOnObject(hitObject);
             }
         }
+
         protected virtual void ImpactOnObject(GameObject hitObject)
         {
             if (hitObject.GetComponent<IDamage>() is {} damageSystemHit && hitObject.gameObject != _owner)
@@ -59,7 +65,7 @@ namespace PushItOut.Spell_system
 
         protected virtual void OnDestroyProjectile()
         {
-            _debugHitPos = transform.position;
+            // _debugHitPos = transform.position;
         }
 
         private void DestroyThisObject()
@@ -69,11 +75,11 @@ namespace PushItOut.Spell_system
 
         #region ForDebug
 
-        private Vector3 _debugHitPos;
-        void OnDrawGizmos()
-        {
-            Gizmos.DrawSphere(_debugHitPos, BallConfig.ExplosionRadius);
-        }
+        // private Vector3 _debugHitPos;
+        // void OnDrawGizmos()
+        // {
+        //     Gizmos.DrawSphere(_debugHitPos, BallConfig.ExplosionRadius);
+        // }
 
         #endregion
     }

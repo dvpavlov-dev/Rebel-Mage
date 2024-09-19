@@ -1,37 +1,31 @@
-using System;
-using PushItOut.Spell_system.Configs;
+using Rebel_Mage.Infrastructure;
+using Rebel_Mage.Spell_system.Configs;
 using UnityEngine;
 using Zenject;
 
-namespace PushItOut.Spell_system
+namespace Rebel_Mage.Spell_system
 {
     public class SpellsAction : MonoBehaviour
     {
         public Transform SpellPoint;
-        public Action<SpellConfig> OnSpellActivate;
+        public Animator AnimatorCastSpell;
 
-        private Spells _spells;
+        private Spells m_Spells;
+        private IFactorySpells m_FactorySpells;
 
         [Inject]
-        public void Constructor(Spells spells)
+        public void Constructor(Spells spells, IFactorySpells factorySpells)
         {
-            _spells = spells;
+            m_Spells = spells;
+            m_FactorySpells = factorySpells;
         }
 
         public void UseSpell(TypeSpell typeSpell)
         {
-            if (_spells.TryGetSpell(typeSpell, out SpellConfig useSpell))
+            if (m_Spells.TryCastSpell(typeSpell, out SpellConfig useSpell))
             {
-                if (_spells.CheckCooldown(typeSpell, useSpell))
-                {
-                    if (useSpell.SpellPrefab != null)
-                    {
-                        GameObject projectile = Instantiate(useSpell.SpellPrefab, SpellPoint.position, SpellPoint.rotation);
-                        projectile.GetComponent<Projectile>().SetOwner(gameObject);
-                    }
-                    
-                    OnSpellActivate?.Invoke(useSpell);
-                }
+                m_Spells.SetGlobalCooldown(typeSpell, useSpell);
+                m_FactorySpells.CastSpell(gameObject, AnimatorCastSpell, SpellPoint, useSpell);
             }
         }
     }

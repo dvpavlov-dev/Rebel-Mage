@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace PushItOut.Configs
+namespace Rebel_Mage.Configs
 {
     [CreateAssetMenu(fileName = "EnemyConfig", menuName = "Configs/Enemy Config")]
     public class EnemyConfigSource : ScriptableObject

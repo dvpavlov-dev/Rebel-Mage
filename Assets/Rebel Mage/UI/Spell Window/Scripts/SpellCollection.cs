@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using ModestTree;
-using PushItOut.Spell_system;
-using PushItOut.Spell_system.Configs;
 using UnityEngine;
 using Vanguard_Drone.Infrastructure;
 using System.Linq;
+using Rebel_Mage.Spell_system;
+using Rebel_Mage.Spell_system.Configs;
 
-namespace PushItOut.UI.Spell_Window
+namespace Rebel_Mage.UI.Spell_Window
 {
     public class SpellCollection : MonoBehaviour
     {

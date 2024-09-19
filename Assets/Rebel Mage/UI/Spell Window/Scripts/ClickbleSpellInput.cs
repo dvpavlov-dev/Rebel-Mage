@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace PushItOut.UI.Spell_Window
+namespace Rebel_Mage.UI.Spell_Window
 {
     public class ClickableSpellInput : MonoBehaviour, IPointerClickHandler
     {

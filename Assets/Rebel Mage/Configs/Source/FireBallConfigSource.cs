@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace PushItOut.Configs.Source
+namespace Rebel_Mage.Configs.Source
 {
     [CreateAssetMenu(fileName = "FireballConfig", menuName = "Configs/FireballConfig")]
     public class FireBallConfigSource : BallConfigSource

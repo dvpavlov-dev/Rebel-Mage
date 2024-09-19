@@ -1,10 +1,10 @@
-using PushItOut.Spell_system.Configs;
+using Rebel_Mage.Spell_system.Configs;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Vanguard_Drone.Infrastructure;
 
-namespace PushItOut.UI.Spell_Window
+namespace Rebel_Mage.UI.Spell_Window
 {
     public class SpellCollectionСell : MonoBehaviour
     {

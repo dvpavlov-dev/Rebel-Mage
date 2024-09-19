@@ -1,4 +1,4 @@
-﻿using PushItOut.UI.Gameplay;
+﻿using Rebel_Mage.UI.Gameplay;
 using UnityEngine;
 using Zenject;
 

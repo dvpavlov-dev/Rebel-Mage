@@ -17,7 +17,7 @@ namespace Vanguard_Drone.Enemy
         private readonly List<GameObject> _enemyOnScene = new();
         private int _enemyDestroyed;
 
-        private IFactory _factory;
+        private IFactoryActors m_FactoryActors;
         private int _pointsForRound;
         private Random _rnd;
         private SpawnOneSide _spawnOneSide;
@@ -28,9 +28,9 @@ namespace Vanguard_Drone.Enemy
             _spawnOneSide = new SpawnOneSide();
         }
 
-        public void SpawnEnemy(IFactory factory, RoundsConfigSource.RoundParameters roundParameters, int difficultyModifier, GameObject target)
+        public void SpawnEnemy(IFactoryActors factoryActors, RoundsConfigSource.RoundParameters roundParameters, int difficultyModifier, GameObject target)
         {
-            _factory ??= factory;
+            m_FactoryActors ??= factoryActors;
             ClearEnemyList();
 
             foreach (RoundsConfigSource.EnemyParameters enemyParameters in roundParameters.EnemyParameters)
@@ -65,7 +65,7 @@ namespace Vanguard_Drone.Enemy
             {
                 Vector3 position = SetPositionEnemy(spawnType);
 
-                GameObject enemy = _factory.CreateEnemy(enemyType, position, target);
+                GameObject enemy = m_FactoryActors.CreateEnemy(enemyType, position, target);
                 _enemyOnScene.Add(enemy);
 
                 enemy.SetActive(false);
@@ -154,6 +154,6 @@ namespace Vanguard_Drone.Enemy
     {
         public Action<int> OnAllEnemyDestroyed { get; set; }
 
-        void SpawnEnemy(IFactory factory, RoundsConfigSource.RoundParameters roundParameters, int difficultyModifier, GameObject target);
+        void SpawnEnemy(IFactoryActors factoryActors, RoundsConfigSource.RoundParameters roundParameters, int difficultyModifier, GameObject target);
     }
 }

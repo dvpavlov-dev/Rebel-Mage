@@ -1,10 +1,10 @@
-using PushItOut.Spell_system;
-using PushItOut.Spell_system.Configs;
+using Rebel_Mage.Spell_system;
+using Rebel_Mage.Spell_system.Configs;
 using UnityEngine;
 using Vanguard_Drone.Infrastructure;
 using Zenject;
 
-[RequireComponent(typeof(SpellsAction) , typeof(ZenAutoInjecter))]
+[RequireComponent(typeof(SpellsAction), typeof(ZenAutoInjecter))]
 public class PlayerSpellController : MonoBehaviour
 {
     private SpellsAction m_SpellsAction;
@@ -21,62 +21,55 @@ public class PlayerSpellController : MonoBehaviour
     public void Init()
     {
         m_SpellsAction = GetComponent<SpellsAction>();
-
-        m_SpellsAction.OnSpellActivate += ActivateSpellOnSelf;
     }
 
     void Update()
     {
         var groundPlane = new Plane(Vector3.up, Vector3.zero);
-            Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
 
-            if (groundPlane.Raycast(ray, out float position))
+        if (groundPlane.Raycast(ray, out float position))
+        {
+            Vector3 worldPosition = ray.GetPoint(position);
+
+            /* || Input.GetTouch(0).phase == TouchPhase.Began*/
+            if (Input.GetKeyDown(KeyCode.Mouse0) ||
+                Input.GetKeyDown(KeyCode.Mouse1) ||
+                Input.GetKeyDown(KeyCode.Q) ||
+                Input.GetKeyDown(KeyCode.E) ||
+                Input.GetKeyDown(KeyCode.R))
             {
-                Vector3 worldPosition = ray.GetPoint(position);
-
-                /* || Input.GetTouch(0).phase == TouchPhase.Began*/
-                if (Input.GetKeyDown(KeyCode.Mouse0) ||
-                    Input.GetKeyDown(KeyCode.Mouse1) ||
-                    Input.GetKeyDown(KeyCode.Q) ||
-                    Input.GetKeyDown(KeyCode.E) ||
-                    Input.GetKeyDown(KeyCode.R))
+                RaycastHit hit;
+                if (Physics.Raycast(m_Camera.transform.position, ray.direction, out hit, Mathf.Infinity))
                 {
-                    RaycastHit hit;
-                    if (Physics.Raycast(m_Camera.transform.position, ray.direction, out hit, Mathf.Infinity))
+                    Debug.DrawRay(m_Camera.transform.position, ray.direction * hit.distance, Color.yellow);
+
+                    if (Input.GetKeyDown(KeyCode.Mouse0))
                     {
-                        Debug.DrawRay(m_Camera.transform.position, ray.direction * hit.distance, Color.yellow);
+                        m_SpellsAction.UseSpell(TypeSpell.BASE_ATTACK);
+                    }
 
-                        if (Input.GetKeyDown(KeyCode.Mouse0))
-                        {
-                            m_SpellsAction.UseSpell(TypeSpell.BASE_ATTACK);
-                        }
+                    if (Input.GetKeyDown(KeyCode.Mouse1))
+                    {
+                        m_SpellsAction.UseSpell(TypeSpell.SUPPORT_ATTACK);
+                    }
 
-                        if (Input.GetKeyDown(KeyCode.Mouse1))
-                        {
-                            m_SpellsAction.UseSpell(TypeSpell.SUPPORT_ATTACK);
-                        }
+                    if (Input.GetKeyDown(KeyCode.Q))
+                    {
+                        m_SpellsAction.UseSpell(TypeSpell.FIRST_SPELL);
+                    }
 
-                        if (Input.GetKeyDown(KeyCode.Q))
-                        {
-                            m_SpellsAction.UseSpell(TypeSpell.FIRST_SPELL);
-                        }
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        m_SpellsAction.UseSpell(TypeSpell.SECOND_SPELL);
+                    }
 
-                        if (Input.GetKeyDown(KeyCode.E))
-                        {
-                            m_SpellsAction.UseSpell(TypeSpell.SECOND_SPELL);
-                        }
-
-                        if (Input.GetKeyDown(KeyCode.R))
-                        {
-                            m_SpellsAction.UseSpell(TypeSpell.THIRD_SPELL);
-                        }
+                    if (Input.GetKeyDown(KeyCode.R))
+                    {
+                        m_SpellsAction.UseSpell(TypeSpell.THIRD_SPELL);
                     }
                 }
             }
-    }
-
-    private void ActivateSpellOnSelf(SpellConfig spell)
-    {
-
+        }
     }
 }

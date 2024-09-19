@@ -19,17 +19,17 @@ namespace Vanguard_Drone.Infrastructure
         private int _difficultyModifier = 1;
 
         private IEnemySpawner _enemySpawner;
-        private IFactory _factory;
+        private IFactoryActors m_FactoryActors;
 
         private GameObject _player;
         private int _roundCount;
 
         [Inject]
-        private void Constructor(IEnemySpawner enemySpawner, Configs configs, IFactory factory)
+        private void Constructor(IEnemySpawner enemySpawner, Configs configs, IFactoryActors factoryActors)
         {
             _enemySpawner = enemySpawner;
             _configs = configs;
-            _factory = factory;
+            m_FactoryActors = factoryActors;
 
             _enemySpawner.OnAllEnemyDestroyed += EndRound;
         }
@@ -38,7 +38,7 @@ namespace Vanguard_Drone.Infrastructure
         {
             if (_player == null)
             {
-                _player = _factory.CreatePlayer(new Vector3(0, 0, 0));
+                _player = m_FactoryActors.CreatePlayer(new Vector3(0, 0, 0));
                 _player.GetComponent<Player.Player>().OnDead = () => {
                     EndRound(TypeEndRound.PLAYER_LOST);
                 };

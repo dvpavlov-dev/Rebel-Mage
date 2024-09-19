@@ -1,11 +1,11 @@
 using System;
-using PushItOut.Spell_system;
-using PushItOut.Spell_system.Configs;
+using Rebel_Mage.Spell_system;
+using Rebel_Mage.Spell_system.Configs;
 using UnityEngine;
 using Vanguard_Drone.Infrastructure;
 using Zenject;
 
-namespace PushItOut.UI.Spell_Window
+namespace Rebel_Mage.UI.Spell_Window
 {
     public class SpellWindowController : MonoBehaviour
     {

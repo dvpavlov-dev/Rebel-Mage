@@ -1,4 +1,5 @@
-using PushItOut.Spell_system;
+using Rebel_Mage.Infrastructure;
+using Rebel_Mage.Spell_system;
 using UnityEngine;
 using Zenject;
 
@@ -43,8 +44,13 @@ namespace Vanguard_Drone.Infrastructure
         private void BindFactories()
         {
             Container
-                .Bind<IFactory>()
-                .FromInstance(new Factory(_prefabs, _configs))
+                .Bind<IFactoryActors>()
+                .FromInstance(new FactoryActors(_prefabs, _configs))
+                .AsSingle();
+
+            Container
+                .Bind<IFactorySpells>()
+                .FromInstance(new FactorySpells())
                 .AsSingle();
         }
     }

@@ -1,12 +1,20 @@
-﻿using PushItOut.Configs.Source;
+﻿using Rebel_Mage.Configs.Source;
+using Rebel_Mage.Spell_system.Configs;
 using UnityEngine;
 
-namespace PushItOut.Spell_system
+namespace Rebel_Mage.Spell_system
 {
     public class FireBall : BallProjectile
     {
         public FireBallConfigSource FireBallConfig;
         public GameObject ExplosionEffectPref;
+
+        protected override SpellConfig Config => FireBallConfig;
+        
+        // protected override void MoveProjectile(BallConfigSource config)
+        // {
+        //     base.MoveProjectile(FireBallConfig);
+        // }
 
         protected override void ImpactOnObject(GameObject hitObject)
         {

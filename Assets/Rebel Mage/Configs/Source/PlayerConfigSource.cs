@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PushItOut.Configs
+namespace Rebel_Mage.Configs
 {
     [CreateAssetMenu(fileName = "PlayerConfig", menuName = "Configs/Player Config")]
     public class PlayerConfigSource : ScriptableObject

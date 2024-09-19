@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace PushItOut.Spell_system
+namespace Rebel_Mage.Spell_system
 {
     public class SpellCell : MonoBehaviour
     {

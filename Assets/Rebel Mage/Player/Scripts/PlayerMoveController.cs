@@ -1,8 +1,6 @@
 using System.Collections;
-using PushItOut.Configs;
-using PushItOut.Spell_system;
-using PushItOut.UI.Gameplay;
-using UnityEditor;
+using Rebel_Mage.Configs;
+using Rebel_Mage.Spell_system;
 using UnityEngine;
 using Vanguard_Drone.Infrastructure;
 using Zenject;
@@ -12,7 +10,8 @@ namespace Vanguard_Drone.Player
     [RequireComponent(typeof(Rigidbody), typeof(ZenAutoInjecter))]
     public class PlayerMoveController : MonoBehaviour, IImpact
     {
-        public bool IsBlockedControl {
+        public bool IsBlockedControl 
+        {
             get => m_IsBlockedControl;
             set => m_IsBlockedControl = value;
         }
@@ -146,7 +145,10 @@ namespace Vanguard_Drone.Player
             Vector3 move = new(deltaX, 0, deltaZ);
             move.Normalize();
 
-            AnimTransform(move);
+            if (AnimMove != null)
+            {
+                AnimTransform(move);
+            }
 
             m_Movement.Set(m_CurrentSpeed * move.x, 0, m_CurrentSpeed * move.z);
             m_Rb.velocity = m_Movement;

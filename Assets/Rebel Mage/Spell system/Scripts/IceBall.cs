@@ -1,14 +1,17 @@
-﻿using PushItOut.Configs.Source;
+﻿using Rebel_Mage.Configs.Source;
+using Rebel_Mage.Spell_system.Configs;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace PushItOut.Spell_system
+namespace Rebel_Mage.Spell_system
 {
     public class IceBall : BallProjectile
     {
         public IceBallConfigSource IceBallConfig;
         public GameObject ExplosionEffectPref;
 
+        protected override SpellConfig Config => IceBallConfig;
+        
         protected override void ImpactOnObject(GameObject hitObject)
         {
             base.ImpactOnObject(hitObject);
@@ -18,7 +21,7 @@ namespace PushItOut.Spell_system
                 impactSystem.ChangeSpeedImpact(IceBallConfig.SlowdownPercentage / 100, IceBallConfig.TimeSlowdown);
             }
         }
-        
+
         protected override void OnDestroyProjectile()
         {
             base.OnDestroyProjectile();

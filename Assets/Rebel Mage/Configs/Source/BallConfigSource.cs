@@ -1,7 +1,7 @@
-using PushItOut.Spell_system.Configs;
+using Rebel_Mage.Spell_system.Configs;
 using UnityEngine;
 
-namespace PushItOut.Configs.Source
+namespace Rebel_Mage.Configs.Source
 {
     public class BallConfigSource : SpellConfig
     {
