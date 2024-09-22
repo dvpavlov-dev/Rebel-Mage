@@ -1,5 +1,5 @@
+using Rebel_Mage.Configs.Source;
 using Rebel_Mage.Infrastructure;
-using Rebel_Mage.Spell_system.Configs;
 using UnityEngine;
 using Zenject;
 

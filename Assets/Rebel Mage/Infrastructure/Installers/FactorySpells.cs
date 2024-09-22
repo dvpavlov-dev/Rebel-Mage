@@ -1,5 +1,4 @@
 using Rebel_Mage.Configs.Source;
-using Rebel_Mage.Spell_system.Configs;
 using UnityEngine;
 
 namespace Rebel_Mage.Infrastructure

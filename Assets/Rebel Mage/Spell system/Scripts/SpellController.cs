@@ -1,4 +1,4 @@
-using Rebel_Mage.Spell_system.Configs;
+using Rebel_Mage.Configs.Source;
 using UnityEngine;
 
 public abstract class SpellController : MonoBehaviour

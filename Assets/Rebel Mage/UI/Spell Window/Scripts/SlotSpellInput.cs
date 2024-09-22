@@ -1,4 +1,4 @@
-using Rebel_Mage.Spell_system.Configs;
+using Rebel_Mage.Configs.Source;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;

@@ -1,5 +1,4 @@
 using Rebel_Mage.Spell_system;
-using Rebel_Mage.Spell_system.Configs;
 using UnityEngine;
 using Vanguard_Drone.Infrastructure;
 using Zenject;

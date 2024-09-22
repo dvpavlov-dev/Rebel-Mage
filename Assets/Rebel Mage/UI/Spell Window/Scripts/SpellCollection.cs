@@ -3,8 +3,8 @@ using ModestTree;
 using UnityEngine;
 using Vanguard_Drone.Infrastructure;
 using System.Linq;
+using Rebel_Mage.Configs.Source;
 using Rebel_Mage.Spell_system;
-using Rebel_Mage.Spell_system.Configs;
 
 namespace Rebel_Mage.UI.Spell_Window
 {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Rebel_Mage.Spell_system.Configs
+namespace Rebel_Mage.Configs.Source
 {
     public class SpellConfig : ScriptableObject
     {
@@ -12,4 +12,5 @@ namespace Rebel_Mage.Spell_system.Configs
         public string AnimationName;
         public float AnimationTime;
     }
+
 }
