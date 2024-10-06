@@ -11,6 +11,8 @@ namespace Vanguard_Drone.Infrastructure
         [SerializeField] private Configs _configs;
         [SerializeField] private Prefabs _prefabs;
 
+        readonly IFactorySpells m_FactorySpells = new FactorySpells();
+        
         public override void InstallBindings()
         {
             BindSpells();
@@ -39,6 +41,8 @@ namespace Vanguard_Drone.Infrastructure
                 .Bind<Spells>()
                 .FromInstance(_spells)
                 .AsSingle();
+            
+            _spells.Constructor(m_FactorySpells);
         }
 
         private void BindFactories()
@@ -47,10 +51,10 @@ namespace Vanguard_Drone.Infrastructure
                 .Bind<IFactoryActors>()
                 .FromInstance(new FactoryActors(_prefabs, _configs))
                 .AsSingle();
-
+            
             Container
                 .Bind<IFactorySpells>()
-                .FromInstance(new FactorySpells())
+                .FromInstance(m_FactorySpells)
                 .AsSingle();
         }
     }

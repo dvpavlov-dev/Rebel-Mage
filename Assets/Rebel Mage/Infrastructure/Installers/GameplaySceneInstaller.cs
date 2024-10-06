@@ -1,3 +1,4 @@
+using Rebel_Mage.Spell_system;
 using Rebel_Mage.UI.Gameplay;
 using Rebel_Mage.UI.Spell_Window;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Vanguard_Drone.Infrastructure
         [SerializeField] private SpellWindowController _spellWindowController;
         [SerializeField] private CameraManager _cameraManager;
         [SerializeField] private EnemySpawner _enemySpawner;
-
+        
         public override void InstallBindings()
         {
             BindRoundProcess();

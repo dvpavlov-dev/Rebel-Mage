@@ -95,6 +95,7 @@ MonoBehaviour:
   AllSpells:
   - {fileID: 11400000, guid: d404d3a797b9b3741a92f74686951ad3, type: 2}
   - {fileID: 11400000, guid: b40f5be749f0b724eb53adbbdc243ae3, type: 2}
+  - {fileID: 11400000, guid: 18519799f9697094ebeaed58a48a6607, type: 2}
 --- !u!114 &-131553019137547936
 MonoBehaviour:
   m_ObjectHideFlags: 0

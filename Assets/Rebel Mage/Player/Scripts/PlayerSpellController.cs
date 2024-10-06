@@ -3,23 +3,22 @@ using UnityEngine;
 using Vanguard_Drone.Infrastructure;
 using Zenject;
 
-[RequireComponent(typeof(SpellsAction), typeof(ZenAutoInjecter))]
+[RequireComponent(typeof(ZenAutoInjecter))]
 public class PlayerSpellController : MonoBehaviour
 {
-    private SpellsAction m_SpellsAction;
+    public Transform SpellPoint;
+    public Animator AnimatorCastSpell;
+    
     private CameraManager m_CameraManager;
     private Camera m_Camera;
+    private Spells m_Spells;
 
     [Inject]
-    private void Constructor(CameraManager cameraManager)
+    private void Constructor(Spells spells, CameraManager cameraManager)
     {
+        m_Spells = spells;
         m_CameraManager = cameraManager;
         m_Camera = cameraManager.CameraPlayer.GetComponent<Camera>();
-    }
-
-    public void Init()
-    {
-        m_SpellsAction = GetComponent<SpellsAction>();
     }
 
     void Update()
@@ -45,30 +44,35 @@ public class PlayerSpellController : MonoBehaviour
 
                     if (Input.GetKeyDown(KeyCode.Mouse0))
                     {
-                        m_SpellsAction.UseSpell(TypeSpell.BASE_ATTACK);
+                        UseSpell(TypeSpell.BASE_ATTACK);
                     }
 
                     if (Input.GetKeyDown(KeyCode.Mouse1))
                     {
-                        m_SpellsAction.UseSpell(TypeSpell.SUPPORT_ATTACK);
+                        UseSpell(TypeSpell.SUPPORT_ATTACK);
                     }
 
                     if (Input.GetKeyDown(KeyCode.Q))
                     {
-                        m_SpellsAction.UseSpell(TypeSpell.FIRST_SPELL);
+                        UseSpell(TypeSpell.FIRST_SPELL);
                     }
 
                     if (Input.GetKeyDown(KeyCode.E))
                     {
-                        m_SpellsAction.UseSpell(TypeSpell.SECOND_SPELL);
+                        UseSpell(TypeSpell.SECOND_SPELL);
                     }
 
                     if (Input.GetKeyDown(KeyCode.R))
                     {
-                        m_SpellsAction.UseSpell(TypeSpell.THIRD_SPELL);
+                        UseSpell(TypeSpell.THIRD_SPELL);
                     }
                 }
             }
         }
+    }
+    
+    private void UseSpell(TypeSpell typeSpell)
+    {
+        m_Spells.CastSpell(typeSpell, AnimatorCastSpell, SpellPoint, gameObject);
     }
 }

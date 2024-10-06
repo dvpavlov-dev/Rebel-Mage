@@ -25,7 +25,6 @@ namespace Vanguard_Drone.Player
         {
             GetComponent<DamageController>().InitHealthPoints(m_PlayerConfig.Hp);
             GetComponent<PlayerMoveController>().Init(m_PlayerConfig);
-            GetComponent<PlayerSpellController>().Init();
         }
 
         private void OnDisable()

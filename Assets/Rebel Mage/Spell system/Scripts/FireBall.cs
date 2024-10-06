@@ -3,18 +3,13 @@ using UnityEngine;
 
 namespace Rebel_Mage.Spell_system
 {
-    public class FireBall : BallProjectile
+    public class FireBall : BallSpell
     {
         public FireBallConfigSource FireBallConfig;
         public GameObject ExplosionEffectPref;
 
         protected override SpellConfig Config => FireBallConfig;
         
-        // protected override void MoveProjectile(BallConfigSource config)
-        // {
-        //     base.MoveProjectile(FireBallConfig);
-        // }
-
         protected override void ImpactOnObject(GameObject hitObject)
         {
             base.ImpactOnObject(hitObject);

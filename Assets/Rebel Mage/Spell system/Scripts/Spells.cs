@@ -1,40 +1,51 @@
 using System;
 using System.Collections.Generic;
 using Rebel_Mage.Configs.Source;
+using Rebel_Mage.Infrastructure;
 using UnityEngine;
+using Zenject;
 
 namespace Rebel_Mage.Spell_system
 {
+
     public class Spells : MonoBehaviour
     {
         public List<SpellConfig> AllSpells = new();
         public Action<TypeSpell, float, float> OnActivateCooldown;
 
-        private readonly Dictionary<TypeSpell, SpellConfig> _activeSpells = new();
-        private readonly Dictionary<SpellConfig, float> _coolDown = new();
+        public Dictionary<TypeSpell, SpellConfig> ActiveSpells { get; } = new();
+        public CooldownController CooldownController => m_CooldownController ??= new CooldownController(this);
 
+        private CooldownController m_CooldownController;
+        private IFactorySpells m_FactorySpells;
+
+        public void Constructor(IFactorySpells factorySpells)
+        {
+            m_FactorySpells = factorySpells;
+        }
+        
         public void ClearSpells()
         {
-            _activeSpells.Clear();
+            ActiveSpells.Clear();
 
             SetSpell(AllSpells[0], TypeSpell.BASE_ATTACK);
         }
 
         public Dictionary<TypeSpell, SpellConfig> GetActiveSpells()
         {
-            return _activeSpells;
+            return ActiveSpells;
         }
 
         public void SetSpell(SpellConfig spell, TypeSpell typeSpell)
         {
-            _activeSpells[typeSpell] = spell;
+            ActiveSpells[typeSpell] = spell;
         }
 
         public bool TryGetSpell(TypeSpell typeSpell, out SpellConfig spell)
         {
-            if (_activeSpells.ContainsKey(typeSpell) && _activeSpells[typeSpell] != null)
+            if (ActiveSpells.ContainsKey(typeSpell) && ActiveSpells[typeSpell] != null)
             {
-                spell = _activeSpells[typeSpell];
+                spell = ActiveSpells[typeSpell];
                 return true;
             }
 
@@ -42,52 +53,13 @@ namespace Rebel_Mage.Spell_system
             return false;
         }
 
-        public bool TryCastSpell(TypeSpell typeSpell, out SpellConfig spellConfig)
+        public void CastSpell(TypeSpell typeSpell, Animator animatorCastSpell, Transform spellPoint, GameObject owner)
         {
-            if (TryGetSpell(typeSpell, out SpellConfig useSpell))
+            if (TryGetSpell(typeSpell, out SpellConfig useSpell) && CooldownController.CheckCooldown(typeSpell, useSpell))
             {
-                if (CheckCooldown(typeSpell, useSpell))
-                {
-                    spellConfig = useSpell;
-                    return true;
-                }
+                CooldownController.SetGlobalCooldown(typeSpell);
+                m_FactorySpells.CastSpell(owner, animatorCastSpell, spellPoint, useSpell);
             }
-
-            spellConfig = null;
-            return false;
-        }
-
-        public void SetGlobalCooldown(TypeSpell typeSpell, SpellConfig spellConfig)
-        {
-            foreach (TypeSpell activeTypeSpell in _activeSpells.Keys)
-            {
-                SpellConfig spell = _activeSpells[activeTypeSpell];
-                
-                if (spell != null)
-                {
-                    _coolDown.TryAdd(spell, 0);
-
-                    if (activeTypeSpell != typeSpell)
-                    {
-                        _coolDown[spell] = Time.time + spell.AnimationTime;
-                        OnActivateCooldown?.Invoke(activeTypeSpell, Time.time, _coolDown[spell]);
-                    }
-                }
-            }
-        }
-
-        private bool CheckCooldown(TypeSpell typeSpell, SpellConfig spell)
-        {
-            _coolDown.TryAdd(spell, 0);
-
-            if (_coolDown[spell] <= Time.time)
-            {
-                _coolDown[spell] = Time.time + spell.Cooldown;
-                OnActivateCooldown?.Invoke(typeSpell, Time.time, _coolDown[spell]);
-                return true;
-            }
-
-            return false;
         }
     }
 }

@@ -19,7 +19,6 @@ namespace Vanguard_Drone.Player
         public Animator AnimMove;
 
         // public GameObject MousePoint;
-        private SpellsAction m_SpellsAction;
 
         private Camera m_Camera;
         private CameraManager m_CameraManager;

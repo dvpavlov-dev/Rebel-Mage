@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36" version="24.7.12">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36" version="24.7.17">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="1195" dy="622" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1434" dy="746" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -435,10 +435,10 @@
         <mxCell id="CzBxCU9g4txhyeJvgo_D-0" value="В&amp;nbsp; SpellAction создаем обычные классы всех активных заклинаний и вызываем в них методы когда происходит активация определенного заклинания" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="2760" y="520" width="220" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="ZzF_akA_T3d2tdXg7JUX-0" target="OCq0OnNYbWX01t8ZmXER-0">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="ZzF_akA_T3d2tdXg7JUX-0" target="OCq0OnNYbWX01t8ZmXER-0" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-2" value="Передаем нужный конфиг фабрике" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="OCq0OnNYbWX01t8ZmXER-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-2" value="Передаем нужный конфиг фабрике" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="OCq0OnNYbWX01t8ZmXER-1" vertex="1" connectable="0">
           <mxGeometry x="-0.5128" y="-3" relative="1" as="geometry">
             <mxPoint x="54" y="-13" as="offset" />
           </mxGeometry>
@@ -457,68 +457,116 @@
         <mxCell id="ZzF_akA_T3d2tdXg7JUX-1" value="Spell Action" style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3400" y="660" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-0" value="Фабрика заклинаний" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-0" value="Фабрика заклинаний" style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3750" y="530" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-3" value="Закл 1" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-3" value="Закл 1" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3400" y="880" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-4" value="Закл 2" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-4" value="Закл 2" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3520" y="880" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-5" value="Закл 3" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-5" value="Закл 3" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3642" y="879" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-6" value="Закл 1" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-6" value="Закл 1" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3400" y="1019" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-7" value="Закл 2" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-7" value="Закл 2" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3520" y="1019" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-8" value="Закл 3" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-8" value="Закл 3" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3642" y="1018" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-9" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-9" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="3559.58" y="970" as="sourcePoint" />
             <mxPoint x="3559.58" y="1010" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-10" value="Закл 1" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-10" value="Закл 1" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3399" y="1159" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-11" value="Закл 2" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-11" value="Закл 2" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3519" y="1159" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-12" value="Закл 3" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-12" value="Закл 3" style="whiteSpace=wrap;html=1;aspect=fixed;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3641" y="1158" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-13" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-13" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="3558.58" y="1110" as="sourcePoint" />
             <mxPoint x="3558.58" y="1150" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-15" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-15" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3400" y="1018" width="40" height="82" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-16" value="Активируем заклинание 1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-16" value="Активируем заклинание 1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3750" y="905" width="180" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-17" value="Закл 1 уходит в кд, но пока оно работает (проигрывается анимация) другие закл не могут быть активированы&lt;div&gt;ГКД (Global cooldown)&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-17" value="Закл 1 уходит в кд, но пока оно работает (проигрывается анимация) другие закл не могут быть активированы&lt;div&gt;ГКД (Global cooldown)&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3760" y="1019.5" width="180" height="77" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-19" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-19" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3519" y="1019" width="61" height="82" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-20" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-20" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3641" y="1018" width="61" height="82" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-21" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-21" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3399" y="1158" width="40" height="82" as="geometry" />
         </mxCell>
-        <mxCell id="OCq0OnNYbWX01t8ZmXER-22" value="Закл 1 может еще быть в кд, но ГКД уже прошло, можно применять закл&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Время ГКД будет зависеть от времени анимации заклинания&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="OCq0OnNYbWX01t8ZmXER-22" value="Закл 1 может еще быть в кд, но ГКД уже прошло, можно применять закл&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Время ГКД будет зависеть от времени анимации заклинания&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="3760" y="1158" width="180" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-2" value="Spells" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="2820" y="1290" width="140" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-3" value="Хранит в себе модели всех заклинаний" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="_5UatFdoYQuRfR0SVw_J-2" vertex="1">
+          <mxGeometry y="30" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-6" value="Хранит в себе модели выбранных заклинаний" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="_5UatFdoYQuRfR0SVw_J-2" vertex="1">
+          <mxGeometry y="70" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-5" value="Позволяет взять модель заклинания" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="_5UatFdoYQuRfR0SVw_J-2" vertex="1">
+          <mxGeometry y="130" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-13" value="Кастует заклинания" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="_5UatFdoYQuRfR0SVw_J-2" vertex="1">
+          <mxGeometry y="170" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-9" value="ColldownController" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="2820" y="1540" width="140" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-4" value="Хранит КД заклинаний" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="_5UatFdoYQuRfR0SVw_J-9" vertex="1">
+          <mxGeometry y="30" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-7" value="Проверяет на КД заклинание" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="_5UatFdoYQuRfR0SVw_J-9" vertex="1">
+          <mxGeometry y="60" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-8" value="Задает глобальный КД" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="_5UatFdoYQuRfR0SVw_J-9" vertex="1">
+          <mxGeometry y="100" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-14" value="SpellController" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="3250" y="1430" width="140" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-15" value="Запускает анимацию каста заклинания" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="_5UatFdoYQuRfR0SVw_J-14" vertex="1">
+          <mxGeometry y="30" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-16" value="Спавн проджектайла" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="_5UatFdoYQuRfR0SVw_J-14" vertex="1">
+          <mxGeometry y="70" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-18" value="&lt;div style=&quot;&quot;&gt;&lt;p style=&quot;&quot;&gt;FactorySpells&lt;/p&gt;&lt;/div&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="3040" y="1440" width="140" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-19" value="Выбор контроллера в зависимости от входной модели" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="_5UatFdoYQuRfR0SVw_J-18" vertex="1">
+          <mxGeometry y="30" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-20" value="Item 2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="_5UatFdoYQuRfR0SVw_J-18" vertex="1">
+          <mxGeometry y="90" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_5UatFdoYQuRfR0SVw_J-21" value="Item 3" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" parent="_5UatFdoYQuRfR0SVw_J-18" vertex="1">
+          <mxGeometry y="120" width="140" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

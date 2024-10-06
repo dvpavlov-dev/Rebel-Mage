@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Rebel_Mage.Spell_system
 {
     [RequireComponent(typeof(Rigidbody))]
-    public abstract class BallProjectile : Projectile
+    public abstract class BallSpell : Spell
     {
         private BallConfigSource BallConfig => Config as BallConfigSource;
 
