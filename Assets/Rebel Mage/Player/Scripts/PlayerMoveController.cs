@@ -8,7 +8,7 @@ using Zenject;
 namespace Vanguard_Drone.Player
 {
     [RequireComponent(typeof(Rigidbody), typeof(ZenAutoInjecter))]
-    public class PlayerMoveController : MonoBehaviour, IImpact
+    public class PlayerMoveController : MonoBehaviour, IImpact, ICastSpells
     {
         public bool IsBlockedControl 
         {
@@ -115,14 +115,14 @@ namespace Vanguard_Drone.Player
             Invoke(nameof(UnblockControl), 0.1f);
         }
 
-        public void ExplosionImpact(Vector3 positionImpact, float maxDistance, float explosionForce)
+        void IImpact.ExplosionImpact(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
             m_IsBlockedControl = true;
             m_Rb.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
             Invoke(nameof(UnblockControl), 0.1f);
         }
 
-        public void ChangeSpeedImpact(float slowdown, float timeSlowdown)
+        void IImpact.ChangeSpeedImpact(float slowdown, float timeSlowdown)
         {
             if (!gameObject.activeSelf) return;
 
@@ -194,6 +194,11 @@ namespace Vanguard_Drone.Player
         {
             yield return new WaitForSeconds(timeWhenReturn);
             m_CurrentSpeed = m_MoveSpeed;
+        }
+        public void OnCastSpell(float castTime)
+        {
+            m_IsBlockedControl = true;
+            Invoke(nameof(UnblockControl), castTime);
         }
     }
 }

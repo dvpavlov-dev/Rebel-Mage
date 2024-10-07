@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4203686234702465812}
-  - component: {fileID: 280295895574434914}
+  - component: {fileID: 5170417932737876016}
   - component: {fileID: 7071259479409886622}
   m_Layer: 0
   m_Name: ExplosionEffect
@@ -35,7 +35,7 @@ Transform:
   - {fileID: 1741569258360242047}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &280295895574434914
+--- !u!114 &5170417932737876016
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,10 +44,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7916656756039522504}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5f61ee59c27a024b85aee9d7355a928, type: 3}
+  m_Script: {fileID: 11500000, guid: fdd6d4538b6d6d647af44fbffdbcb8a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExplosionEffect: {fileID: 8422738917696345132}
+  IceExplosion: {fileID: 8422738917696345132}
 --- !u!82 &7071259479409886622
 AudioSource:
   m_ObjectHideFlags: 0

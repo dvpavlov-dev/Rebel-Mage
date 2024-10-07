@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Rebel_Mage.Spell_system
 {
     [RequireComponent(typeof(Rigidbody))]
-    public abstract class BallSpell : Spell
+    public abstract class BallSpell : AttackSpell
     {
         private BallConfigSource BallConfig => Config as BallConfigSource;
 
@@ -40,27 +40,14 @@ namespace Rebel_Mage.Spell_system
             DestroyThisObject();
         }
 
-        private void HitHandling(GameObject other)
+        protected override void HitHandling(GameObject other)
         {
             if (other.GetComponent<IDamage>() is {} damageController)
             {
                 damageController.TakeDamage(BallConfig.Damage / 2);
             }
 
-            foreach (Collider hit in Physics.OverlapSphere(transform.position, BallConfig.ExplosionRadius))
-            {
-                GameObject hitObject = hit.gameObject;
-
-                ImpactOnObject(hitObject);
-            }
-        }
-
-        protected virtual void ImpactOnObject(GameObject hitObject)
-        {
-            if (hitObject.GetComponent<IDamage>() is {} damageSystemHit && hitObject.gameObject != _owner)
-            {
-                damageSystemHit.TakeDamage(BallConfig.Damage / 2);
-            }
+            base.HitHandling(other);
         }
 
         protected virtual void OnDestroyProjectile()

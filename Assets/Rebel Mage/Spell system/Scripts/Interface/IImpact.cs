@@ -8,4 +8,9 @@ namespace Rebel_Mage.Spell_system
 
         void ChangeSpeedImpact(float slowdownPercentage, float timeSlowdown);
     }
+
+    public interface ICastSpells
+    {
+        void OnCastSpell(float castTime);
+    }
 }

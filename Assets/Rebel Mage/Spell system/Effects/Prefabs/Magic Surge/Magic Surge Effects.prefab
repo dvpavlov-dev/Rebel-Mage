@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1059620161036077086}
-  - component: {fileID: 8636546861838894589}
+  - component: {fileID: 8574565111513297378}
   m_Layer: 0
-  m_Name: Magic Surge
+  m_Name: Magic Surge Effects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 8967890365442972252}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8636546861838894589
+--- !u!114 &8574565111513297378
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,10 +42,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1318967166799039317}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5f61ee59c27a024b85aee9d7355a928, type: 3}
+  m_Script: {fileID: 11500000, guid: fdd6d4538b6d6d647af44fbffdbcb8a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExplosionEffect: {fileID: 8967890365458177818}
+  Explosion: {fileID: 8967890365458177818}
 --- !u!1001 &8967890365443358936
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -136,7 +136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: c0a6034072b736e4380b2bd671494671, type: 3}
       propertyPath: playOnAwake
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19800000, guid: c0a6034072b736e4380b2bd671494671, type: 3}
       propertyPath: scalingMode
@@ -151,8 +151,12 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 19800002, guid: c0a6034072b736e4380b2bd671494671, type: 3}
+      propertyPath: lengthInSec
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 19800002, guid: c0a6034072b736e4380b2bd671494671, type: 3}
       propertyPath: playOnAwake
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19800002, guid: c0a6034072b736e4380b2bd671494671, type: 3}
       propertyPath: scalingMode
@@ -160,7 +164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19800004, guid: c0a6034072b736e4380b2bd671494671, type: 3}
       propertyPath: playOnAwake
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19800004, guid: c0a6034072b736e4380b2bd671494671, type: 3}
       propertyPath: scalingMode
@@ -176,7 +180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19800006, guid: c0a6034072b736e4380b2bd671494671, type: 3}
       propertyPath: playOnAwake
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 19800006, guid: c0a6034072b736e4380b2bd671494671, type: 3}
       propertyPath: scalingMode

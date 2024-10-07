@@ -6,14 +6,19 @@ namespace Rebel_Mage.Spell_system
     {
         public override void CastSpell()
         {
+            if (GetComponent<ICastSpells>() is {} actorCastSpell)
+            {
+                actorCastSpell.OnCastSpell(m_Config.AnimationTime);
+            }
+            
             m_Animator.SetTrigger(m_Config.AnimationName);
             Invoke(nameof(SpawnProjectile), 0.8f);
         }
         
         private void SpawnProjectile()
         {
-            GameObject projectile = Instantiate(m_Config.SpellPrefab, m_SpellPoint.position, m_SpellPoint.rotation);
-            projectile.GetComponent<Spell>().SetOwner(m_Owner);
+            GameObject spell = Instantiate(m_Config.SpellPrefab, m_SpellPoint.position, Quaternion.identity);
+            spell.GetComponent<Spell>().SetOwner(gameObject);
         }
     }
 }

@@ -17,10 +17,10 @@ MonoBehaviour:
   Cooldown: 2
   SpellImage: {fileID: 21300000, guid: 4184495d79c523148bd19006e6e88b2d, type: 3}
   OpenAfterRound: 0
-  AnimationName: FireBall
+  AnimationName: BallProjectile
   AnimationTime: 1
   Damage: 5
-  Speed: 25
   ExplosionRadius: 10
+  Speed: 25
   SlowdownPercentage: 50
   TimeSlowdown: 5

@@ -14,12 +14,12 @@ namespace Rebel_Mage.Spell_system
         {
             base.ImpactOnObject(hitObject);
 
-            if (hitObject.GetComponent<Rigidbody>() != null)
+            if (hitObject.GetComponent<Rigidbody>() != null) // impact on dynamic object (some objects with physics)
             {
                 hitObject.GetComponent<Rigidbody>().AddExplosionForce(FireBallConfig.ExplosionForce, transform.position, FireBallConfig.ExplosionRadius);
             }
 
-            if (hitObject.GetComponent<IImpact>() is {} impactSystem)
+            if (hitObject.GetComponent<IImpact>() is {} impactSystem) // impact on actors (player or enemy)
             {
                 impactSystem.ExplosionImpact(transform.position, FireBallConfig.ExplosionRadius, FireBallConfig.ExplosionForce);
             }
