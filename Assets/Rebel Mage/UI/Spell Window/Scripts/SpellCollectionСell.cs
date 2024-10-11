@@ -1,8 +1,8 @@
 using Rebel_Mage.Configs.Source;
+using Rebel_Mage.Infrastructure;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Vanguard_Drone.Infrastructure;
 
 namespace Rebel_Mage.UI.Spell_Window
 {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Vanguard_Drone.Infrastructure 
+namespace Rebel_Mage.Infrastructure 
 {
     public class CameraManager : MonoBehaviour
     {

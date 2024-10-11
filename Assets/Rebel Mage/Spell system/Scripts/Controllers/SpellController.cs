@@ -3,19 +3,19 @@ using UnityEngine;
 
 namespace Rebel_Mage.Spell_system
 {
-    public abstract class SpellController : MonoBehaviour
+    public abstract class SpellController<T> : MonoBehaviour
     {
-        protected Animator m_Animator;
-        protected SpellConfig m_Config;
-        protected GameObject m_Owner;
-        protected Transform m_SpellPoint;
+        protected Animator Animator;
+        protected T Config;
+        protected GameObject Owner;
+        protected Transform SpellPoint;
 
-        public void Constructor(GameObject owner, Animator animator, Transform spellPoint, SpellConfig config)
+        public void Constructor(GameObject owner, Animator animator, Transform spellPoint, T config)
         {
-            m_Owner = owner;
-            m_Animator = animator;
-            m_Config = config;
-            m_SpellPoint = spellPoint;
+            Owner = owner;
+            Animator = animator;
+            Config = config;
+            SpellPoint = spellPoint;
         }
 
         public abstract void CastSpell();

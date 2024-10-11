@@ -1,14 +1,18 @@
 using UnityEngine;
 
-namespace Vanguard_Drone.Enemy
+namespace Rebel_Mage.Enemy
 {
     public class EnemyAbilities : MonoBehaviour
     {
         protected float Damage;
-        
-        public void SetupEnemyAbilities(float damage)
+        protected Enemy Enemy;
+        protected GameObject Target;
+
+        public void SetupEnemyAbilities(float damage, GameObject target, Enemy meleeEnemy)
         {
             Damage = damage;
+            Target = target;
+            Enemy = meleeEnemy;
         }
     }
 }

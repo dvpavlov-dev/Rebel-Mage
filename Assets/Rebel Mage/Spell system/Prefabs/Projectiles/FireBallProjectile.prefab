@@ -148,7 +148,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2717792568191984999}
-  - component: {fileID: 6870968832150056276}
+  - component: {fileID: 8283539941587076075}
   - component: {fileID: 3612940297667647752}
   - component: {fileID: 6567260182040496527}
   - component: {fileID: 5574438702139134807}
@@ -177,7 +177,7 @@ Transform:
   - {fileID: 6395828170404884791}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6870968832150056276
+--- !u!114 &8283539941587076075
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -189,7 +189,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94cdb851e8ed45df8f26dd157848c630, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FireBallConfig: {fileID: 11400000, guid: d404d3a797b9b3741a92f74686951ad3, type: 2}
   ExplosionEffectPref: {fileID: 7916656756039522504, guid: 710b4c8ea6d8ea54b85fbcf85392c557, type: 3}
 --- !u!135 &3612940297667647752
 SphereCollider:

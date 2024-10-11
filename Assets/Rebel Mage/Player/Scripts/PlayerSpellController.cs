@@ -1,6 +1,6 @@
+using Rebel_Mage.Infrastructure;
 using Rebel_Mage.Spell_system;
 using UnityEngine;
-using Vanguard_Drone.Infrastructure;
 using Zenject;
 
 [RequireComponent(typeof(ZenAutoInjecter))]

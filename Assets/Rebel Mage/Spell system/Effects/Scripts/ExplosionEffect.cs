@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Vanguard_Drone.Spell_system.Effects
+namespace Rebel_Mage.Spell_system.Effects
 {
     public class ExplosionEffect : MonoBehaviour
     {

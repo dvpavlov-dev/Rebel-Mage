@@ -467,11 +467,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97cf00d9a44a6e546bf4b7610be7f725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _roundProcess: {fileID: 63623262}
-  _gameplayUI: {fileID: 1695424503}
-  _spellWindowController: {fileID: 1443631028}
-  _cameraManager: {fileID: 738384732}
-  _enemySpawner: {fileID: 1684964820}
+  m_RoundProcess: {fileID: 63623262}
+  m_GameplayUI: {fileID: 1695424503}
+  m_SpellWindowController: {fileID: 1443631028}
+  m_CameraManager: {fileID: 738384732}
+  m_EnemySpawner: {fileID: 1684964820}
 --- !u!114 &63623262
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using Rebel_Mage.Spell_system;
 using UnityEngine;
 using Zenject;
 
-namespace Vanguard_Drone.Player
+namespace Rebel_Mage.Player
 {
     [RequireComponent(typeof(DamageController), typeof(PlayerMoveController))]
     [RequireComponent(typeof(ZenAutoInjecter), typeof(PlayerSpellController))]
@@ -16,7 +16,7 @@ namespace Vanguard_Drone.Player
         private PlayerConfigSource m_PlayerConfig;
 
         [Inject]
-        private void Constructor(Infrastructure.Configs configs)
+        private void Constructor(Configs.Configs configs)
         {
             m_PlayerConfig = configs.PlayerConfig;
         }

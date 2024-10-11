@@ -4,10 +4,8 @@ using UnityEngine;
 namespace Rebel_Mage.Spell_system
 {
     [RequireComponent(typeof(Rigidbody))]
-    public abstract class BallSpell : AttackSpell
+    public abstract class BallSpell<T> : AttackSpell<T> where T : BallConfigSource
     {
-        private BallConfigSource BallConfig => Config as BallConfigSource;
-
         void Start()
         {
             Invoke(nameof(DestroyThisObject), 5);
@@ -15,7 +13,7 @@ namespace Rebel_Mage.Spell_system
 
         private void Update()
         {
-            MoveProjectile(BallConfig);
+            MoveProjectile(Config);
         }
 
         private void MoveProjectile(BallConfigSource config)
@@ -32,7 +30,7 @@ namespace Rebel_Mage.Spell_system
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject == _owner)
+            if (other.gameObject == Owner)
                 return;
 
             HitHandling(other.gameObject);
@@ -44,7 +42,7 @@ namespace Rebel_Mage.Spell_system
         {
             if (other.GetComponent<IDamage>() is {} damageController)
             {
-                damageController.TakeDamage(BallConfig.Damage / 2);
+                damageController.TakeDamage(Config.Damage / 2);
             }
 
             base.HitHandling(other);

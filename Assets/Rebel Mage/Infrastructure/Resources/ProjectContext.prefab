@@ -77,9 +77,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160879e147157054482cccc7879d1f76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spells: {fileID: 7781698344734495940}
-  _configs: {fileID: -131553019137547936}
-  _prefabs: {fileID: -4416623294905022587}
+  m_Spells: {fileID: 7781698344734495940}
+  m_Configs: {fileID: -131553019137547936}
+  m_Prefabs: {fileID: -4416623294905022587}
 --- !u!114 &7781698344734495940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,3 +125,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerPref: {fileID: 6553823866756482685, guid: 6aebd1944fbd6be43a3141112923e63b, type: 3}
   BaseEnemyPref: {fileID: 2271899163048147823, guid: 16be38c4f7e27e74f99848d8c183d56f, type: 3}
+  MeleeEnemyPref: {fileID: 5958801608821954793, guid: bb78ca888e445e84d8b9880eb4387614, type: 3}

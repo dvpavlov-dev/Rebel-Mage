@@ -1,20 +1,22 @@
+using Rebel_Mage.Spell_system;
 using UnityEngine;
 
-namespace Vanguard_Drone.Enemy.Scripts
+namespace Rebel_Mage.Enemy
 {
     public class BaseEnemy : Enemy
     {
-        public override void InitEnemy(Infrastructure.Configs configs, GameObject target)
+        public override void InitEnemy(Configs.Configs configs, GameObject target)
         {
             base.InitEnemy(configs, target);
-
-            _pointsForEnemy = configs.EnemyConfig.BaseEnemy_Points;
-
-            EnemyAI = gameObject.AddComponent<BaseEnemyAI>();
-            EnemyAbilities = gameObject.AddComponent<BaseEnemyAbilities>();
             
-            EnemyAI.SetupEnemyAI(configs.EnemyConfig.BaseEnemy_MoveSpeed, Target);
-            EnemyAbilities.SetupEnemyAbilities(configs.EnemyConfig.BaseEnemy_Damage);
+            PointsForEnemy = configs.EnemyConfig.BaseEnemy.Points;
+
+            EnemyAI = gameObject.AddComponent<EnemyAI>();
+            EnemyAbilities = gameObject.AddComponent<BaseEnemyAbilities>();
+
+            GetComponent<DamageController>().InitHealthPoints(configs.EnemyConfig.BaseEnemy.Hp);
+            EnemyAI.SetupEnemyAI(configs.EnemyConfig.BaseEnemy.MoveSpeed, Target, configs.EnemyConfig.BaseEnemy.StoppingDistance, this);
+            EnemyAbilities.SetupEnemyAbilities(configs.EnemyConfig.BaseEnemy.Damage, target, this);
         }
     }
 }

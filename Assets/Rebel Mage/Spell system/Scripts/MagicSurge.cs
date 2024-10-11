@@ -4,13 +4,10 @@ using UnityEngine;
 namespace Rebel_Mage.Spell_system
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class MagicSurge : AttackSpell
+    public class MagicSurge : AttackSpell<MagicSurgeConfigSource>
     {
-        public MagicSurgeConfigSource MagicSurgeConfig;
         public GameObject SpellEffect;
         
-        protected override SpellConfig Config => MagicSurgeConfig;
-
         private Rigidbody m_Rb;
 
         private void Awake()
@@ -20,11 +17,11 @@ namespace Rebel_Mage.Spell_system
 
         private void Start()
         {
-            HitHandling(_owner);
+            HitHandling(Owner);
 
             Vector3 position = transform.position;
             
-            m_Rb.AddExplosionForce(MagicSurgeConfig.ExplosionForce, position, MagicSurgeConfig.ExplosionRadius, 0, ForceMode.Acceleration);
+            m_Rb.AddExplosionForce(Config.ExplosionForce, position, Config.ExplosionRadius, 0, ForceMode.Acceleration);
             Instantiate(SpellEffect, position, Quaternion.identity);
             
             Destroy(gameObject);
@@ -33,11 +30,9 @@ namespace Rebel_Mage.Spell_system
         protected override void ImpactOnObject(GameObject hitObject)
         {
             base.ImpactOnObject(hitObject);
-            
-            if (hitObject.GetComponent<Rigidbody>() != null)
-            {
-                hitObject.GetComponent<Rigidbody>().AddExplosionForce(MagicSurgeConfig.ExplosionForce, transform.position, MagicSurgeConfig.ExplosionRadius);
-            }
+
+            ExplosionImpact(hitObject);
         }
+
     }
 }

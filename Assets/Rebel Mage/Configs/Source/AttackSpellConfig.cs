@@ -7,6 +7,7 @@ namespace Rebel_Mage.Configs.Source
         [Space]
         public float Damage;
         public float ExplosionRadius;
+        public float ExplosionForce;
     }
 
 }

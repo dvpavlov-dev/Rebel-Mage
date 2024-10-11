@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using ModestTree;
 using UnityEngine;
-using Vanguard_Drone.Infrastructure;
 using System.Linq;
 using Rebel_Mage.Configs.Source;
+using Rebel_Mage.Infrastructure;
 using Rebel_Mage.Spell_system;
 
 namespace Rebel_Mage.UI.Spell_Window

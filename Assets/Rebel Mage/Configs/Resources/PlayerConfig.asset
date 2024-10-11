@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
   Hp: 100
-  MoveSpeed: 10
+  MoveSpeed: 5
   Dash_CooldownTime: 1

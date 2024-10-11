@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Rebel_Mage.UI.Gameplay;
 using Rebel_Mage.UI.Spell_Window;
 
-namespace Vanguard_Drone.Infrastructure 
+namespace Rebel_Mage.Infrastructure 
 {
     public class GameStateMachine
     {

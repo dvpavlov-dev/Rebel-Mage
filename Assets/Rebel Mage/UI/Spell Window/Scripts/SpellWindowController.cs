@@ -1,8 +1,8 @@
 using System;
 using Rebel_Mage.Configs.Source;
+using Rebel_Mage.Infrastructure;
 using Rebel_Mage.Spell_system;
 using UnityEngine;
-using Vanguard_Drone.Infrastructure;
 using Zenject;
 
 namespace Rebel_Mage.UI.Spell_Window

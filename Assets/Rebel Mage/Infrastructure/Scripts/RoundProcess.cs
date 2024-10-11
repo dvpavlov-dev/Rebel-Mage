@@ -1,9 +1,9 @@
 using System;
+using Rebel_Mage.Enemy;
 using UnityEngine;
-using Vanguard_Drone.Enemy;
 using Zenject;
 
-namespace Vanguard_Drone.Infrastructure
+namespace Rebel_Mage.Infrastructure
 {
     public class RoundProcess : MonoBehaviour, IRoundProcess
     {
@@ -15,42 +15,42 @@ namespace Vanguard_Drone.Infrastructure
         public int PointsForAllRounds { get; set; }
         public int RoundsCompleted { get; set; }
         
-        private Configs _configs;
-        private int _difficultyModifier = 1;
+        private Configs.Configs m_Configs;
+        private int m_DifficultyModifier = 1;
 
-        private IEnemySpawner _enemySpawner;
+        private IEnemySpawner m_EnemySpawner;
         private IFactoryActors m_FactoryActors;
 
-        private GameObject _player;
-        private int _roundCount;
+        private GameObject m_Player;
+        private int m_RoundCount;
 
         [Inject]
-        private void Constructor(IEnemySpawner enemySpawner, Configs configs, IFactoryActors factoryActors)
+        private void Constructor(IEnemySpawner enemySpawner, Configs.Configs configs, IFactoryActors factoryActors)
         {
-            _enemySpawner = enemySpawner;
-            _configs = configs;
+            m_EnemySpawner = enemySpawner;
+            m_Configs = configs;
             m_FactoryActors = factoryActors;
 
-            _enemySpawner.OnAllEnemyDestroyed += EndRound;
+            m_EnemySpawner.OnAllEnemyDestroyed += EndRound;
         }
 
         public void StartRound()
         {
-            if (_player == null)
+            if (m_Player == null)
             {
-                _player = m_FactoryActors.CreatePlayer(new Vector3(0, 0, 0));
-                _player.GetComponent<Player.Player>().OnDead = () => {
+                m_Player = m_FactoryActors.CreatePlayer(new Vector3(0, 0.1f, 0));
+                m_Player.GetComponent<Player.Player>().OnDead = () => {
                     EndRound(TypeEndRound.PLAYER_LOST);
                 };
             }
 
-            if (!_player.activeSelf)
+            if (!m_Player.activeSelf)
             {
-                _player.SetActive(true);
-                _player.GetComponent<Player.Player>().InitPlayer();
+                m_Player.SetActive(true);
+                m_Player.GetComponent<Player.Player>().InitPlayer();
             }
 
-            //_enemySpawner.SpawnEnemy(_factory, _configs.RoundsConfig.RoundParametersList[_roundCount], _difficultyModifier, _player);
+            m_EnemySpawner.SpawnEnemy(m_FactoryActors, m_Configs.RoundsConfig.RoundParametersList[m_RoundCount], m_DifficultyModifier, m_Player);
 
             IsRoundInProgress = true;
         }
@@ -68,20 +68,21 @@ namespace Vanguard_Drone.Infrastructure
             {
                 IsRoundInProgress = false;
 
-                _player.transform.position = new Vector3(0, 1, 0);
+                m_Player.transform.position = new Vector3(0, 1, 0);
+                m_Player.SetActive(false);
 
                 switch (typeEndRound)
                 {
                     case TypeEndRound.END_ROUND:
-                        if (_roundCount >= _configs.RoundsConfig.RoundParametersList.Count - 1)
+                        if (m_RoundCount >= m_Configs.RoundsConfig.RoundParametersList.Count - 1)
                         {
-                            _roundCount = 0;
-                            _difficultyModifier++;
+                            m_RoundCount = 0;
+                            m_DifficultyModifier++;
                             OnEndGame?.Invoke();
                         }
                         else
                         {
-                            _roundCount++;
+                            m_RoundCount++;
                             OnEndRound?.Invoke();
                         }
 
@@ -90,6 +91,10 @@ namespace Vanguard_Drone.Infrastructure
 
                     case TypeEndRound.PLAYER_LOST:
                         OnPlayerLost?.Invoke();
+                        break;
+                    
+                    default:
+                        Debug.Log("Unknown type round");
                         break;
                 }
             }

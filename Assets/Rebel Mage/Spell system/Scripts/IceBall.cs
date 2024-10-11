@@ -4,12 +4,9 @@ using UnityEngine;
 
 namespace Rebel_Mage.Spell_system
 {
-    public class IceBall : BallSpell
+    public class IceBall : BallSpell<IceBallConfigSource>
     {
-        public IceBallConfigSource IceBallConfig;
         public GameObject ExplosionEffectPref;
-
-        protected override SpellConfig Config => IceBallConfig;
         
         protected override void ImpactOnObject(GameObject hitObject)
         {
@@ -17,14 +14,14 @@ namespace Rebel_Mage.Spell_system
 
             if (hitObject.GetComponent<IImpact>() is {} impactSystem)
             {
-                impactSystem.ChangeSpeedImpact(IceBallConfig.SlowdownPercentage / 100, IceBallConfig.TimeSlowdown);
+                impactSystem.ChangeSpeedImpact(Config.SlowdownPercentage / 100, Config.TimeSlowdown);
             }
         }
 
         protected override void OnDestroyProjectile()
         {
             base.OnDestroyProjectile();
-            
+
             Instantiate(ExplosionEffectPref, transform.position, quaternion.identity);
         }
     }

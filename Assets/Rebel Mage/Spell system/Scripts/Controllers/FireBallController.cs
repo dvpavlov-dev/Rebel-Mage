@@ -1,19 +1,20 @@
+using Rebel_Mage.Configs.Source;
 using UnityEngine;
 
 namespace Rebel_Mage.Spell_system
 {
-    public class FireBallController : SpellController
+    public class FireBallController : SpellController<FireBallConfigSource>
     {
         public override void CastSpell()
         {
-            m_Animator.SetTrigger(m_Config.AnimationName);
+            Animator.SetTrigger(Config.AnimationName);
             Invoke(nameof(SpawnProjectile), 0.6f);
         }
 
         private void SpawnProjectile()
         {
-            GameObject projectile = Instantiate(m_Config.SpellPrefab, m_SpellPoint.position, m_SpellPoint.rotation);
-            projectile.GetComponent<Spell>().SetOwner(m_Owner);
+            GameObject projectile = Instantiate(Config.SpellPrefab, SpellPoint.position, SpellPoint.rotation);
+            projectile.GetComponent<Spell<FireBallConfigSource>>().Constructor(Owner, Config);
         }
     }
 }

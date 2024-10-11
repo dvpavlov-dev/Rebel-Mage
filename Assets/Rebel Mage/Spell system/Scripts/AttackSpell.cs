@@ -3,13 +3,11 @@ using UnityEngine;
 
 namespace Rebel_Mage.Spell_system
 {
-    public abstract class AttackSpell : Spell
+    public abstract class AttackSpell<T> : Spell<T> where T : AttackSpellConfig
     {
-        private AttackSpellConfig AttackSpellConfig => Config as AttackSpellConfig;
-        
         protected virtual void HitHandling(GameObject other)
         {
-            foreach (Collider hit in Physics.OverlapSphere(transform.position, AttackSpellConfig.ExplosionRadius))
+            foreach (Collider hit in Physics.OverlapSphere(transform.position, Config.ExplosionRadius))
             {
                 GameObject hitObject = hit.gameObject;
 
@@ -19,9 +17,22 @@ namespace Rebel_Mage.Spell_system
         
         protected virtual void ImpactOnObject(GameObject hitObject)
         {
-            if (hitObject == _owner && hitObject.GetComponent<IDamage>() is {} damageSystemHit)
+            if (hitObject != Owner && hitObject.GetComponent<IDamage>() is {} damageSystemHit)
             {
-                damageSystemHit.TakeDamage(AttackSpellConfig.Damage / 2);
+                damageSystemHit.TakeDamage(Config.Damage);
+            }
+        }
+        
+        protected void ExplosionImpact(GameObject hitObject)
+        {
+            if (hitObject.GetComponent<Rigidbody>() != null)
+            {
+                hitObject.GetComponent<Rigidbody>().AddExplosionForce(Config.ExplosionForce, transform.position, Config.ExplosionRadius);
+            }
+
+            if (hitObject.GetComponent<IImpact>() is {} impactSystem) // impact on actors (player or enemy)
+            {
+                impactSystem.ExplosionImpact(transform.position, Config.ExplosionRadius, Config.ExplosionForce);
             }
         }
     }

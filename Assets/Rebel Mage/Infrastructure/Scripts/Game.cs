@@ -3,27 +3,27 @@ using Rebel_Mage.UI.Spell_Window;
 using UnityEngine;
 using Zenject;
 
-namespace Vanguard_Drone.Infrastructure
+namespace Rebel_Mage.Infrastructure
 {
     public class Game : MonoBehaviour
     {
-        private GameStateMachine _stateMachine;
+        private GameStateMachine m_StateMachine;
 
-        private IRoundProcess _roundProcess;
-        private SpellWindowController _spellWindowController;
-        private GameplayUI _gameplayUI;
+        private IRoundProcess m_RoundProcess;
+        private SpellWindowController m_SpellWindowController;
+        private GameplayUI m_GameplayUI;
 
         [Inject]
         private void Constructor(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI)
         {
-            _roundProcess = roundProcess;
-            _spellWindowController = spellWindowController;
-            _gameplayUI = gameplayUI;
+            m_RoundProcess = roundProcess;
+            m_SpellWindowController = spellWindowController;
+            m_GameplayUI = gameplayUI;
         }
 
-        void Start()
+        private void Start()
         {
-            _stateMachine = new GameStateMachine(_roundProcess, _spellWindowController, _gameplayUI);
+            m_StateMachine = new GameStateMachine(m_RoundProcess, m_SpellWindowController, m_GameplayUI);
         }
     }
 }

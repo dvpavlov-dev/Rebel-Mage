@@ -1,13 +1,13 @@
 using Rebel_Mage.Spell_system;
 using UnityEngine;
 
-namespace Vanguard_Drone.Enemy
+namespace Rebel_Mage.Enemy
 {
     public class BaseEnemyAbilities : EnemyAbilities
     {
         private void OnTriggerEnter(Collider other)
         {
-            if (other.GetComponent<IDamage>() is {} damageController && other.CompareTag("Player"))
+            if (other.CompareTag("Player") && other.GetComponent<IDamage>() is {} damageController)
             {
                 damageController.TakeDamage(Damage);
                 gameObject.SetActive(false);

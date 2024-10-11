@@ -7,4 +7,5 @@ public class Prefabs : MonoBehaviour
 
     [Header("Enemy")]
     public GameObject BaseEnemyPref;
+    public GameObject MeleeEnemyPref;
 }

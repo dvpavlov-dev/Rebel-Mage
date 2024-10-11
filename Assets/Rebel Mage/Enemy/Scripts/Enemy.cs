@@ -2,32 +2,32 @@ using System;
 using Rebel_Mage.Spell_system;
 using UnityEngine;
 
-namespace Vanguard_Drone.Enemy
+namespace Rebel_Mage.Enemy
 {
     [RequireComponent(typeof(DamageController))]
     public class Enemy : MonoBehaviour
     {
-        public int _pointsForEnemy { get; protected set; }
         public Action OnDead;
-
-        protected EnemyAI EnemyAI;
+        
         protected EnemyAbilities EnemyAbilities;
-
+        protected EnemyAI EnemyAI;
         protected GameObject Target;
-
-
-        public virtual void InitEnemy(Infrastructure.Configs configs, GameObject target)
-        {
-            Target = target;
-            
-            GetComponent<DamageController>().InitHealthPoints(configs.EnemyConfig.BaseEnemy_Hp);
-        }
+        protected IDamage DamageController;
+        
+        public int PointsForEnemy { get; protected set; }
 
         private void OnDisable()
         {
             if (!gameObject.scene.isLoaded) return;
-            
+
             OnDead?.Invoke();
+        }
+
+        public virtual void InitEnemy(Configs.Configs configs, GameObject target)
+        {
+            Target = target;
+
+            DamageController = GetComponent<IDamage>();
         }
     }
 }

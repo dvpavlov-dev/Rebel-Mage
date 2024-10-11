@@ -1,11 +1,11 @@
 using System.Collections;
 using Rebel_Mage.Configs;
+using Rebel_Mage.Infrastructure;
 using Rebel_Mage.Spell_system;
 using UnityEngine;
-using Vanguard_Drone.Infrastructure;
 using Zenject;
 
-namespace Vanguard_Drone.Player
+namespace Rebel_Mage.Player
 {
     [RequireComponent(typeof(Rigidbody), typeof(ZenAutoInjecter))]
     public class PlayerMoveController : MonoBehaviour, IImpact, ICastSpells
@@ -22,13 +22,12 @@ namespace Vanguard_Drone.Player
 
         private Camera m_Camera;
         private CameraManager m_CameraManager;
-        private float m_CurrentSpeed;
+        private float m_MoveCoefficient = 1;
+        private float m_MoveSpeed;
         private float m_CooldownDash;
-
         private bool m_IsBlockedControl;
         private bool m_IsPlayerSetup;
         private Vector3 m_Movement;
-        private float m_MoveSpeed;
         private Rigidbody m_Rb;
 
         private IRoundProcess m_RoundProcess;
@@ -51,9 +50,7 @@ namespace Vanguard_Drone.Player
 
             m_CameraManager.SwitchCamera(TypeCamera.PLAYER_CAMERA);
             m_Camera = m_CameraManager.CameraPlayer.GetComponent<Camera>();
-
-            m_CurrentSpeed = m_MoveSpeed;
-
+            
             m_IsPlayerSetup = true;
         }
 
@@ -126,7 +123,7 @@ namespace Vanguard_Drone.Player
         {
             if (!gameObject.activeSelf) return;
 
-            m_CurrentSpeed = m_MoveSpeed - m_MoveSpeed * slowdown;
+            m_MoveCoefficient = 1 - m_MoveCoefficient * slowdown;
 
             if (m_TimerForSpeedEffects != null)
             {
@@ -143,13 +140,14 @@ namespace Vanguard_Drone.Player
             
             Vector3 move = new(deltaX, 0, deltaZ);
             move.Normalize();
+            move *= m_MoveCoefficient;
 
             if (AnimMove != null)
             {
                 AnimTransform(move);
             }
 
-            m_Movement.Set(m_CurrentSpeed * move.x, 0, m_CurrentSpeed * move.z);
+            m_Movement.Set(m_MoveSpeed * move.x, 0, m_MoveSpeed * move.z);
             m_Rb.velocity = m_Movement;
         }
 
@@ -167,6 +165,9 @@ namespace Vanguard_Drone.Player
 
         private void RotatePlayer()
         {
+            if(m_IsBlockedControl)
+                return;
+            
             var groundPlane = new Plane(Vector3.up, Vector3.zero);
             Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
 
@@ -193,11 +194,14 @@ namespace Vanguard_Drone.Player
         private IEnumerator ReturnSpeed(float timeWhenReturn)
         {
             yield return new WaitForSeconds(timeWhenReturn);
-            m_CurrentSpeed = m_MoveSpeed;
+            m_MoveCoefficient = 1;
         }
         public void OnCastSpell(float castTime)
         {
             m_IsBlockedControl = true;
+            m_Movement.Set(0, 0, 0);
+            m_Rb.velocity = m_Movement;
+            
             Invoke(nameof(UnblockControl), castTime);
         }
     }

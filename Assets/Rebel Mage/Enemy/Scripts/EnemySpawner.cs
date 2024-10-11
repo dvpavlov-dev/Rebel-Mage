@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Rebel_Mage.Configs;
 using UnityEngine;
-using Vanguard_Drone.Configs;
-using Vanguard_Drone.Infrastructure;
 using Random = System.Random;
+using Rebel_Mage.Infrastructure;
 
-namespace Vanguard_Drone.Enemy
+namespace Rebel_Mage.Enemy
 {
     public class EnemySpawner : MonoBehaviour, IEnemySpawner
     {
@@ -14,18 +14,18 @@ namespace Vanguard_Drone.Enemy
         
         private const float DISTANCE_SPAWN = 30;
 
-        private readonly List<GameObject> _enemyOnScene = new();
-        private int _enemyDestroyed;
+        private readonly List<GameObject> m_EnemyOnScene = new();
+        private int m_EnemyDestroyed;
 
         private IFactoryActors m_FactoryActors;
-        private int _pointsForRound;
-        private Random _rnd;
-        private SpawnOneSide _spawnOneSide;
+        private int m_PointsForRound;
+        private Random m_Rnd;
+        private SpawnOneSide m_SpawnOneSide;
 
         private void Awake()
         {
-            _rnd = new Random();
-            _spawnOneSide = new SpawnOneSide();
+            m_Rnd = new Random();
+            m_SpawnOneSide = new SpawnOneSide();
         }
 
         public void SpawnEnemy(IFactoryActors factoryActors, RoundsConfigSource.RoundParameters roundParameters, int difficultyModifier, GameObject target)
@@ -46,42 +46,42 @@ namespace Vanguard_Drone.Enemy
 
         private void ClearEnemyList()
         {
-            for (int i = _enemyOnScene.Count - 1; i >= 0; i--)
+            for (int i = m_EnemyOnScene.Count - 1; i >= 0; i--)
             {
-                Destroy(_enemyOnScene[i]);
+                Destroy(m_EnemyOnScene[i]);
             }
 
-            _enemyOnScene.Clear();
-            _enemyDestroyed = 0;
+            m_EnemyOnScene.Clear();
+            m_EnemyDestroyed = 0;
 
             StopAllCoroutines();
         }
 
         private void CreateEnemy(int enemyCount, EnemyType enemyType, SpawnType spawnType, GameObject target)
         {
-            _pointsForRound = 0;
+            m_PointsForRound = 0;
 
             for (int i = 0; i < enemyCount; i++)
             {
                 Vector3 position = SetPositionEnemy(spawnType);
 
                 GameObject enemy = m_FactoryActors.CreateEnemy(enemyType, position, target);
-                _enemyOnScene.Add(enemy);
+                m_EnemyOnScene.Add(enemy);
 
                 enemy.SetActive(false);
                 Enemy enemyController = enemy.GetComponent<Enemy>();
                 enemyController.OnDead += SyncEnemyCount;
-                _pointsForRound += enemyController._pointsForEnemy;
+                m_PointsForRound += enemyController.PointsForEnemy;
             }
         }
 
         private void SyncEnemyCount()
         {
-            _enemyDestroyed++;
+            m_EnemyDestroyed++;
 
-            if (_enemyDestroyed > _enemyOnScene.Count - 1)
+            if (m_EnemyDestroyed > m_EnemyOnScene.Count - 1)
             {
-                OnAllEnemyDestroyed?.Invoke(_pointsForRound);
+                OnAllEnemyDestroyed?.Invoke(m_PointsForRound);
             }
         }
 
@@ -90,13 +90,13 @@ namespace Vanguard_Drone.Enemy
             switch (spawnType)
             {
                 case SpawnType.CIRCLE:
-                    int rand = _rnd.Next(0, 360);
+                    int rand = m_Rnd.Next(0, 360);
                     float x = DISTANCE_SPAWN * Mathf.Cos(rand);
                     float z = DISTANCE_SPAWN * Mathf.Sin(rand);
                     return new Vector3(x, 1, z);
 
                 case SpawnType.ONE_SIDE:
-                    return _spawnOneSide.GetPositionSpawnOneSide(DISTANCE_SPAWN);
+                    return m_SpawnOneSide.GetPositionSpawnOneSide(DISTANCE_SPAWN);
 
                 default:
                     return new Vector3(DISTANCE_SPAWN, 1, 0);
@@ -105,7 +105,7 @@ namespace Vanguard_Drone.Enemy
 
         private IEnumerator SpawnWave()
         {
-            foreach (GameObject enemy in _enemyOnScene)
+            foreach (GameObject enemy in m_EnemyOnScene)
             {
                 enemy.SetActive(true);
 
@@ -118,24 +118,23 @@ namespace Vanguard_Drone.Enemy
 
     internal class SpawnOneSide
     {
-
-        private readonly int _countPerSide = 3;
-        private readonly Random _rnd;
-        private int _currentCountPerSide;
-        private int _currentRandAngle;
+        private const int COUNT_PER_SIDE = 3;
+        private readonly Random m_Rnd;
+        private int m_CurrentCountPerSide;
+        private int m_CurrentRandAngle;
 
         public SpawnOneSide()
         {
-            _rnd = new();
-            _currentRandAngle = _rnd.Next(0, 360);
+            m_Rnd = new();
+            m_CurrentRandAngle = m_Rnd.Next(0, 360);
         }
 
         public Vector3 GetPositionSpawnOneSide(float distanceSpawn)
         {
-            if (_currentCountPerSide < _countPerSide)
+            if (m_CurrentCountPerSide < COUNT_PER_SIDE)
             {
-                _currentCountPerSide++;
-                float angelWithOffset = _currentRandAngle + _rnd.Next(-15, 15);
+                m_CurrentCountPerSide++;
+                float angelWithOffset = m_CurrentRandAngle + m_Rnd.Next(-15, 15);
                 angelWithOffset *= Mathf.Deg2Rad;
                 float x = distanceSpawn * Mathf.Cos(angelWithOffset);
                 float z = distanceSpawn * Mathf.Sin(angelWithOffset);
@@ -143,8 +142,8 @@ namespace Vanguard_Drone.Enemy
             }
             else
             {
-                _currentRandAngle = _rnd.Next(0, 360);
-                _currentCountPerSide = 0;
+                m_CurrentRandAngle = m_Rnd.Next(0, 360);
+                m_CurrentCountPerSide = 0;
                 return GetPositionSpawnOneSide(distanceSpawn);
             }
         }

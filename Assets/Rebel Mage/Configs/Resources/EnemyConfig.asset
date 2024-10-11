@@ -12,7 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efe0a302ee794897aa50473c94fc5955, type: 3}
   m_Name: EnemyConfig
   m_EditorClassIdentifier: 
-  BaseEnemy_Hp: 10
-  BaseEnemy_MoveSpeed: 10
-  BaseEnemy_Damage: 10
-  BaseEnemy_Points: 13
+  BaseEnemy:
+    Hp: 5
+    MoveSpeed: 10
+    Damage: 10
+    Points: 13
+    StoppingDistance: 0
+  MeleeEnemy:
+    Hp: 25
+    MoveSpeed: 5
+    Damage: 15
+    Points: 15
+    StoppingDistance: 2

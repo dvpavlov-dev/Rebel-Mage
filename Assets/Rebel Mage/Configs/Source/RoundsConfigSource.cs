@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Vanguard_Drone.Configs 
+namespace Rebel_Mage.Configs 
 {
     [CreateAssetMenu(menuName = "Configs/Rounds config", fileName = "Rounds config")]
     public class RoundsConfigSource : ScriptableObject
@@ -30,6 +30,7 @@ namespace Vanguard_Drone.Configs
     public enum EnemyType
     {
         BASE_ENEMY,
+        MELEE_ENEMY,
     }
 
     public enum SpawnType

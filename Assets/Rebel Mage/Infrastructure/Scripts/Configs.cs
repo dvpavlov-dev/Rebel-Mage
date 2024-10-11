@@ -1,8 +1,6 @@
-using Rebel_Mage.Configs;
 using UnityEngine;
-using Vanguard_Drone.Configs;
 
-namespace Vanguard_Drone.Infrastructure
+namespace Rebel_Mage.Configs
 {
     public class Configs : MonoBehaviour
     {

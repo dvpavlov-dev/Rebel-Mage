@@ -1,17 +1,17 @@
-using Rebel_Mage.Configs.Source;
 using UnityEngine;
 
 namespace Rebel_Mage.Spell_system
 {
-    public abstract class Spell : MonoBehaviour
+    public abstract class Spell<T> : MonoBehaviour
     {
-        protected abstract SpellConfig Config { get; }
+        protected T Config { get; private set; }
         
-        protected GameObject _owner;
+        protected GameObject Owner;
 
-        public void SetOwner(GameObject owner)
+        public void Constructor(GameObject owner, T config)
         {
-            _owner = owner;
+            Owner = owner;
+            Config = config;
         }
     }
 

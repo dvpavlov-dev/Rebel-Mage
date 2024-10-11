@@ -1,19 +1,24 @@
-using Rebel_Mage.Spell_system;
+using Rebel_Mage.Enemy;
 using Rebel_Mage.UI.Gameplay;
 using Rebel_Mage.UI.Spell_Window;
 using UnityEngine;
-using Vanguard_Drone.Enemy;
+using UnityEngine.Serialization;
 using Zenject;
 
-namespace Vanguard_Drone.Infrastructure
+namespace Rebel_Mage.Infrastructure
 {
     public class GameplaySceneInstaller : MonoInstaller
     {
-        [SerializeField] private RoundProcess _roundProcess;
-        [SerializeField] private GameplayUI _gameplayUI;
-        [SerializeField] private SpellWindowController _spellWindowController;
-        [SerializeField] private CameraManager _cameraManager;
-        [SerializeField] private EnemySpawner _enemySpawner;
+        [FormerlySerializedAs("_roundProcess")]
+        [SerializeField] private RoundProcess m_RoundProcess;
+        [FormerlySerializedAs("_gameplayUI")]
+        [SerializeField] private GameplayUI m_GameplayUI;
+        [FormerlySerializedAs("_spellWindowController")]
+        [SerializeField] private SpellWindowController m_SpellWindowController;
+        [FormerlySerializedAs("_cameraManager")]
+        [SerializeField] private CameraManager m_CameraManager;
+        [FormerlySerializedAs("_enemySpawner")]
+        [SerializeField] private EnemySpawner m_EnemySpawner;
         
         public override void InstallBindings()
         {
@@ -28,7 +33,7 @@ namespace Vanguard_Drone.Infrastructure
         {
             Container
                 .Bind<IEnemySpawner>()
-                .FromInstance(_enemySpawner)
+                .FromInstance(m_EnemySpawner)
                 .AsSingle();
         }
         
@@ -36,7 +41,7 @@ namespace Vanguard_Drone.Infrastructure
         {
             Container
                 .Bind<CameraManager>()
-                .FromInstance(_cameraManager)
+                .FromInstance(m_CameraManager)
                 .AsSingle();
         }
 
@@ -44,7 +49,7 @@ namespace Vanguard_Drone.Infrastructure
         {
             Container
                 .Bind<IRoundProcess>()
-                .FromInstance(_roundProcess)
+                .FromInstance(m_RoundProcess)
                 .AsSingle();
         }
 
@@ -52,7 +57,7 @@ namespace Vanguard_Drone.Infrastructure
         {
             Container
                 .Bind<SpellWindowController>()
-                .FromInstance(_spellWindowController)
+                .FromInstance(m_SpellWindowController)
                 .AsSingle();
         }
         
@@ -60,7 +65,7 @@ namespace Vanguard_Drone.Infrastructure
         {
             Container
                 .Bind<GameplayUI>()
-                .FromInstance(_gameplayUI)
+                .FromInstance(m_GameplayUI)
                 .AsSingle();
         }
     }
