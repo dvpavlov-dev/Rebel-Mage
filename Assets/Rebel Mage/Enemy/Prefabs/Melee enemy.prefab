@@ -1969,7 +1969,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 016f8acde6ce47008817ec1f8fcdbc48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Animator: {fileID: 8818653970430307785}
 --- !u!114 &9155581403297537622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1996,6 +1995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6ff3d27b1f745aeb93f2cccc6b67f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AnimationController: {fileID: 8818653970430307785}
 --- !u!114 &7662286487593733739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2008,7 +2008,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123e13c12ad74045a352c0bd7ace080f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Animator: {fileID: 8818653970430307785}
 --- !u!1 &6206932062576868447
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,69 +10,120 @@ namespace Rebel_Mage.Enemy
     [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyAI : MonoBehaviour, IImpact
     {
-        protected GameObject Target;
-        protected NavMeshAgent Agent;
-        protected bool IsEnemySetup;
-        protected float MoveCoefficient = 1;
-
-        private Enemy m_Enemy;
-        private bool m_IsBlockControl;
-        // private Rigidbody m_Rb;
-        private List<Rigidbody> m_Rigidbodies;
-        private float m_MoveSpeed;
-        private Coroutine m_TimerForSpeedEffects;
-
-        protected virtual void FixedUpdate()
-        {
-            if (!IsEnemySetup || IsBlockControl) return;
-            
-            Agent.SetDestination(Target.transform.position);
-        }
-        
-        protected bool IsBlockControl 
-        {
-            get => m_IsBlockControl;
-            private set 
+        public bool AgentEnabled {
+            get => m_Agent.enabled;
+            set 
             {
-                m_IsBlockControl = value;
-                Agent.enabled = !value;
+                if (value)
+                {
+                    m_Agent.speed = 0;
+                    m_Agent.enabled = true;
+                    m_Agent.speed = m_MoveSpeed * MoveCoefficient;
+                }
+                else
+                {
+                    m_Agent.speed = m_MoveSpeed * MoveCoefficient;
+                    m_Agent.enabled = false;
+                    m_Agent.speed = 0;
+                }
             }
         }
+
+        public bool RagdollEnabled 
+        {
+            set 
+            {
+                if (value)
+                {
+                    EnableRigidbody();
+                }
+                else
+                {
+                    DisableRigidbody();
+                }
+            }
+        }
+        
+        protected bool IsEnemySetup;
+        protected GameObject Target;
+        protected float MoveCoefficient = 1;
+        protected Enemy EnemyController;
+
+        private NavMeshAgent m_Agent;
+        private float m_MoveSpeed;
+        private List<Rigidbody> m_Rigidbodies;
+        private Coroutine m_TimerForSpeedEffects;
         
         public void SetupEnemyAI(float moveSpeed, GameObject target, float stoppingDistance, Enemy enemy)
         {
             Target = target;
             m_MoveSpeed = moveSpeed;
-            m_Enemy = enemy;
-        
-            Agent = GetComponent<NavMeshAgent>();
-            Agent.speed = m_MoveSpeed;
-            Agent.stoppingDistance = stoppingDistance;
+            EnemyController = enemy;
 
-            // m_Rb = GetComponent<Rigidbody>();
+            m_Agent = GetComponent<NavMeshAgent>();
+            m_Agent.speed = m_MoveSpeed;
+            m_Agent.stoppingDistance = stoppingDistance;
+
             m_Rigidbodies = new List<Rigidbody>(GetComponentsInChildren<Rigidbody>());
             DisableRigidbody();
 
             IsEnemySetup = true;
         }
 
+        protected virtual void FixedUpdate()
+        {
+            if (!IsEnemySetup || !m_Agent.enabled) return;
+
+            m_Agent.SetDestination(Target.transform.position);
+        }
+
+        private void OnDisable()
+        {
+            if (!gameObject.scene.isLoaded) return;
+
+            StopAllCoroutines();
+        }
+
         void IImpact.ExplosionImpact(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
-            IsBlockControl = true;
+            EnemyController.EnemySM.ChangeState<KnockedDownState>();
             // m_Rb.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
             Hit(positionImpact, maxDistance, explosionForce);
             // Invoke(nameof(SetBlockControl), 1f);
         }
 
+        void IImpact.ChangeSpeedImpact(float slowdownPercentage, float timeSlowdown)
+        {
+            if (!gameObject.activeSelf) return;
+
+            MoveCoefficient = 1 - slowdownPercentage;
+            m_Agent.speed = m_MoveSpeed * MoveCoefficient;
+
+            if (m_TimerForSpeedEffects != null)
+            {
+                StopCoroutine(m_TimerForSpeedEffects);
+            }
+
+            m_TimerForSpeedEffects = StartCoroutine(ReturnSpeed(timeSlowdown));
+        }
+
+
         private void Hit(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
-            IsBlockControl = true;
             EnableRigidbody();
 
             Rigidbody hitBone = m_Rigidbodies.OrderBy(rigidbody => Vector3.Distance(positionImpact, rigidbody.position)).First();
             hitBone.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
+            
+            Invoke(nameof(ReturnControl), 2f);
         }
-        
+
+        private void ReturnControl()
+        {
+            DisableRigidbody();
+            EnemyController.EnemySM.ChangeState<MoveState>();
+        }
+
         private void EnableRigidbody()
         {
             foreach (Rigidbody rb in m_Rigidbodies)
@@ -89,40 +140,11 @@ namespace Rebel_Mage.Enemy
             }
         }
 
-        private void SetBlockControl()
-        {
-            Agent.speed = 0;
-            IsBlockControl = false;
-            Agent.speed = m_MoveSpeed * MoveCoefficient;
-        }
-
-        void IImpact.ChangeSpeedImpact(float slowdownPercentage, float timeSlowdown)
-        {
-            if (!gameObject.activeSelf) return;
-            
-            MoveCoefficient = 1 - slowdownPercentage;
-            Agent.speed = m_MoveSpeed * MoveCoefficient;
-            
-            if (m_TimerForSpeedEffects != null)
-            {
-                StopCoroutine(m_TimerForSpeedEffects);
-            }
-            
-            m_TimerForSpeedEffects = StartCoroutine(ReturnSpeed(timeSlowdown));
-        }
-    
         private IEnumerator ReturnSpeed(float timeWhenReturn)
         {
             yield return new WaitForSeconds(timeWhenReturn);
-            Agent.speed = m_MoveSpeed;
+            m_Agent.speed = m_MoveSpeed;
             MoveCoefficient = 1;
-        }
-
-        private void OnDisable()
-        {
-            if (!gameObject.scene.isLoaded) return;
-            
-            StopAllCoroutines();
         }
     }
 }
