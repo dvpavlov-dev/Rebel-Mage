@@ -12,7 +12,7 @@ namespace Rebel_Mage.Enemy
 
             if (!IsEnemySetup) return;
 
-            EnemyController.AnimationController.SetFloat(MoveForward, MoveCoefficient);
+            EnemyController.MeleeEnemyView.StartMoveAnimation(MoveCoefficient);
         }
     }
 }

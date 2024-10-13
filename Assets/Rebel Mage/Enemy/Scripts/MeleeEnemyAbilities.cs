@@ -19,21 +19,23 @@ namespace Rebel_Mage.Enemy
                     m_IsAttackStarted = true;
                  
                     EnemyController.EnemySM.ChangeState<AttackState>();
-                    EnemyController.AnimationController.SetTrigger(ANIMATION_NAME);
-                    
-                    foreach (AnimationClip clip in EnemyController.AnimationController.runtimeAnimatorController.animationClips)
-                    {
-                        if (clip.name == ANIMATION_NAME)
-                        {
-                            Invoke(nameof(OnEndAnimation), clip.length);
-                        }
-                    }
+                    EnemyController.MeleeEnemyView.StartAttackAnimation();
+                    EnemyController.MeleeEnemyView.OnEndAnimationAction = OnEndAnimation;
+                    // foreach (AnimationClip clip in EnemyController.AnimationController.runtimeAnimatorController.animationClips)
+                    // {
+                    //     if (clip.name == ANIMATION_NAME)
+                    //     {
+                    //         Invoke(nameof(OnEndAnimation), clip.length);
+                    //     }
+                    // }
                 }
             }
         }
 
-        private void OnEndAnimation()
+        private void OnEndAnimation(string animName)
         {
+            if (animName != "Mutant Punch") return;
+            
             m_IsAttackStarted = false;
            
             EnemyController.EnemySM.ChangeState<MoveState>();

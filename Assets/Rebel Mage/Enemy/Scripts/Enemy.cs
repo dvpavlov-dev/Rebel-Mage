@@ -8,24 +8,23 @@ namespace Rebel_Mage.Enemy
     [RequireComponent(typeof(DamageController))]
     public class Enemy : MonoBehaviour
     {
-        [SerializeField]
-        internal protected Animator AnimationController;
+        public MeleeEnemyView MeleeEnemyView;
         public Action OnDead;
         public EnemyStateMachine EnemySM;
 
         public int PointsForEnemy { get; protected set; }
         
-        public bool AnimatorEnabled 
-        {
-            get => AnimationController != null && AnimationController.enabled;
-            set 
-            {
-                if (AnimationController != null)
-                {
-                    AnimationController.enabled = value;
-                }
-            }
-        }
+        // public bool AnimatorEnabled 
+        // {
+        //     get => AnimationController != null && AnimationController.enabled;
+        //     set 
+        //     {
+        //         if (AnimationController != null)
+        //         {
+        //             AnimationController.enabled = value;
+        //         }
+        //     }
+        // }
         
         protected EnemyAbilities EnemyAbilities;
         protected EnemyAI EnemyAI;
@@ -39,7 +38,8 @@ namespace Rebel_Mage.Enemy
 
         public virtual void InitEnemy(Configs.Configs configs, GameObject target)
         {
-            EnemySM = new EnemyStateMachine(this, EnemyAI, EnemyAbilities);
+            MeleeEnemyView.Init(transform);
+            EnemySM = new EnemyStateMachine(this, EnemyAI, EnemyAbilities, MeleeEnemyView);
         }
     }
 
@@ -49,13 +49,13 @@ namespace Rebel_Mage.Enemy
         
         private IStateEnemy m_ActiveState;
         
-        public EnemyStateMachine(Enemy enemy, EnemyAI enemyAI, EnemyAbilities enemyAbilities)
+        public EnemyStateMachine(Enemy enemy, EnemyAI enemyAI, EnemyAbilities enemyAbilities, MeleeEnemyView meleeEnemyView)
         {
             m_States = new Dictionary<Type, IStateEnemy>
             {
-                [typeof(MoveState)] = new MoveState(enemy, enemyAI, enemyAbilities),
-                [typeof(AttackState)] = new AttackState(enemy, enemyAI, enemyAbilities),
-                [typeof(KnockedDownState)] = new KnockedDownState(enemy, enemyAI, enemyAbilities),
+                [typeof(MoveState)] = new MoveState(enemy, enemyAI, enemyAbilities, meleeEnemyView),
+                [typeof(AttackState)] = new AttackState(enemy, enemyAI, enemyAbilities, meleeEnemyView),
+                [typeof(KnockedDownState)] = new KnockedDownState(enemy, enemyAI, enemyAbilities, meleeEnemyView),
             };
             
             ChangeState<MoveState>();
@@ -77,20 +77,22 @@ namespace Rebel_Mage.Enemy
         private readonly Enemy m_Enemy;
         private readonly EnemyAI m_EnemyAI;
         private readonly EnemyAbilities m_EnemyAbilities;
-        
-        public MoveState(Enemy enemy, EnemyAI enemyAI, EnemyAbilities enemyAbilities)
+        private readonly MeleeEnemyView m_MeleeEnemyView;
+
+        public MoveState(Enemy enemy, EnemyAI enemyAI, EnemyAbilities enemyAbilities, MeleeEnemyView meleeEnemyView)
         {
             m_Enemy = enemy;
             m_EnemyAI = enemyAI;
             m_EnemyAbilities = enemyAbilities;
+            m_MeleeEnemyView = meleeEnemyView;
         }
         
         public void Enter()
         {
             m_EnemyAI.AgentEnabled = true;
-            m_EnemyAI.RagdollEnabled = false;
+            m_MeleeEnemyView.DisableRigidbody();
             
-            m_Enemy.AnimatorEnabled = true;
+            m_MeleeEnemyView.EnabledAnimator();
         }
         
         public void Exit()
@@ -104,20 +106,22 @@ namespace Rebel_Mage.Enemy
         private readonly Enemy m_Enemy;
         private readonly EnemyAI m_EnemyAI;
         private readonly EnemyAbilities m_EnemyAbilities;
-        
-        public AttackState(Enemy enemy, EnemyAI enemyAI, EnemyAbilities enemyAbilities)
+        private readonly MeleeEnemyView m_MeleeEnemyView;
+
+        public AttackState(Enemy enemy, EnemyAI enemyAI, EnemyAbilities enemyAbilities, MeleeEnemyView meleeEnemyView)
         {
             m_Enemy = enemy;
             m_EnemyAI = enemyAI;
             m_EnemyAbilities = enemyAbilities;
+            m_MeleeEnemyView = meleeEnemyView;
         }
         
         public void Enter()
         {
             m_EnemyAI.AgentEnabled = false;
-            m_EnemyAI.RagdollEnabled = false;
+            m_MeleeEnemyView.DisableRigidbody();
 
-            m_Enemy.AnimatorEnabled = true;
+            m_MeleeEnemyView.EnabledAnimator();
         }
         
         public void Exit()
@@ -131,19 +135,21 @@ namespace Rebel_Mage.Enemy
         private readonly Enemy m_Enemy;
         private readonly EnemyAI m_EnemyAI;
         private readonly EnemyAbilities m_EnemyAbilities;
-        
-        public KnockedDownState(Enemy enemy, EnemyAI enemyAI, EnemyAbilities enemyAbilities)
+        private readonly MeleeEnemyView m_MeleeEnemyView;
+
+        public KnockedDownState(Enemy enemy, EnemyAI enemyAI, EnemyAbilities enemyAbilities, MeleeEnemyView meleeEnemyView)
         {
             m_Enemy = enemy;
             m_EnemyAI = enemyAI;
             m_EnemyAbilities = enemyAbilities;
+            m_MeleeEnemyView = meleeEnemyView;
         }
         public void Enter()
         {
             m_EnemyAI.AgentEnabled = false;
-            m_EnemyAI.RagdollEnabled = true;
+            m_MeleeEnemyView.EnableRigidbody();
             
-            m_Enemy.AnimatorEnabled = false;
+            m_MeleeEnemyView.DisabledAnimator();
         }
         
         public void Exit()

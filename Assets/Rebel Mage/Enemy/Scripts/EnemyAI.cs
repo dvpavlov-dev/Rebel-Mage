@@ -29,20 +29,20 @@ namespace Rebel_Mage.Enemy
             }
         }
 
-        public bool RagdollEnabled 
-        {
-            set 
-            {
-                if (value)
-                {
-                    EnableRigidbody();
-                }
-                else
-                {
-                    DisableRigidbody();
-                }
-            }
-        }
+        // public bool RagdollEnabled 
+        // {
+        //     set 
+        //     {
+        //         if (value)
+        //         {
+        //             EnableRigidbody();
+        //         }
+        //         else
+        //         {
+        //             DisableRigidbody();
+        //         }
+        //     }
+        // }
         
         protected bool IsEnemySetup;
         protected GameObject Target;
@@ -65,7 +65,7 @@ namespace Rebel_Mage.Enemy
             m_Agent.stoppingDistance = stoppingDistance;
 
             m_Rigidbodies = new List<Rigidbody>(GetComponentsInChildren<Rigidbody>());
-            DisableRigidbody();
+            EnemyController.MeleeEnemyView.DisableRigidbody();
 
             IsEnemySetup = true;
         }
@@ -106,39 +106,38 @@ namespace Rebel_Mage.Enemy
 
             m_TimerForSpeedEffects = StartCoroutine(ReturnSpeed(timeSlowdown));
         }
-
-
+        
         private void Hit(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
-            EnableRigidbody();
-
-            Rigidbody hitBone = m_Rigidbodies.OrderBy(rigidbody => Vector3.Distance(positionImpact, rigidbody.position)).First();
-            hitBone.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
+            EnemyController.MeleeEnemyView.EnableRigidbody();
+            EnemyController.MeleeEnemyView.ReactionOnExplosion(positionImpact,maxDistance,explosionForce);
+            // Rigidbody hitBone = m_Rigidbodies.OrderBy(rigidbody => Vector3.Distance(positionImpact, rigidbody.position)).First();
+            // hitBone.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
             
             Invoke(nameof(ReturnControl), 2f);
         }
 
         private void ReturnControl()
         {
-            DisableRigidbody();
+            EnemyController.MeleeEnemyView.DisableRigidbody();
             EnemyController.EnemySM.ChangeState<MoveState>();
         }
 
-        private void EnableRigidbody()
-        {
-            foreach (Rigidbody rb in m_Rigidbodies)
-            {
-                rb.isKinematic = false;
-            }
-        }
-
-        private void DisableRigidbody()
-        {
-            foreach (Rigidbody rb in m_Rigidbodies)
-            {
-                rb.isKinematic = true;
-            }
-        }
+        // private void EnableRigidbody()
+        // {
+        //     foreach (Rigidbody rb in m_Rigidbodies)
+        //     {
+        //         rb.isKinematic = false;
+        //     }
+        // }
+        //
+        // private void DisableRigidbody()
+        // {
+        //     foreach (Rigidbody rb in m_Rigidbodies)
+        //     {
+        //         rb.isKinematic = true;
+        //     }
+        // }
 
         private IEnumerator ReturnSpeed(float timeWhenReturn)
         {

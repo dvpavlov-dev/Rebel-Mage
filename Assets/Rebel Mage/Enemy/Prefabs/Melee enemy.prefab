@@ -869,6 +869,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3207138823732197299}
   - component: {fileID: 8818653970430307785}
+  - component: {fileID: 3171912074169698866}
   m_Layer: 0
   m_Name: Mutant
   m_TagString: Untagged
@@ -901,7 +902,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2867063877644561673}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 2fa2b2fba0ed5aa4486c05ce0b03fed0, type: 3}
   m_Controller: {fileID: 9100000, guid: 3fd08e47cb0c4d1499516211d5212f0d, type: 2}
   m_CullingMode: 1
@@ -914,6 +915,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3171912074169698866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2867063877644561673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acd0809d62794e3a9db21b3eb9e8f871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2960994444055138846
 GameObject:
   m_ObjectHideFlags: 0
@@ -1995,7 +2008,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6ff3d27b1f745aeb93f2cccc6b67f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnimationController: {fileID: 8818653970430307785}
+  MeleeEnemyView: {fileID: 3171912074169698866}
 --- !u!114 &7662286487593733739
 MonoBehaviour:
   m_ObjectHideFlags: 0
