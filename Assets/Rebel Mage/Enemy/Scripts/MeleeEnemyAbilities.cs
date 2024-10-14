@@ -20,7 +20,7 @@ namespace Rebel_Mage.Enemy
                  
                     EnemyController.EnemySM.ChangeState<AttackState<MeleeEnemyView>>();
                     EnemyView.StartAttackAnimation();
-                    EnemyView.OnEndAnimationAction = OnEndAnimation;
+                    EnemyView.OnEndAnimationAction += OnEndAnimation;
                     // foreach (AnimationClip clip in EnemyController.AnimationController.runtimeAnimatorController.animationClips)
                     // {
                     //     if (clip.name == ANIMATION_NAME)
@@ -34,6 +34,7 @@ namespace Rebel_Mage.Enemy
 
         private void OnEndAnimation(string animName)
         {
+            EnemyView.OnEndAnimationAction -= OnEndAnimation;
             OnEndPunchAnimation(animName);
         }
         

@@ -19,7 +19,7 @@ MonoBehaviour:
     Points: 13
     StoppingDistance: 0
   MeleeEnemy:
-    Hp: 25
+    Hp: 250
     MoveSpeed: 5
     Damage: 15
     Points: 15

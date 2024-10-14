@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Rebel_Mage.Enemy
@@ -6,13 +7,15 @@ namespace Rebel_Mage.Enemy
     [RequireComponent(typeof(Animator))]
     public class EnemyView : MonoBehaviour
     {
+        private void EnabledAnimator() => AnimationController.enabled = true;
+        private void DisabledAnimator() => AnimationController.enabled = false;
+        
         protected Animator AnimationController;
         protected List<Rigidbody> Rigidbodies;
 
-        public void EnabledAnimator() => AnimationController.enabled = true;
-        public void DisabledAnimator() => AnimationController.enabled = false;
+        private bool m_IsRigidBodyEnabled;
 
-        public void Init(Transform parent)
+        public virtual void Init(Transform parent)
         {
             AnimationController = GetComponent<Animator>();
             Rigidbodies = new List<Rigidbody>(GetComponentsInChildren<Rigidbody>());
@@ -24,18 +27,22 @@ namespace Rebel_Mage.Enemy
 
         public void EnableRigidbody()
         {
+            DisabledAnimator();
+            
             foreach (Rigidbody rb in Rigidbodies)
             {
                 rb.isKinematic = false;
             }
         }
 
-        public void DisableRigidbody()
+        public virtual void DisableRigidbody(Action onEndStandingUpAnimation)
         {
             foreach (Rigidbody rb in Rigidbodies)
             {
                 rb.isKinematic = true;
             }
+            
+            EnabledAnimator();
         }
     }
 }

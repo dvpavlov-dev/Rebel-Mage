@@ -48,7 +48,7 @@ namespace Rebel_Mage.Enemy
             m_Agent.speed = m_MoveSpeed;
             m_Agent.stoppingDistance = stoppingDistance;
 
-            EnemyController.EnemyView.DisableRigidbody();
+            EnemyController.EnemyView.DisableRigidbody(null);
 
             IsEnemySetup = true;
         }
@@ -98,7 +98,7 @@ namespace Rebel_Mage.Enemy
 
         private void ReturnControl()
         {
-            EnemyController.EnemyView.DisableRigidbody();
+            // EnemyController.EnemyView.DisableRigidbody();
             EnemyController.EnemySM.ChangeState<MoveState<T>>();
         }
 
