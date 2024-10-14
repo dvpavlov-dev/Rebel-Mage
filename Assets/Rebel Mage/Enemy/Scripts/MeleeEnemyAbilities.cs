@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rebel_Mage.Enemy
 {
-    public class MeleeEnemyAbilities : EnemyAbilities
+    public class MeleeEnemyAbilities : EnemyAbilities<MeleeEnemyView>
     {
         private bool m_IsAttackStarted;
         private const string ANIMATION_NAME = "Mutant Punch";
@@ -18,9 +18,9 @@ namespace Rebel_Mage.Enemy
                 {
                     m_IsAttackStarted = true;
                  
-                    EnemyController.EnemySM.ChangeState<AttackState>();
-                    EnemyController.MeleeEnemyView.StartAttackAnimation();
-                    EnemyController.MeleeEnemyView.OnEndAnimationAction = OnEndAnimation;
+                    EnemyController.EnemySM.ChangeState<AttackState<MeleeEnemyView>>();
+                    EnemyView.StartAttackAnimation();
+                    EnemyView.OnEndAnimationAction = OnEndAnimation;
                     // foreach (AnimationClip clip in EnemyController.AnimationController.runtimeAnimatorController.animationClips)
                     // {
                     //     if (clip.name == ANIMATION_NAME)
@@ -34,12 +34,17 @@ namespace Rebel_Mage.Enemy
 
         private void OnEndAnimation(string animName)
         {
+            OnEndPunchAnimation(animName);
+        }
+        
+        private void OnEndPunchAnimation(string animName)
+        {
             if (animName != "Mutant Punch") return;
-            
+
             m_IsAttackStarted = false;
-           
-            EnemyController.EnemySM.ChangeState<MoveState>();
-            
+
+            EnemyController.EnemySM.ChangeState<MoveState<MeleeEnemyView>>();
+
             foreach (RaycastHit hit in Physics.SphereCastAll(transform.position, 2, Vector3.up))
             {
                 if (hit.transform.CompareTag("Player") && hit.transform.GetComponent<IDamage>() is {} damageController)

@@ -13,12 +13,7 @@ namespace Rebel_Mage.Spell_system
 
         private void Update()
         {
-            MoveProjectile(Config);
-        }
-
-        private void MoveProjectile(BallConfigSource config)
-        {
-            transform.Translate(new Vector3(0, 0, 1) * config.Speed * Time.deltaTime);
+            transform.Translate(new Vector3(0, 0, 1) * Config.Speed * Time.deltaTime);
         }
 
         private void OnDestroy()

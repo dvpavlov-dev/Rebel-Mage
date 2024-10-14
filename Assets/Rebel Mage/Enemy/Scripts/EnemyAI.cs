@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Rebel_Mage.Spell_system;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,7 +6,7 @@ using UnityEngine.AI;
 namespace Rebel_Mage.Enemy
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class EnemyAI : MonoBehaviour, IImpact
+    public class EnemyAI<T> : MonoBehaviour, IImpact where T : EnemyView
     {
         public bool AgentEnabled {
             get => m_Agent.enabled;
@@ -28,44 +26,29 @@ namespace Rebel_Mage.Enemy
                 }
             }
         }
-
-        // public bool RagdollEnabled 
-        // {
-        //     set 
-        //     {
-        //         if (value)
-        //         {
-        //             EnableRigidbody();
-        //         }
-        //         else
-        //         {
-        //             DisableRigidbody();
-        //         }
-        //     }
-        // }
         
         protected bool IsEnemySetup;
         protected GameObject Target;
         protected float MoveCoefficient = 1;
-        protected Enemy EnemyController;
+        protected Enemy<T> EnemyController;
+        protected T EnemyView;
 
         private NavMeshAgent m_Agent;
         private float m_MoveSpeed;
-        private List<Rigidbody> m_Rigidbodies;
         private Coroutine m_TimerForSpeedEffects;
         
-        public void SetupEnemyAI(float moveSpeed, GameObject target, float stoppingDistance, Enemy enemy)
+        public void SetupEnemyAI(float moveSpeed, GameObject target, float stoppingDistance, T meleeEnemyView, Enemy<T> enemy)
         {
             Target = target;
             m_MoveSpeed = moveSpeed;
+            EnemyView = meleeEnemyView;
             EnemyController = enemy;
 
             m_Agent = GetComponent<NavMeshAgent>();
             m_Agent.speed = m_MoveSpeed;
             m_Agent.stoppingDistance = stoppingDistance;
 
-            m_Rigidbodies = new List<Rigidbody>(GetComponentsInChildren<Rigidbody>());
-            EnemyController.MeleeEnemyView.DisableRigidbody();
+            EnemyController.EnemyView.DisableRigidbody();
 
             IsEnemySetup = true;
         }
@@ -86,10 +69,8 @@ namespace Rebel_Mage.Enemy
 
         void IImpact.ExplosionImpact(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
-            EnemyController.EnemySM.ChangeState<KnockedDownState>();
-            // m_Rb.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
+            EnemyController.EnemySM.ChangeState<KnockedDownState<T>>();
             Hit(positionImpact, maxDistance, explosionForce);
-            // Invoke(nameof(SetBlockControl), 1f);
         }
 
         void IImpact.ChangeSpeedImpact(float slowdownPercentage, float timeSlowdown)
@@ -109,35 +90,17 @@ namespace Rebel_Mage.Enemy
         
         private void Hit(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
-            EnemyController.MeleeEnemyView.EnableRigidbody();
-            EnemyController.MeleeEnemyView.ReactionOnExplosion(positionImpact,maxDistance,explosionForce);
-            // Rigidbody hitBone = m_Rigidbodies.OrderBy(rigidbody => Vector3.Distance(positionImpact, rigidbody.position)).First();
-            // hitBone.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
+            EnemyController.EnemyView.EnableRigidbody();
+            EnemyController.EnemyView.ReactionOnExplosion(positionImpact,maxDistance,explosionForce);
             
             Invoke(nameof(ReturnControl), 2f);
         }
 
         private void ReturnControl()
         {
-            EnemyController.MeleeEnemyView.DisableRigidbody();
-            EnemyController.EnemySM.ChangeState<MoveState>();
+            EnemyController.EnemyView.DisableRigidbody();
+            EnemyController.EnemySM.ChangeState<MoveState<T>>();
         }
-
-        // private void EnableRigidbody()
-        // {
-        //     foreach (Rigidbody rb in m_Rigidbodies)
-        //     {
-        //         rb.isKinematic = false;
-        //     }
-        // }
-        //
-        // private void DisableRigidbody()
-        // {
-        //     foreach (Rigidbody rb in m_Rigidbodies)
-        //     {
-        //         rb.isKinematic = true;
-        //     }
-        // }
 
         private IEnumerator ReturnSpeed(float timeWhenReturn)
         {
@@ -146,4 +109,5 @@ namespace Rebel_Mage.Enemy
             MoveCoefficient = 1;
         }
     }
+
 }

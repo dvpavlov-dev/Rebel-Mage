@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Rebel_Mage.Enemy
 {
-    public class BaseEnemyAbilities : EnemyAbilities
+    public class BaseEnemyAbilities : EnemyAbilities<EnemyView>
     {
         private void OnTriggerEnter(Collider other)
         {

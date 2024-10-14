@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Rebel_Mage.Player;
 using UnityEngine;
@@ -7,19 +8,20 @@ namespace Rebel_Mage.Spell_system
     [RequireComponent(typeof(BoxCollider))]
     public class DamageController : MonoBehaviour, IDamage
     {
-        public float MaxHealth = 1;
         public HealthUI HealthUI;
+        public Action OnDead { get; set; }
 
         private float Health {
-            get => _health;
+            get => m_Health;
             set 
             {
-                _health = value;
+                m_Health = value;
                 SyncHealth();
             }
         }
 
-        private float _health;
+        private float m_MaxHealth = 1;
+        private float m_Health;
 
         private void Start()
         {
@@ -28,17 +30,17 @@ namespace Rebel_Mage.Spell_system
 
         public void InitHealthPoints(float maxHealth)
         {
-            MaxHealth = maxHealth;
+            m_MaxHealth = maxHealth;
             InitHealthPoints();
         }
         
         private void InitHealthPoints()
         {
-            Health = MaxHealth;
+            Health = m_MaxHealth;
 
             if (HealthUI != null)
             {
-                HealthUI.Constructor(MaxHealth);
+                HealthUI.Constructor(m_MaxHealth);
                 HealthUI.UpdateHp(Health);
             }
         }
@@ -52,7 +54,8 @@ namespace Rebel_Mage.Spell_system
             
             if (Health <= 0)
             {
-                gameObject.SetActive(false);
+                // gameObject.SetActive(false);
+                OnDead?.Invoke();
             }
         }
     

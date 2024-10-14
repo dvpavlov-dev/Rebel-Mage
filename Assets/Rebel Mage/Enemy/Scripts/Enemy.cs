@@ -2,63 +2,51 @@ using System;
 using System.Collections.Generic;
 using Rebel_Mage.Spell_system;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Rebel_Mage.Enemy
 {
     [RequireComponent(typeof(DamageController))]
-    public class Enemy : MonoBehaviour
+    public class Enemy<T> : MonoBehaviour where T : EnemyView
     {
-        public MeleeEnemyView MeleeEnemyView;
-        public Action OnDead;
-        public EnemyStateMachine EnemySM;
+        [FormerlySerializedAs("MeleeEnemyView")]
+        public T EnemyView;
+        public EnemyStateMachine<T> EnemySM;
 
         public int PointsForEnemy { get; protected set; }
-        
-        // public bool AnimatorEnabled 
-        // {
-        //     get => AnimationController != null && AnimationController.enabled;
-        //     set 
-        //     {
-        //         if (AnimationController != null)
-        //         {
-        //             AnimationController.enabled = value;
-        //         }
-        //     }
-        // }
-        
-        protected EnemyAbilities EnemyAbilities;
-        protected EnemyAI EnemyAI;
-        
-        private void OnDisable()
-        {
-            if (!gameObject.scene.isLoaded) return;
 
-            OnDead?.Invoke();
-        }
+        protected DamageController DmgController;
+        protected EnemyAbilities<T> EnemyAbilities;
+        protected EnemyAI<T> EnemyAI;
 
-        public virtual void InitEnemy(Configs.Configs configs, GameObject target)
+        public virtual void InitEnemy(Configs.Configs configs, GameObject target, Action onDead)
         {
-            MeleeEnemyView.Init(transform);
-            EnemySM = new EnemyStateMachine(this, EnemyAI, EnemyAbilities, MeleeEnemyView);
+            EnemyView.Init(transform);
+            EnemySM = new EnemyStateMachine<T>(this, EnemyAI, EnemyAbilities, EnemyView);
+            
+            DmgController = GetComponent<DamageController>();
+            DmgController.OnDead = () => 
+            {
+                onDead?.Invoke();
+                gameObject.SetActive(false);
+            };
         }
     }
 
-    public class EnemyStateMachine
+    public class EnemyStateMachine<T> where T : EnemyView
     {
         private readonly Dictionary<Type, IStateEnemy> m_States;
         
         private IStateEnemy m_ActiveState;
         
-        public EnemyStateMachine(Enemy enemy, EnemyAI enemyAI, EnemyAbilities enemyAbilities, MeleeEnemyView meleeEnemyView)
+        public EnemyStateMachine(Enemy<T> enemy, EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T meleeEnemyView)
         {
             m_States = new Dictionary<Type, IStateEnemy>
             {
-                [typeof(MoveState)] = new MoveState(enemy, enemyAI, enemyAbilities, meleeEnemyView),
-                [typeof(AttackState)] = new AttackState(enemy, enemyAI, enemyAbilities, meleeEnemyView),
-                [typeof(KnockedDownState)] = new KnockedDownState(enemy, enemyAI, enemyAbilities, meleeEnemyView),
+                [typeof(MoveState<T>)] = new MoveState<T>(enemy, enemyAI, enemyAbilities, meleeEnemyView),
+                [typeof(AttackState<T>)] = new AttackState<T>(enemy, enemyAI, enemyAbilities, meleeEnemyView),
+                [typeof(KnockedDownState<T>)] = new KnockedDownState<T>(enemy, enemyAI, enemyAbilities, meleeEnemyView),
             };
-            
-            ChangeState<MoveState>();
         }
 
         public void ChangeState<TState>() where TState : class, IStateEnemy
@@ -72,14 +60,14 @@ namespace Rebel_Mage.Enemy
         private TState GetState<TState>() where TState : class, IStateEnemy => m_States[typeof(TState)] as TState;
     }
 
-    class MoveState : IStateEnemy
+    class MoveState<T> : IStateEnemy where T : EnemyView
     {
-        private readonly Enemy m_Enemy;
-        private readonly EnemyAI m_EnemyAI;
-        private readonly EnemyAbilities m_EnemyAbilities;
-        private readonly MeleeEnemyView m_MeleeEnemyView;
+        private readonly Enemy<T> m_Enemy;
+        private readonly EnemyAI<T> m_EnemyAI;
+        private readonly EnemyAbilities<T> m_EnemyAbilities;
+        private readonly T m_MeleeEnemyView;
 
-        public MoveState(Enemy enemy, EnemyAI enemyAI, EnemyAbilities enemyAbilities, MeleeEnemyView meleeEnemyView)
+        public MoveState(Enemy<T> enemy, EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T meleeEnemyView)
         {
             m_Enemy = enemy;
             m_EnemyAI = enemyAI;
@@ -101,14 +89,14 @@ namespace Rebel_Mage.Enemy
         }
     } 
     
-    class AttackState : IStateEnemy
+    class AttackState<T> : IStateEnemy where T : EnemyView
     {
-        private readonly Enemy m_Enemy;
-        private readonly EnemyAI m_EnemyAI;
-        private readonly EnemyAbilities m_EnemyAbilities;
-        private readonly MeleeEnemyView m_MeleeEnemyView;
+        private readonly Enemy<T> m_Enemy;
+        private readonly EnemyAI<T> m_EnemyAI;
+        private readonly EnemyAbilities<T> m_EnemyAbilities;
+        private readonly T m_MeleeEnemyView;
 
-        public AttackState(Enemy enemy, EnemyAI enemyAI, EnemyAbilities enemyAbilities, MeleeEnemyView meleeEnemyView)
+        public AttackState(Enemy<T> enemy, EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T meleeEnemyView)
         {
             m_Enemy = enemy;
             m_EnemyAI = enemyAI;
@@ -130,14 +118,14 @@ namespace Rebel_Mage.Enemy
         }
     } 
     
-    class KnockedDownState : IStateEnemy
+    class KnockedDownState<T> : IStateEnemy where T : EnemyView
     {
-        private readonly Enemy m_Enemy;
-        private readonly EnemyAI m_EnemyAI;
-        private readonly EnemyAbilities m_EnemyAbilities;
-        private readonly MeleeEnemyView m_MeleeEnemyView;
+        private readonly Enemy<T> m_Enemy;
+        private readonly EnemyAI<T> m_EnemyAI;
+        private readonly EnemyAbilities<T> m_EnemyAbilities;
+        private readonly T m_MeleeEnemyView;
 
-        public KnockedDownState(Enemy enemy, EnemyAI enemyAI, EnemyAbilities enemyAbilities, MeleeEnemyView meleeEnemyView)
+        public KnockedDownState(Enemy<T> enemy, EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T meleeEnemyView)
         {
             m_Enemy = enemy;
             m_EnemyAI = enemyAI;

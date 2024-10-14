@@ -1,18 +1,14 @@
-﻿using UnityEngine;
-
-namespace Rebel_Mage.Enemy
+﻿namespace Rebel_Mage.Enemy
 {
-    public class MeleeEnemyAI : EnemyAI
+    public class MeleeEnemyAI : EnemyAI<MeleeEnemyView>
     {
-        private static readonly int MoveForward = Animator.StringToHash("MoveForward");
-
         protected override void FixedUpdate()
         {
             base.FixedUpdate();
 
             if (!IsEnemySetup) return;
 
-            EnemyController.MeleeEnemyView.StartMoveAnimation(MoveCoefficient);
+            EnemyView.StartMoveAnimation(MoveCoefficient);
         }
     }
 }

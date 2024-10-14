@@ -1,24 +1,29 @@
-﻿using Rebel_Mage.Spell_system;
+﻿using System;
+using Rebel_Mage.Configs;
+using Rebel_Mage.Spell_system;
 using UnityEngine;
 
 namespace Rebel_Mage.Enemy
 {
     [RequireComponent(typeof(MeleeEnemyAI), typeof(MeleeEnemyAbilities))]
-    public class MeleeEnemy : Enemy
+    public class MeleeEnemy : Enemy<MeleeEnemyView>
     {
-        public override void InitEnemy(Configs.Configs configs, GameObject target)
+        public override void InitEnemy(Configs.Configs configs, GameObject target, Action onDead)
         {
-            PointsForEnemy = configs.EnemyConfig.MeleeEnemy.Points;
+            MeleeEnemyParameters config = configs.EnemyConfig.MeleeEnemy;
+            
+            PointsForEnemy = config.Points;
 
             EnemyAI = gameObject.GetComponent<MeleeEnemyAI>();
             EnemyAbilities = gameObject.GetComponent<MeleeEnemyAbilities>();
 
+            base.InitEnemy(configs, target, onDead);
 
-            GetComponent<DamageController>().InitHealthPoints(configs.EnemyConfig.MeleeEnemy.Hp);
-            EnemyAI.SetupEnemyAI(configs.EnemyConfig.MeleeEnemy.MoveSpeed, target, configs.EnemyConfig.MeleeEnemy.StoppingDistance, this);
-            EnemyAbilities.SetupEnemyAbilities(configs.EnemyConfig.MeleeEnemy.Damage, target, this);
+            DmgController.InitHealthPoints(config.Hp);
+            EnemyAI.SetupEnemyAI(config.MoveSpeed, target, config.StoppingDistance, EnemyView, this);
+            EnemyAbilities.SetupEnemyAbilities(config.Damage, target, EnemyView, this);
             
-            base.InitEnemy(configs, target);
+            EnemySM.ChangeState<MoveState<MeleeEnemyView>>();
         }
     }
 }

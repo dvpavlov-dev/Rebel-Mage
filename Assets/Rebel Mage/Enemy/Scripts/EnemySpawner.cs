@@ -65,13 +65,11 @@ namespace Rebel_Mage.Enemy
             {
                 Vector3 position = SetPositionEnemy(spawnType);
 
-                GameObject enemy = m_FactoryActors.CreateEnemy(enemyType, position, target);
+                GameObject enemy = m_FactoryActors.CreateEnemy(enemyType, position, target, SyncEnemyCount, out int pointsForEnemy);
                 m_EnemyOnScene.Add(enemy);
 
                 enemy.SetActive(false);
-                Enemy enemyController = enemy.GetComponent<Enemy>();
-                enemyController.OnDead += SyncEnemyCount;
-                m_PointsForRound += enemyController.PointsForEnemy;
+                m_PointsForRound += pointsForEnemy;
             }
         }
 

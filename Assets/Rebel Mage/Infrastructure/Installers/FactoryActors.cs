@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Rebel_Mage.Configs;
+using Rebel_Mage.Enemy;
 
 namespace Rebel_Mage.Infrastructure
 {
@@ -22,33 +24,39 @@ namespace Rebel_Mage.Infrastructure
             return player;
         }
 
-        public GameObject CreateEnemy(EnemyType enemyType, Vector3 position, GameObject target)
+        public GameObject CreateEnemy(EnemyType enemyType, Vector3 position, GameObject target, Action onDead, out int pointsForEnemy)
         {
             switch (enemyType)
             {
                 case EnemyType.BASE_ENEMY:
-                    return CreateBaseEnemy(position, target);
+                    return CreateBaseEnemy(position, target, onDead, out pointsForEnemy);
                 
                 case EnemyType.MELEE_ENEMY:
-                    return CreateMeleeEnemy(position, target);
+                    return CreateMeleeEnemy(position, target, onDead, out pointsForEnemy);
                 
                 default:
                     Debug.LogError("Enemy type not found");
+                    pointsForEnemy = 0;
                     return null;
             }
         }
-        private GameObject CreateMeleeEnemy(Vector3 position, GameObject target)
+        private GameObject CreateMeleeEnemy(Vector3 position, GameObject target, Action onDead, out int pointsForEnemy)
         {
             GameObject meleeEnemy = GameObject.Instantiate(m_Prefabs.MeleeEnemyPref, position, Quaternion.identity, null);
-            meleeEnemy.GetComponent<Rebel_Mage.Enemy.Enemy>().InitEnemy(m_Configs, target);
-
+            
+            MeleeEnemy enemyController = meleeEnemy.GetComponent<MeleeEnemy>();
+            enemyController.InitEnemy(m_Configs, target, onDead);
+            pointsForEnemy = enemyController.PointsForEnemy;
+            
             return meleeEnemy;
         }
 
-        private GameObject CreateBaseEnemy(Vector3 position, GameObject target)
+        private GameObject CreateBaseEnemy(Vector3 position, GameObject target, Action onDead, out int pointsForEnemy)
         {
             GameObject baseEnemy = GameObject.Instantiate(m_Prefabs.BaseEnemyPref, position, Quaternion.identity, null);
-            baseEnemy.GetComponent<Rebel_Mage.Enemy.Enemy>().InitEnemy(m_Configs, target);
+            var enemyController = baseEnemy.GetComponent<BaseEnemy>();
+            enemyController.InitEnemy(m_Configs, target, onDead);
+            pointsForEnemy = enemyController.PointsForEnemy;
 
             return baseEnemy;
         }
@@ -58,6 +66,6 @@ namespace Rebel_Mage.Infrastructure
     {
         GameObject CreatePlayer(Vector3 position);
 
-        GameObject CreateEnemy(EnemyType enemyType, Vector3 position, GameObject target);
+        GameObject CreateEnemy(EnemyType enemyType, Vector3 position, GameObject target, Action onDead, out int pointsForEnemy);
     }
 }
