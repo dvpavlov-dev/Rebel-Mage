@@ -42,7 +42,7 @@ namespace Rebel_Mage.Enemy
             {
                 [typeof(MoveState<T>)] = new MoveState<T>(enemy, enemyAI, enemyAbilities, meleeEnemyView),
                 [typeof(AttackState<T>)] = new AttackState<T>(enemy, enemyAI, enemyAbilities, meleeEnemyView),
-                [typeof(KnockedDownState<T>)] = new KnockedDownState<T>(enemy, enemyAI, enemyAbilities, meleeEnemyView),
+                [typeof(RagdollActivatedState<T>)] = new RagdollActivatedState<T>(enemy, enemyAI, enemyAbilities, meleeEnemyView),
             };
         }
 
@@ -74,8 +74,6 @@ namespace Rebel_Mage.Enemy
 
         public void Enter()
         {
-            // m_EnemyAI.AgentEnabled = true;
-
             m_EnemyView.DisableRigidbody(() => 
             {
                 m_EnemyAI.AgentEnabled = true;
@@ -112,14 +110,14 @@ namespace Rebel_Mage.Enemy
         public void Exit() {}
     }
 
-    class KnockedDownState<T> : IStateEnemy where T : EnemyView
+    class RagdollActivatedState<T> : IStateEnemy where T : EnemyView
     {
         private readonly Enemy<T> m_Enemy;
         private readonly EnemyAbilities<T> m_EnemyAbilities;
         private readonly EnemyAI<T> m_EnemyAI;
         private readonly T m_EnemyView;
 
-        public KnockedDownState(Enemy<T> enemy, EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T enemyView)
+        public RagdollActivatedState(Enemy<T> enemy, EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T enemyView)
         {
             m_Enemy = enemy;
             m_EnemyAI = enemyAI;

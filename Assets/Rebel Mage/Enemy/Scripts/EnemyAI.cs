@@ -48,7 +48,7 @@ namespace Rebel_Mage.Enemy
             m_Agent.speed = m_MoveSpeed;
             m_Agent.stoppingDistance = stoppingDistance;
 
-            EnemyController.EnemyView.DisableRigidbody(null);
+            // EnemyController.EnemyView.DisableRigidbody(null);
 
             IsEnemySetup = true;
         }
@@ -69,7 +69,7 @@ namespace Rebel_Mage.Enemy
 
         void IImpact.ExplosionImpact(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
-            EnemyController.EnemySM.ChangeState<KnockedDownState<T>>();
+            EnemyController.EnemySM.ChangeState<RagdollActivatedState<T>>();
             Hit(positionImpact, maxDistance, explosionForce);
         }
 
