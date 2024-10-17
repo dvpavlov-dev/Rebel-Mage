@@ -6,7 +6,7 @@
         {
             base.FixedUpdate();
 
-            if (!IsEnemySetup) return;
+            if (!IsEnemySetup || !m_Agent.enabled) return;
 
             EnemyView.StartMoveAnimation(MoveCoefficient);
         }

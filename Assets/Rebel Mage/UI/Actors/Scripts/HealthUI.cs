@@ -7,7 +7,7 @@ namespace Rebel_Mage.Player
     public class HealthUI : MonoBehaviour
     {
         public GameObject UIOther;
-        public Image ForegraundHp;
+        public Image ForegroundHp;
         public TextMeshProUGUI HpText;
 
         private float _maxHp;
@@ -34,7 +34,7 @@ namespace Rebel_Mage.Player
 
         public void UpdateHp(float currentHp)
         {
-            ForegraundHp.fillAmount = currentHp / _maxHp;
+            ForegroundHp.fillAmount = currentHp / _maxHp;
             HpText.text = currentHp.ToString();
         }
     }

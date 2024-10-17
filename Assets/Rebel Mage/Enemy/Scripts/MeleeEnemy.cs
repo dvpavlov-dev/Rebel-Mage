@@ -1,6 +1,5 @@
 ﻿using System;
 using Rebel_Mage.Configs;
-using Rebel_Mage.Spell_system;
 using UnityEngine;
 
 namespace Rebel_Mage.Enemy

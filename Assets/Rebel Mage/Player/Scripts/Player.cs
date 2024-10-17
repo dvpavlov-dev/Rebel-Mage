@@ -11,8 +11,9 @@ namespace Rebel_Mage.Player
     [RequireComponent(typeof(PlayerUIController))]
     public class Player : MonoBehaviour
     {
-        public Action OnDead;
-        
+        public Action OnDead { get; set; }
+
+        private DamageController m_DmgController;
         private PlayerConfigSource m_PlayerConfig;
 
         [Inject]
@@ -23,15 +24,20 @@ namespace Rebel_Mage.Player
 
         public void InitPlayer()
         {
-            GetComponent<DamageController>().InitHealthPoints(m_PlayerConfig.Hp);
+            m_DmgController = GetComponent<DamageController>();
+            m_DmgController.InitHealthPoints(m_PlayerConfig.Hp);
+            m_DmgController.OnDead += OnDeadAction;
             GetComponent<PlayerMoveController>().Init(m_PlayerConfig);
         }
-
-        private void OnDisable()
+        
+        private void OnDeadAction()
         {
-            if (!gameObject.scene.isLoaded) return;
-            
             OnDead?.Invoke();
+        }
+
+        private void OnDestroy()
+        {
+            m_DmgController.OnDead -= OnDead;
         }
     }
 }

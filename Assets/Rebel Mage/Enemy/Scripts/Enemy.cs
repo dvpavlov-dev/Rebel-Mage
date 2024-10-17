@@ -9,23 +9,22 @@ namespace Rebel_Mage.Enemy
     public class Enemy<T> : MonoBehaviour where T : EnemyView
     {
         public T EnemyView;
+        public EnemyStateMachine<T> EnemySM { get; private set; }
+        public int PointsForEnemy { get; protected set; }
 
         protected DamageController DmgController;
         protected EnemyAbilities<T> EnemyAbilities;
         protected EnemyAI<T> EnemyAI;
-        public EnemyStateMachine<T> EnemySM;
-
-        public int PointsForEnemy { get; protected set; }
-
+        
         public virtual void InitEnemy(Configs.Configs configs, GameObject target, Action onDead)
         {
             EnemyView.Init(transform);
-            EnemySM = new EnemyStateMachine<T>(this, EnemyAI, EnemyAbilities, EnemyView);
+            EnemySM = new EnemyStateMachine<T>(EnemyAI, EnemyAbilities, EnemyView);
 
             DmgController = GetComponent<DamageController>();
             DmgController.OnDead = () => {
                 onDead?.Invoke();
-                gameObject.SetActive(false);
+                EnemySM.ChangeState<DeadState<EnemyView>>();
             };
         }
     }
@@ -36,13 +35,14 @@ namespace Rebel_Mage.Enemy
 
         private IStateEnemy m_ActiveState;
 
-        public EnemyStateMachine(Enemy<T> enemy, EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T meleeEnemyView)
+        public EnemyStateMachine(EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T meleeEnemyView)
         {
             m_States = new Dictionary<Type, IStateEnemy>
             {
-                [typeof(MoveState<T>)] = new MoveState<T>(enemy, enemyAI, enemyAbilities, meleeEnemyView),
-                [typeof(AttackState<T>)] = new AttackState<T>(enemy, enemyAI, enemyAbilities, meleeEnemyView),
-                [typeof(RagdollActivatedState<T>)] = new RagdollActivatedState<T>(enemy, enemyAI, enemyAbilities, meleeEnemyView),
+                [typeof(MoveState<T>)] = new MoveState<T>(enemyAI, enemyAbilities, meleeEnemyView),
+                [typeof(AttackState<T>)] = new AttackState<T>(enemyAI, enemyAbilities),
+                [typeof(RagdollActivatedState<T>)] = new RagdollActivatedState<T>(enemyAI, enemyAbilities, meleeEnemyView),
+                [typeof(DeadState<T>)] = new DeadState<T>(enemyAI, enemyAbilities, meleeEnemyView),
             };
         }
 
@@ -59,14 +59,12 @@ namespace Rebel_Mage.Enemy
 
     class MoveState<T> : IStateEnemy where T : EnemyView
     {
-        private readonly Enemy<T> m_Enemy;
         private readonly EnemyAbilities<T> m_EnemyAbilities;
         private readonly EnemyAI<T> m_EnemyAI;
         private readonly T m_EnemyView;
 
-        public MoveState(Enemy<T> enemy, EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T enemyView)
+        public MoveState(EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T enemyView)
         {
-            m_Enemy = enemy;
             m_EnemyAI = enemyAI;
             m_EnemyAbilities = enemyAbilities;
             m_EnemyView = enemyView;
@@ -74,10 +72,18 @@ namespace Rebel_Mage.Enemy
 
         public void Enter()
         {
-            m_EnemyView.DisableRigidbody(() => 
+            m_EnemyAbilities.CanAttack = true;
+            
+            if(m_EnemyView.IsRigidBodyEnabled)
+            {
+                m_EnemyView.DisableRigidbody(() => {
+                    m_EnemyAI.AgentEnabled = true;
+                });
+            }
+            else
             {
                 m_EnemyAI.AgentEnabled = true;
-            });
+            }
         }
 
         public void Exit() {}
@@ -85,52 +91,70 @@ namespace Rebel_Mage.Enemy
 
     class AttackState<T> : IStateEnemy where T : EnemyView
     {
-        private readonly Enemy<T> m_Enemy;
         private readonly EnemyAbilities<T> m_EnemyAbilities;
         private readonly EnemyAI<T> m_EnemyAI;
-        private readonly T m_EnemyView;
 
-        public AttackState(Enemy<T> enemy, EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T enemyView)
+        public AttackState(EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities)
         {
-            m_Enemy = enemy;
             m_EnemyAI = enemyAI;
             m_EnemyAbilities = enemyAbilities;
-            m_EnemyView = enemyView;
         }
 
         public void Enter()
         {
             m_EnemyAI.AgentEnabled = false;
+            m_EnemyAbilities.CanAttack = false;
+        }
 
-            // m_EnemyView.DisableRigidbody(() => {
-            //     
-            // });
+        public void Exit()
+        {
+            m_EnemyAbilities.IsAttackInProgress = false;
+        }
+    }
+
+    class RagdollActivatedState<T> : IStateEnemy where T : EnemyView
+    {
+        private readonly EnemyAbilities<T> m_EnemyAbilities;
+        private readonly EnemyAI<T> m_EnemyAI;
+        private readonly T m_EnemyView;
+
+        public RagdollActivatedState(EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T enemyView)
+        {
+            m_EnemyAI = enemyAI;
+            m_EnemyAbilities = enemyAbilities;
+            m_EnemyView = enemyView;
+        }
+        public void Enter()
+        {
+            m_EnemyAI.AgentEnabled = false;
+            m_EnemyAbilities.CanAttack = false;
+            
+            m_EnemyView.EnableRigidbody();
         }
 
         public void Exit() {}
     }
 
-    class RagdollActivatedState<T> : IStateEnemy where T : EnemyView
+    class DeadState<T> : IStateEnemy where T : EnemyView
     {
-        private readonly Enemy<T> m_Enemy;
-        private readonly EnemyAbilities<T> m_EnemyAbilities;
         private readonly EnemyAI<T> m_EnemyAI;
-        private readonly T m_EnemyView;
-
-        public RagdollActivatedState(Enemy<T> enemy, EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T enemyView)
+        private readonly EnemyAbilities<T> m_EnemyAbilities;
+        private readonly EnemyView m_EnemyView;
+        
+        public DeadState(EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, EnemyView enemyView)
         {
-            m_Enemy = enemy;
             m_EnemyAI = enemyAI;
             m_EnemyAbilities = enemyAbilities;
             m_EnemyView = enemyView;
         }
+        
         public void Enter()
         {
             m_EnemyAI.AgentEnabled = false;
-
+            m_EnemyAbilities.CanAttack = false;
             m_EnemyView.EnableRigidbody();
         }
-
+        
         public void Exit() {}
     }
 

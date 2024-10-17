@@ -8,20 +8,31 @@ namespace Rebel_Mage.Enemy
 {
     public class MeleeEnemyView : EnemyView
     {
+        public List<Transform> ObjectNeedMoveWithModel = new();
+        
+        public event Action<string> OnEndAnimationAction;
+        
         private const string ANIM_PUNCH_NAME = "Mutant Punch";
+        private const string ANIM_SWIPING_NAME = "Mutant Swiping";
         private const string ANIM_STANDING_UP_FACE_UP_NAME = "Stand Up Face Up";
         private const string ANIM_STANDING_UP_FACE_DOWN_NAME = "Stand Up Face Down";
 
-        private static readonly int MoveForward = Animator.StringToHash("MoveForward");
-        private static readonly int MutantPunch = Animator.StringToHash("Mutant Punch");
+        private static readonly int m_MoveForward = Animator.StringToHash("MoveForward");
+
         private Transform m_HipsBone;
         private bool m_IsFacingUp;
 
         private Transform m_Parent;
         private RigAdjusterForAnimation m_RigAdjusterForDaceDownStandingUpAnimation;
-
         private RigAdjusterForAnimation m_RigAdjusterForFaceUpStandingUpAnimation;
-        public event Action<string> OnEndAnimationAction;
+
+        protected override void Update()
+        {
+            foreach (Transform obj in ObjectNeedMoveWithModel)
+            {
+                obj.position = new Vector3(m_HipsBone.position.x, obj.position.y, m_HipsBone.position.z);
+            }
+        }
 
         public override void Init(Transform parent)
         {
@@ -44,12 +55,26 @@ namespace Rebel_Mage.Enemy
 
         public void StartMoveAnimation(float moveCoefficient)
         {
-            AnimationController.SetFloat(MoveForward, moveCoefficient);
+            if(AnimationController.applyRootMotion)
+            {
+                AnimationController.applyRootMotion = false;
+            }
+            
+            AnimationController.SetFloat(m_MoveForward, moveCoefficient);
         }
 
-        public void StartAttackAnimation()
+        public string StartPunchAnimation()
         {
+            AnimationController.applyRootMotion = true;
             AnimationController.Play(ANIM_PUNCH_NAME);
+            return ANIM_PUNCH_NAME;
+        }
+
+        public string StartSwipingAnimation()
+        {
+            AnimationController.applyRootMotion = true;
+            AnimationController.Play(ANIM_SWIPING_NAME);
+            return ANIM_SWIPING_NAME;
         }
 
         public override void ReactionOnExplosion(Vector3 positionImpact, float maxDistance, float explosionForce)
@@ -58,7 +83,7 @@ namespace Rebel_Mage.Enemy
             hitBone.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
         }
 
-        public override void DisableRigidbody(Action onEndStandingUpAnimation)
+        public override void DisableRigidbody(Action onEndStandingUpAnimation = null)
         {
             foreach (Rigidbody rb in Rigidbodies)
             {
@@ -75,6 +100,11 @@ namespace Rebel_Mage.Enemy
 
         private void StartAnimStandingUp(Action onEndStandingUpAnimation)
         {
+            if(AnimationController.applyRootMotion)
+            {
+                AnimationController.applyRootMotion = false;
+            }
+            
             m_IsFacingUp = m_HipsBone.forward.y > 0;
 
             AdjustParentPositionToHipsBone();
@@ -148,16 +178,15 @@ namespace Rebel_Mage.Enemy
 
     public class RigAdjusterForAnimation
     {
-        private const float m_TimeToShiftBonesToStartAnimation = 0.5f;
+        private const float TIME_TO_SHIFT_BONES_TO_START_ANIMATION = 0.5f;
 
-        private List<Transform> m_Bones;
-        private BoneTransformData[] m_BonesAtStartAnimation;
-        private BoneTransformData[] m_BonesBeforeAnimation;
+        private readonly List<Transform> m_Bones;
+        private readonly BoneTransformData[] m_BonesAtStartAnimation;
+        private readonly BoneTransformData[] m_BonesBeforeAnimation;
 
-        private AnimationClip m_Clip;
-
+        private readonly AnimationClip m_Clip;
         private Coroutine m_ShiftBonesToStandingUpAnimation;
-        private MonoBehaviour m_View;
+        private readonly MonoBehaviour m_View;
 
         public RigAdjusterForAnimation(AnimationClip clip, IEnumerable<Transform> bones, MonoBehaviour view)
         {
@@ -214,10 +243,10 @@ namespace Rebel_Mage.Enemy
         {
             float progress = 0;
 
-            while (progress < m_TimeToShiftBonesToStartAnimation)
+            while (progress < TIME_TO_SHIFT_BONES_TO_START_ANIMATION)
             {
                 progress += Time.deltaTime;
-                float progressInPercentage = progress / m_TimeToShiftBonesToStartAnimation;
+                float progressInPercentage = progress / TIME_TO_SHIFT_BONES_TO_START_ANIMATION;
 
                 for (int i = 0; i < m_Bones.Count; i++)
                 {

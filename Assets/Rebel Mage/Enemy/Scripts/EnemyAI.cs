@@ -33,7 +33,7 @@ namespace Rebel_Mage.Enemy
         protected Enemy<T> EnemyController;
         protected T EnemyView;
 
-        private NavMeshAgent m_Agent;
+        protected NavMeshAgent m_Agent;
         private float m_MoveSpeed;
         private Coroutine m_TimerForSpeedEffects;
         
@@ -98,7 +98,6 @@ namespace Rebel_Mage.Enemy
 
         private void ReturnControl()
         {
-            // EnemyController.EnemyView.DisableRigidbody();
             EnemyController.EnemySM.ChangeState<MoveState<T>>();
         }
 

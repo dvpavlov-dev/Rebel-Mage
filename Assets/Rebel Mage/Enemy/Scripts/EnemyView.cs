@@ -7,13 +7,17 @@ namespace Rebel_Mage.Enemy
     [RequireComponent(typeof(Animator))]
     public class EnemyView : MonoBehaviour
     {
-        protected void EnabledAnimator() => AnimationController.enabled = true;
-        protected void DisabledAnimator() => AnimationController.enabled = false;
-        
+        public bool IsRigidBodyEnabled { get; protected set; }
+
         protected Animator AnimationController;
         protected List<Rigidbody> Rigidbodies;
-
-        protected bool IsRigidBodyEnabled;
+        
+        protected void EnabledAnimator() => AnimationController.enabled = true;
+        private void DisabledAnimator() => AnimationController.enabled = false;
+        
+        protected virtual void Update()
+        {
+        }
 
         public virtual void Init(Transform parent)
         {
@@ -37,7 +41,7 @@ namespace Rebel_Mage.Enemy
             IsRigidBodyEnabled = true;
         }
 
-        public virtual void DisableRigidbody(Action onEndStandingUpAnimation)
+        public virtual void DisableRigidbody(Action onEndStandingUpAnimation = null)
         {
             foreach (Rigidbody rb in Rigidbodies)
             {
