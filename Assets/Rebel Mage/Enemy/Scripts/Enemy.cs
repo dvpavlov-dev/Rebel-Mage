@@ -9,34 +9,66 @@ namespace Rebel_Mage.Enemy
     public class Enemy<T> : MonoBehaviour where T : EnemyView
     {
         public T EnemyView;
-        public EnemyStateMachine<T> EnemySM { get; private set; }
         public int PointsForEnemy { get; protected set; }
-
-        protected DamageController DmgController;
-        protected EnemyAbilities<T> EnemyAbilities;
-        protected EnemyAI<T> EnemyAI;
+        public bool IsEnemyDead { get; private set; }
+        public IDamage DmgController { get; private set; }
         
+        protected EnemyAbilities<T> EnemyAbilities { get; set; }
+        protected EnemyAI<T> EnemyAI { get; set; }
+
+        private EnemyStateMachine<T> m_EnemySm;
+
         public virtual void InitEnemy(Configs.Configs configs, GameObject target, Action onDead)
         {
             EnemyView.Init(transform);
-            EnemySM = new EnemyStateMachine<T>(EnemyAI, EnemyAbilities, EnemyView);
+            m_EnemySm = new EnemyStateMachine<T>(this, EnemyAI, EnemyAbilities, EnemyView);
 
-            DmgController = GetComponent<DamageController>();
-            DmgController.OnDead = () => {
-                onDead?.Invoke();
-                EnemySM.ChangeState<DeadState<EnemyView>>();
+            DmgController = GetComponent<IDamage>();
+            DmgController.OnDead = () => 
+            {
+                OnDeadAction(onDead);
             };
+        }
+
+        protected virtual void OnDeadAction(Action onDead)
+        {
+            SetDeadState();
+            IsEnemyDead = true;
+
+            onDead?.Invoke();
+        }
+
+        public void SetMoveState()
+        {
+            m_EnemySm.ChangeState<MoveState<T>>();
+        }
+
+        public void SetAttackState()
+        {
+            m_EnemySm.ChangeState<AttackState<T>>();
+        }
+
+        public void SetRagdollActivatedState()
+        {
+            m_EnemySm.ChangeState<RagdollActivatedState<T>>();
+        }
+
+        private void SetDeadState()
+        {
+            m_EnemySm.ChangeState<DeadState<T>>();
         }
     }
 
     public class EnemyStateMachine<T> where T : EnemyView
     {
+        private readonly Enemy<T> m_Enemy;
         private readonly Dictionary<Type, IStateEnemy> m_States;
 
         private IStateEnemy m_ActiveState;
 
-        public EnemyStateMachine(EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T meleeEnemyView)
+        public EnemyStateMachine(Enemy<T> enemy, EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T meleeEnemyView)
         {
+            m_Enemy = enemy;
             m_States = new Dictionary<Type, IStateEnemy>
             {
                 [typeof(MoveState<T>)] = new MoveState<T>(enemyAI, enemyAbilities, meleeEnemyView),
@@ -48,6 +80,8 @@ namespace Rebel_Mage.Enemy
 
         public void ChangeState<TState>() where TState : class, IStateEnemy
         {
+            if (m_Enemy.IsEnemyDead) return;
+            
             m_ActiveState?.Exit();
 
             m_ActiveState = GetState<TState>();
@@ -73,6 +107,7 @@ namespace Rebel_Mage.Enemy
         public void Enter()
         {
             m_EnemyAbilities.CanAttack = true;
+            
             
             if(m_EnemyView.IsRigidBodyEnabled)
             {
@@ -109,6 +144,7 @@ namespace Rebel_Mage.Enemy
         public void Exit()
         {
             m_EnemyAbilities.IsAttackInProgress = false;
+            m_EnemyAbilities.StopAllCoroutines();
         }
     }
 

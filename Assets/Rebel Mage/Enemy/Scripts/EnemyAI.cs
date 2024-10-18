@@ -37,19 +37,17 @@ namespace Rebel_Mage.Enemy
         private float m_MoveSpeed;
         private Coroutine m_TimerForSpeedEffects;
         
-        public void SetupEnemyAI(float moveSpeed, GameObject target, float stoppingDistance, T meleeEnemyView, Enemy<T> enemy)
+        public void SetupEnemyAI(float moveSpeed, GameObject target, float stoppingDistance, T enemyView, Enemy<T> enemy)
         {
             Target = target;
             m_MoveSpeed = moveSpeed;
-            EnemyView = meleeEnemyView;
+            EnemyView = enemyView;
             EnemyController = enemy;
 
             m_Agent = GetComponent<NavMeshAgent>();
             m_Agent.speed = m_MoveSpeed;
             m_Agent.stoppingDistance = stoppingDistance;
-
-            // EnemyController.EnemyView.DisableRigidbody(null);
-
+            
             IsEnemySetup = true;
         }
 
@@ -69,7 +67,7 @@ namespace Rebel_Mage.Enemy
 
         void IImpact.ExplosionImpact(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
-            EnemyController.EnemySM.ChangeState<RagdollActivatedState<T>>();
+            EnemyController.SetRagdollActivatedState();
             Hit(positionImpact, maxDistance, explosionForce);
         }
 
@@ -93,12 +91,14 @@ namespace Rebel_Mage.Enemy
             EnemyController.EnemyView.EnableRigidbody();
             EnemyController.EnemyView.ReactionOnExplosion(positionImpact,maxDistance,explosionForce);
             
-            Invoke(nameof(ReturnControl), 2f);
+            StartCoroutine(ReturnControl());
         }
 
-        private void ReturnControl()
+        private IEnumerator ReturnControl()
         {
-            EnemyController.EnemySM.ChangeState<MoveState<T>>();
+            yield return new WaitForSeconds(2f);
+            
+            EnemyController.SetMoveState();
         }
 
         private IEnumerator ReturnSpeed(float timeWhenReturn)
@@ -108,5 +108,4 @@ namespace Rebel_Mage.Enemy
             MoveCoefficient = 1;
         }
     }
-
 }

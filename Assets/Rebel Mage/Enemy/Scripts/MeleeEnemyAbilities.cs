@@ -17,7 +17,7 @@ namespace Rebel_Mage.Enemy
                 {
                     m_IsAttackStarted = true;
 
-                    EnemyController.EnemySM.ChangeState<AttackState<MeleeEnemyView>>();
+                    EnemyController.SetAttackState();
                     m_Animation_name = EnemyView.StartPunchAnimation();
 
                     foreach (RaycastHit hit in Physics.SphereCastAll(transform.position, 2, Vector3.up))
@@ -45,7 +45,7 @@ namespace Rebel_Mage.Enemy
 
             m_IsAttackStarted = false;
 
-            EnemyController.EnemySM.ChangeState<MoveState<MeleeEnemyView>>();
+            EnemyController.SetMoveState();
         }
     }
 }

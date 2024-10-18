@@ -13,7 +13,7 @@ namespace Rebel_Mage.Player
     {
         public Action OnDead { get; set; }
 
-        private DamageController m_DmgController;
+        private IDamage m_DmgController;
         private PlayerConfigSource m_PlayerConfig;
 
         [Inject]
@@ -24,7 +24,7 @@ namespace Rebel_Mage.Player
 
         public void InitPlayer()
         {
-            m_DmgController = GetComponent<DamageController>();
+            m_DmgController = GetComponent<IDamage>();
             m_DmgController.InitHealthPoints(m_PlayerConfig.Hp);
             m_DmgController.OnDead += OnDeadAction;
             GetComponent<PlayerMoveController>().Init(m_PlayerConfig);

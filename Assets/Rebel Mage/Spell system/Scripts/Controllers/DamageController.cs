@@ -22,12 +22,7 @@ namespace Rebel_Mage.Spell_system
 
         private float m_MaxHealth = 1;
         private float m_Health;
-
-        private void Start()
-        {
-            InitHealthPoints();
-        }
-
+        
         public void InitHealthPoints(float maxHealth)
         {
             m_MaxHealth = maxHealth;
@@ -55,13 +50,14 @@ namespace Rebel_Mage.Spell_system
             if (Health <= 0)
             {
                 // gameObject.SetActive(false);
+                HealthUI.gameObject.SetActive(false);
                 OnDead?.Invoke();
             }
         }
     
         public void TakeDamage(float damage)
         {
-            if (this == null && gameObject.activeSelf) return;
+            if (this == null || Health <= 0) return;
             
             Health -= damage;
         }
@@ -80,11 +76,6 @@ namespace Rebel_Mage.Spell_system
                 currentTime += interval;
                 yield return new WaitForSeconds(interval);
             }
-        }
-
-        private void OnDisable()
-        {
-            InitHealthPoints();
         }
     }
 }

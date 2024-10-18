@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: EnemyConfig
   m_EditorClassIdentifier: 
   BaseEnemy:
-    Hp: 5
+    Hp: 100
     MoveSpeed: 10
     Damage: 10
     Points: 13
     StoppingDistance: 0
   MeleeEnemy:
-    Hp: 250
+    Hp: 25
     MoveSpeed: 5
     Damage: 15
     Points: 15

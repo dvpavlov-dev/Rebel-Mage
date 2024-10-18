@@ -148,7 +148,7 @@ namespace Rebel_Mage.Enemy
 
         private void AdjustParentPositionRelativeGround()
         {
-            if (Physics.Raycast(m_Parent.position, Vector3.down, out RaycastHit hit, 5, 1 << LayerMask.NameToLayer("Walkable")))
+            if (Physics.Raycast(m_Parent.position, Vector3.down, out RaycastHit hit, 1 << LayerMask.NameToLayer("Walkable")))
             {
                 m_Parent.position = new Vector3(m_Parent.position.x, hit.point.y, m_Parent.position.z);
             }

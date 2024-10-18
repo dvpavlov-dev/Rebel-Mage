@@ -51,6 +51,7 @@ namespace Rebel_Mage.Enemy
             EnabledAnimator();
 
             IsRigidBodyEnabled = false;
+            onEndStandingUpAnimation?.Invoke();
         }
     }
 }
