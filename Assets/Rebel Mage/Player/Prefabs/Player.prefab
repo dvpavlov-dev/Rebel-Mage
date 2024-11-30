@@ -362,7 +362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c80b79ae00447843b37406850fc7067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 1
   HealthUI: {fileID: 5378931222080791767}
 --- !u!114 &-2479462999760534247
 MonoBehaviour:
@@ -390,6 +389,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimMove: {fileID: 1777129455179009798}
+  model: {fileID: 4972639927458697158}
+  dashEffectPrefab: {fileID: 2965222256817593503, guid: d26c8ac570ee2d840a1a8d014d0510b3, type: 3}
 --- !u!114 &-3973161460166582864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,6 +511,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: c999e6b7d5ec45f4280cf5308e045393, type: 3}
       propertyPath: m_Name
       value: Knight D Pelegrini
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c999e6b7d5ec45f4280cf5308e045393, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: c999e6b7d5ec45f4280cf5308e045393, type: 3}
       propertyPath: m_Controller
@@ -662,6 +667,18 @@ PrefabInstance:
     - target: {fileID: 4937916430310283474, guid: 80c907c135988624188a38d2a672ccf8, type: 3}
       propertyPath: m_Name
       value: UI Other
+      objectReference: {fileID: 0}
+    - target: {fileID: 4937916430310283474, guid: 80c907c135988624188a38d2a672ccf8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762668057328151722, guid: 80c907c135988624188a38d2a672ccf8, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9159439568139247990, guid: 80c907c135988624188a38d2a672ccf8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

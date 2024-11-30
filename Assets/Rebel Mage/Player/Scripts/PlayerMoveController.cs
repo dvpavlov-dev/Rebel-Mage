@@ -16,8 +16,11 @@ namespace Rebel_Mage.Player
             set => m_IsBlockedControl = value;
         }
 
-        public Animator AnimMove;
+        [SerializeField] private Animator AnimMove;
 
+        [SerializeField] private GameObject model;
+        [SerializeField] private GameObject dashEffectPrefab;
+        
         // public GameObject MousePoint;
 
         private Camera m_Camera;
@@ -106,10 +109,26 @@ namespace Rebel_Mage.Player
 
         private void Push(Vector3 dictionary)
         {
-            m_IsBlockedControl = true;
+            StartDash();
 
             m_Rb.AddExplosionForce(100000, transform.position - dictionary, 10);
-            Invoke(nameof(UnblockControl), 0.1f);
+            Invoke(nameof(EndDash), 0.1f);
+        }
+
+        private void StartDash()
+        {
+            Instantiate(dashEffectPrefab, transform.position, Quaternion.identity);
+            
+            model.SetActive(false);
+            m_IsBlockedControl = true;
+        }
+        
+        private void EndDash()
+        {
+            Instantiate(dashEffectPrefab, transform.position, Quaternion.identity);
+            
+            model.SetActive(true);
+            UnblockControl();
         }
 
         void IImpact.ExplosionImpact(Vector3 positionImpact, float maxDistance, float explosionForce)
