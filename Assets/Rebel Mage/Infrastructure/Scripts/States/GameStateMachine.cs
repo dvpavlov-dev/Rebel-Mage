@@ -83,6 +83,8 @@ namespace Rebel_Mage.Infrastructure
             _spellWindowController.gameObject.SetActive(true);
             _spellWindowController.InitSpellWindow();
             _spellWindowController.OnFinishedChooseSpells += ChooseSpellsFinished;
+            
+            BackgroundMusicController.Instance.ActivateChooseSpellClip();
         }
         
         public void Exit()
@@ -115,6 +117,8 @@ namespace Rebel_Mage.Infrastructure
             _gameplayUI.SpellsPanel.SetActive(true);
             _roundProcess.StartRound();
             SubscribeToEvents();
+            
+            BackgroundMusicController.Instance.ActivateBattleClip();
         }
         
         public void Exit()
@@ -173,8 +177,7 @@ namespace Rebel_Mage.Infrastructure
         
         public void Enter()
         {
-            string textTitle = "Round over";
-            _gameplayUI.RoundOver(textTitle, _roundProcess.PointsForAllRounds);
+            _gameplayUI.RoundOver(true, _roundProcess.PointsForAllRounds);
             _gameplayUI.OnContinuePlay = () => _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
         }
         
@@ -199,8 +202,7 @@ namespace Rebel_Mage.Infrastructure
         
         public void Enter()
         {
-            string textTitle = "The cycle is over, the difficulty modifier is increased";
-            _gameplayUI.RoundOver(textTitle, _roundProcess.PointsForAllRounds);
+            _gameplayUI.RoundOver(true, _roundProcess.PointsForAllRounds);
             _gameplayUI.OnContinuePlay = () => _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
         }
         
@@ -224,8 +226,7 @@ namespace Rebel_Mage.Infrastructure
         
         public void Enter()
         {
-            string textTitle = "You are dead, try again?";
-            _gameplayUI.RoundOver(textTitle, _roundProcess.PointsForAllRounds);
+            _gameplayUI.RoundOver(false, _roundProcess.PointsForAllRounds);
             _gameplayUI.OnContinuePlay = () => _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
         }
         

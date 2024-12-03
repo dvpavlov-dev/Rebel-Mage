@@ -35,6 +35,13 @@ namespace Rebel_Mage.Enemy
             SetDeadState();
             IsEnemyDead = true;
 
+            Collider collider = GetComponent<Collider>();
+            
+            if (collider != null)
+            {
+                collider.enabled = false;
+            }
+
             onDead?.Invoke();
         }
 

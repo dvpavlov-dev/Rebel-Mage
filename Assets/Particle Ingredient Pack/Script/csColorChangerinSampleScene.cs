@@ -1,27 +1,26 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-#if UNITY_EDITOR
-using UnityEditor;
+                  #if UNITY_EDITOR
 #endif
 
-public class csColorChangerinSampleScene : MonoBehaviour {
-
-    Color Red = new Color32(159, 54, 13, 180);
-    Color Orange = new Color32(234, 94, 17, 180);
-    Color Yellow = new Color32(255,250,60,180);
-    Color Green = new Color32(46,154,19,180);
-    Color Blue = new Color32(13, 29, 195, 180);
-    Color DeepBlue = new Color32(54, 13, 159, 180);
-    Color Pink = new Color32(246,14,240,180);
-    Color SkyBlue = new Color32(28, 83, 212, 180);
-    Color Brown = new Color32(116, 81, 19, 180);
+public class csColorChangerinSampleScene : MonoBehaviour
+{
     public Color SaveColor;
-    public bool Saved = false;
+    public bool Saved;
     public Text tx;
     public Light lt;
+    private readonly Color Blue = new Color32(13, 29, 195, 180);
+    private readonly Color Brown = new Color32(116, 81, 19, 180);
+    private readonly Color DeepBlue = new Color32(54, 13, 159, 180);
+    private readonly Color Green = new Color32(46, 154, 19, 180);
+    private readonly Color Orange = new Color32(234, 94, 17, 180);
+    private readonly Color Pink = new Color32(246, 14, 240, 180);
 
-    void Start()
+    private readonly Color Red = new Color32(159, 54, 13, 180);
+    private readonly Color SkyBlue = new Color32(28, 83, 212, 180);
+    private readonly Color Yellow = new Color32(255, 250, 60, 180);
+
+    private void Start()
     {
         Button_Red();
     }
@@ -29,7 +28,7 @@ public class csColorChangerinSampleScene : MonoBehaviour {
     public void Button_Red()
     {
         tx.text = "Red";
-        tx.color = Red; 
+        tx.color = Red;
         SaveColor = Red;
         ChangeColor(Red);
         Saved = true;
@@ -101,7 +100,7 @@ public class csColorChangerinSampleScene : MonoBehaviour {
 
     public void ChangeColor(Color co)
     {
-        ParticleSystem[] ParticleSystems = GameObject.FindObjectsOfType<ParticleSystem>();
+        ParticleSystem[] ParticleSystems = FindObjectsOfType<ParticleSystem>();
         lt.color = co;
 
 

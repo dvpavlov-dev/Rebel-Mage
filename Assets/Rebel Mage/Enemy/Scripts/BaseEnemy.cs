@@ -24,12 +24,5 @@ namespace Rebel_Mage.Enemy
 
             SetMoveState();
         }
-
-        protected override void OnDeadAction(Action onDead)
-        {
-            
-            
-            base.OnDeadAction(onDead);
-        }
     }
 }

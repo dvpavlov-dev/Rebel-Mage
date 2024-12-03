@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-
 public class csMouseOrbit : MonoBehaviour
 {
 
@@ -12,25 +10,25 @@ public class csMouseOrbit : MonoBehaviour
 
     public float yMinLimit = -20.0f;
     public float yMaxLimit = 80.0f;
-
-    private float x = 0.0f;
-    private float y = 0.0f;
     public float CameraDist = 10;
 
+    private float x;
+    private float y;
+
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         Vector3 angles = transform.eulerAngles;
-        x = angles.x+50;
+        x = angles.x + 50;
         y = angles.y;
         distance = 30;
 
-        if (this.GetComponent<Rigidbody>() == true)
+        if (GetComponent<Rigidbody>() == true)
             GetComponent<Rigidbody>().freezeRotation = true;
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    private void LateUpdate()
     {
         if (Target)
         {
@@ -49,7 +47,7 @@ public class csMouseOrbit : MonoBehaviour
             if (Input.GetKey(KeyCode.W))
             {
                 CameraDist -= Time.deltaTime * 5;
-                CameraDist = Mathf.Clamp(CameraDist,2,20);
+                CameraDist = Mathf.Clamp(CameraDist, 2, 20);
             }
             if (Input.GetKey(KeyCode.S))
             {
@@ -59,7 +57,7 @@ public class csMouseOrbit : MonoBehaviour
         }
     }
 
-    float ClampAngle(float ag, float min, float max)
+    private float ClampAngle(float ag, float min, float max)
     {
         if (ag < -360)
             ag += 360;

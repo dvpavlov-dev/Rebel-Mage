@@ -3,16 +3,27 @@ using UnityEngine;
 
 public class RoundEndView : MonoBehaviour
 {
-    public TextMeshProUGUI Title;
-    public TextMeshProUGUI Description;
-
-    public void SetTextTitle(string text)
+    [SerializeField] private GameObject VictoryImage;
+    [SerializeField] private GameObject DefeatImage;
+    [SerializeField] private TextMeshProUGUI ScoreText;
+    
+    public void SetTitle(bool isVictory)
     {
-        Title.text = text;
+        VictoryImage.SetActive(false);
+        DefeatImage.SetActive(false);
+        
+        if (isVictory)
+        {
+            VictoryImage.SetActive(true);
+        }
+        else
+        {
+            DefeatImage.SetActive(true);
+        }
     }
     
     public void ShowCurrentPoints(int currentPoints)
     {
-        Description.text = $"Points collected: {currentPoints}";
+        ScoreText.text = currentPoints.ToString();
     }
 }

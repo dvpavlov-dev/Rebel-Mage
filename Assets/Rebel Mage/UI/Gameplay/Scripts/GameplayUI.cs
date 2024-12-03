@@ -12,13 +12,13 @@ namespace Rebel_Mage.UI.Gameplay
 
         public Action OnContinuePlay;
 
-        public void RoundOver(string textTitle, int currentPointsCollected)
+        public void RoundOver(bool isVictory, int currentPointsCollected)
         {
             Menu.SetActive(false);
             RoundEnd.SetActive(true);
 
             RoundEndView roundEndView = RoundEnd.GetComponent<RoundEndView>();
-            roundEndView.SetTextTitle(textTitle);
+            roundEndView.SetTitle(isVictory);
             roundEndView.ShowCurrentPoints(currentPointsCollected);
         }
 
@@ -40,7 +40,7 @@ namespace Rebel_Mage.UI.Gameplay
         
         public void OnClickExit()
         {
-            SceneManager.LoadScene("Start scene");
+            SceneManager.LoadScene(0);
         }
     }
 }

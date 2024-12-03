@@ -72,8 +72,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 9f25b2901468c6fdb9aeac1f2b006f12, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -81,7 +81,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 3
 --- !u!114 &4145253153546186551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,7 +288,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8715673504825216945, guid: 4550a82c7bae69d4f891b7655bb88bfc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 169.99997
+      value: 186.99992
       objectReference: {fileID: 0}
     - target: {fileID: 8715673504825216945, guid: 4550a82c7bae69d4f891b7655bb88bfc, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -401,7 +401,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8715673504825216945, guid: 4550a82c7bae69d4f891b7655bb88bfc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 60.00003
+      value: 77
       objectReference: {fileID: 0}
     - target: {fileID: 8715673504825216945, guid: 4550a82c7bae69d4f891b7655bb88bfc, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -514,7 +514,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8715673504825216945, guid: 4550a82c7bae69d4f891b7655bb88bfc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 700
+      value: 682.9
       objectReference: {fileID: 0}
     - target: {fileID: 8715673504825216945, guid: 4550a82c7bae69d4f891b7655bb88bfc, type: 3}
       propertyPath: m_AnchoredPosition.y
