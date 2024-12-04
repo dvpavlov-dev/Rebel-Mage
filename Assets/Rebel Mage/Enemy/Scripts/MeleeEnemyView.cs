@@ -79,6 +79,7 @@ namespace Rebel_Mage.Enemy
 
         public override void ReactionOnExplosion(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
+            StopAllCoroutines();
             Rigidbody hitBone = Rigidbodies.OrderBy(rigidbody => Vector3.Distance(positionImpact, rigidbody.position)).First();
             hitBone.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
         }

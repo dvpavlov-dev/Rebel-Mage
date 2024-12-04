@@ -3,6 +3,7 @@ using Rebel_Mage.Configs.Source;
 using Rebel_Mage.Infrastructure;
 using Rebel_Mage.Spell_system;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace Rebel_Mage.UI.Spell_Window
@@ -12,6 +13,8 @@ namespace Rebel_Mage.UI.Spell_Window
         public SpellCollection SpellCollection;
         public SpellInputPanel InputPanel;
 
+        [SerializeField] private Button readyButton;
+        
         private IRoundProcess _roundProcess;
         private Spells _spells;
 
@@ -28,6 +31,8 @@ namespace Rebel_Mage.UI.Spell_Window
 
         public void InitSpellWindow()
         {
+            readyButton.interactable = true;
+            
             SpellCollection.InitSpellCollection(this, _spells, _roundProcess);
             InputPanel.InitInputPanel(this, _spells);
         }
@@ -42,7 +47,14 @@ namespace Rebel_Mage.UI.Spell_Window
 
         public void OnClickReadyButton()
         {
+            readyButton.interactable = false;
+            
             InputPanel.SaveSpellsInSlots();
+            Invoke(nameof(StartGame), 1f);
+        }
+
+        private void StartGame()
+        {
             OnFinishedChooseSpells?.Invoke();
         }
     }

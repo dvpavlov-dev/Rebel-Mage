@@ -11,6 +11,13 @@ namespace Rebel_Mage.Spell_system
         public HealthUI HealthUI;
         public Action OnDead { get; set; }
 
+        private BoxCollider collider;
+
+        private void Awake()
+        {
+            collider = GetComponent<BoxCollider>();
+        }
+
         private float Health {
             get => m_Health;
             set 
@@ -25,6 +32,9 @@ namespace Rebel_Mage.Spell_system
         
         public void InitHealthPoints(float maxHealth)
         {
+            HealthUI.gameObject.SetActive(true);
+            collider.enabled = true;
+            
             m_MaxHealth = maxHealth;
             InitHealthPoints();
         }
@@ -51,6 +61,8 @@ namespace Rebel_Mage.Spell_system
             {
                 // gameObject.SetActive(false);
                 HealthUI.gameObject.SetActive(false);
+
+                collider.enabled = false;
                 OnDead?.Invoke();
             }
         }

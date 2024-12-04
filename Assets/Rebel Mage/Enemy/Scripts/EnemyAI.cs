@@ -88,7 +88,7 @@ namespace Rebel_Mage.Enemy
         
         private void Hit(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
-            EnemyController.EnemyView.EnableRigidbody();
+            // EnemyController.EnemyView.EnableRigidbody();
             EnemyController.EnemyView.ReactionOnExplosion(positionImpact,maxDistance,explosionForce);
             
             StartCoroutine(ReturnControl());

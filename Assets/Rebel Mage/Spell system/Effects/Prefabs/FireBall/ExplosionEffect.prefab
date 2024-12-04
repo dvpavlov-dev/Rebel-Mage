@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdd6d4538b6d6d647af44fbffdbcb8a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IceExplosion: {fileID: 8422738917696345132}
+  Explosion: {fileID: 8422738917696345132}
 --- !u!82 &7071259479409886622
 AudioSource:
   m_ObjectHideFlags: 0
@@ -58,7 +58,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 9db1b357293dfd24797d57ec99a18787, type: 3}
+  m_audioClip: {fileID: 8300000, guid: ac570b9dd5371574da4b79dbcef9c365, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
