@@ -5,9 +5,11 @@ using UnityEngine;
 
 namespace Rebel_Mage.Enemy
 {
-    [RequireComponent(typeof(DamageController))]
+    [RequireComponent(typeof(DamageController), typeof(AudioSource))]
     public class Enemy<T> : MonoBehaviour where T : EnemyView
     {
+        [SerializeField] private AudioClip deathSound;
+        
         public T EnemyView;
         public int PointsForEnemy { get; protected set; }
         public bool IsEnemyDead { get; private set; }
@@ -15,8 +17,15 @@ namespace Rebel_Mage.Enemy
         
         protected EnemyAbilities<T> EnemyAbilities { get; set; }
         protected EnemyAI<T> EnemyAI { get; set; }
+        protected AudioSource audioSource { get; set; }
 
         private EnemyStateMachine<T> m_EnemySm;
+
+        private void Awake()
+        {
+            audioSource = GetComponent<AudioSource>();
+            audioSource.playOnAwake = false;
+        }
 
         public virtual void InitEnemy(Configs.Configs configs, GameObject target, Action onDead)
         {
@@ -35,6 +44,9 @@ namespace Rebel_Mage.Enemy
             SetDeadState();
             IsEnemyDead = true;
 
+            audioSource.clip = deathSound;
+            audioSource.Play();
+            
             onDead?.Invoke();
         }
 

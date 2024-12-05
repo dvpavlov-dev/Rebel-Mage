@@ -19,13 +19,15 @@ namespace Rebel_Mage.Enemy
         protected T EnemyView;
         protected GameObject Target;
         protected bool IsEnemyAbilitiesSetup;
+        protected AudioSource AudioSource;
 
-        public void SetupEnemyAbilities(float damage, GameObject target, T enemyView, Enemy<T> enemyController)
+        public void SetupEnemyAbilities(float damage, GameObject target, T enemyView, Enemy<T> enemyController, AudioSource audioSource)
         {
             Damage = damage;
             Target = target;
             EnemyController = enemyController;
             EnemyView = enemyView;
+            AudioSource = audioSource;
 
             IsEnemyAbilitiesSetup = true;
         }

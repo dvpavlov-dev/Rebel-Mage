@@ -5,6 +5,8 @@ namespace Rebel_Mage.Enemy
 {
     public class MeleeEnemyAbilities : EnemyAbilities<MeleeEnemyView>
     {
+        [SerializeField] private AudioClip attackSound;
+        
         private string m_Animation_name;
 
         private void FixedUpdate()
@@ -17,6 +19,9 @@ namespace Rebel_Mage.Enemy
                 {
                     m_IsAttackStarted = true;
 
+                    AudioSource.clip = attackSound;
+                    AudioSource.Play();
+                    
                     EnemyController.SetAttackState();
                     m_Animation_name = EnemyView.StartPunchAnimation();
 

@@ -4,8 +4,11 @@ using UnityEngine;
 
 namespace Rebel_Mage.Enemy
 {
+    [RequireComponent(typeof(AudioSource))]
     public class BaseEnemyAbilities : EnemyAbilities<BaseEnemyView>
     {
+        [SerializeField] private AudioClip attackSound;
+
         private void OnTriggerEnter(Collider other)
         {
             if (CanAttack && !m_IsAttackStarted && other.CompareTag("Player") && other.GetComponent<IDamage>() is {} damageController)
@@ -16,6 +19,9 @@ namespace Rebel_Mage.Enemy
                 EnemyView.ActivateAttackEffect();
                 damageController.TakeDamage(Damage);
 
+                AudioSource.clip = attackSound;
+                AudioSource.Play();
+                
                 StartCoroutine(OnEndAttack());
             }
         }

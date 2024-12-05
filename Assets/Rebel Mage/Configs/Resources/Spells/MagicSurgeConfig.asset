@@ -22,3 +22,5 @@ MonoBehaviour:
   Damage: 5
   ExplosionRadius: 25
   ExplosionForce: 1000
+  ChargeEffect: {fileID: 3213888720235187180, guid: b128d47523c1f9c46b1abe2e3cfcbc4b, type: 3}
+  ChargeSound: {fileID: 8300000, guid: 9af5a27460c0d864085a4732e267d02b, type: 3}
