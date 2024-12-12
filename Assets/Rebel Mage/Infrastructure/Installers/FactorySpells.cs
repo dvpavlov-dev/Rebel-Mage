@@ -6,7 +6,8 @@ namespace Rebel_Mage.Infrastructure
 {
     public class FactorySpells : IFactorySpells
     {
-        private IFactorySpells m_FactorySpellsImplementation;
+        private IFactorySpells _factorySpellsImplementation;
+        
         public void CastSpell(GameObject owner, Animator animator, Transform spellPoint, SpellConfig spellConfig)
         {
             switch (spellConfig)

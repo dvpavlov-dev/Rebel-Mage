@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Rebel_Mage.Configs.Source;
 using Rebel_Mage.Infrastructure;
 using UnityEngine;
-using Zenject;
 
 namespace Rebel_Mage.Spell_system
 {
@@ -14,21 +13,21 @@ namespace Rebel_Mage.Spell_system
         public Action<TypeSpell, float, float> OnActivateCooldown;
 
         public Dictionary<TypeSpell, SpellConfig> ActiveSpells { get; } = new();
-        public CooldownController CooldownController => m_CooldownController ??= new CooldownController(this);
+        public CooldownController CooldownController => _cooldownController ??= new CooldownController(this);
 
-        private CooldownController m_CooldownController;
-        private IFactorySpells m_FactorySpells;
+        private CooldownController _cooldownController;
+        private IFactorySpells _factorySpells;
 
         public void Constructor(IFactorySpells factorySpells)
         {
-            m_FactorySpells = factorySpells;
+            _factorySpells = factorySpells;
         }
         
         public void ClearSpells()
         {
             ActiveSpells.Clear();
 
-            SetSpell(AllSpells[0], TypeSpell.BASE_ATTACK);
+            SetActiveSpell(AllSpells[0], TypeSpell.BASE_ATTACK);
         }
 
         public Dictionary<TypeSpell, SpellConfig> GetActiveSpells()
@@ -36,7 +35,7 @@ namespace Rebel_Mage.Spell_system
             return ActiveSpells;
         }
 
-        public void SetSpell(SpellConfig spell, TypeSpell typeSpell)
+        public void SetActiveSpell(SpellConfig spell, TypeSpell typeSpell)
         {
             ActiveSpells[typeSpell] = spell;
         }
@@ -58,7 +57,7 @@ namespace Rebel_Mage.Spell_system
             if (TryGetSpell(typeSpell, out SpellConfig useSpell) && CooldownController.CheckCooldown(typeSpell, useSpell))
             {
                 CooldownController.SetGlobalCooldown(typeSpell);
-                m_FactorySpells.CastSpell(owner, animatorCastSpell, spellPoint, useSpell);
+                _factorySpells.CastSpell(owner, animatorCastSpell, spellPoint, useSpell);
             }
         }
     }

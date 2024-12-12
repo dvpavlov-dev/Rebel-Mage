@@ -14,23 +14,23 @@ namespace Rebel_Mage.Enemy
         
         private const float DISTANCE_SPAWN = 30;
 
-        private readonly List<GameObject> m_EnemyOnScene = new();
-        private int m_EnemyDestroyed;
-
-        private IFactoryActors m_FactoryActors;
-        private int m_PointsForRound;
-        private Random m_Rnd;
-        private SpawnOneSide m_SpawnOneSide;
+        private readonly List<GameObject> _enemyOnScene = new();
+        
+        private int _enemyDestroyed;
+        private IFactoryActors _factoryActors;
+        private int _pointsForRound;
+        private Random _rnd;
+        private SpawnOneSide _spawnOneSide;
 
         private void Awake()
         {
-            m_Rnd = new Random();
-            m_SpawnOneSide = new SpawnOneSide();
+            _rnd = new Random();
+            _spawnOneSide = new SpawnOneSide();
         }
 
         public void SpawnEnemy(IFactoryActors factoryActors, RoundsConfigSource.RoundParameters roundParameters, int difficultyModifier, GameObject target)
         {
-            m_FactoryActors ??= factoryActors;
+            _factoryActors ??= factoryActors;
             ClearEnemyList();
 
             foreach (RoundsConfigSource.EnemyParameters enemyParameters in roundParameters.EnemyParameters)
@@ -46,40 +46,40 @@ namespace Rebel_Mage.Enemy
 
         private void ClearEnemyList()
         {
-            for (int i = m_EnemyOnScene.Count - 1; i >= 0; i--)
+            for (int i = _enemyOnScene.Count - 1; i >= 0; i--)
             {
-                Destroy(m_EnemyOnScene[i]);
+                Destroy(_enemyOnScene[i]);
             }
 
-            m_EnemyOnScene.Clear();
-            m_EnemyDestroyed = 0;
+            _enemyOnScene.Clear();
+            _enemyDestroyed = 0;
 
             StopAllCoroutines();
         }
 
         private void CreateEnemy(int enemyCount, EnemyType enemyType, SpawnType spawnType, GameObject target)
         {
-            m_PointsForRound = 0;
+            _pointsForRound = 0;
 
             for (int i = 0; i < enemyCount; i++)
             {
                 Vector3 position = SetPositionEnemy(spawnType);
 
-                GameObject enemy = m_FactoryActors.CreateEnemy(enemyType, position, target, SyncEnemyCount, out int pointsForEnemy);
-                m_EnemyOnScene.Add(enemy);
+                GameObject enemy = _factoryActors.CreateEnemy(enemyType, position, target, SyncEnemyCount, out int pointsForEnemy);
+                _enemyOnScene.Add(enemy);
 
                 enemy.SetActive(false);
-                m_PointsForRound += pointsForEnemy;
+                _pointsForRound += pointsForEnemy;
             }
         }
 
         private void SyncEnemyCount()
         {
-            m_EnemyDestroyed++;
+            _enemyDestroyed++;
 
-            if (m_EnemyDestroyed > m_EnemyOnScene.Count - 1)
+            if (_enemyDestroyed > _enemyOnScene.Count - 1)
             {
-                OnAllEnemyDestroyed?.Invoke(m_PointsForRound);
+                OnAllEnemyDestroyed?.Invoke(_pointsForRound);
             }
         }
 
@@ -88,13 +88,13 @@ namespace Rebel_Mage.Enemy
             switch (spawnType)
             {
                 case SpawnType.CIRCLE:
-                    int rand = m_Rnd.Next(0, 360);
+                    int rand = _rnd.Next(0, 360);
                     float x = DISTANCE_SPAWN * Mathf.Cos(rand);
                     float z = DISTANCE_SPAWN * Mathf.Sin(rand);
                     return new Vector3(x, 1, z);
 
                 case SpawnType.ONE_SIDE:
-                    return m_SpawnOneSide.GetPositionSpawnOneSide(DISTANCE_SPAWN);
+                    return _spawnOneSide.GetPositionSpawnOneSide(DISTANCE_SPAWN);
 
                 default:
                     return new Vector3(DISTANCE_SPAWN, 1, 0);
@@ -103,11 +103,13 @@ namespace Rebel_Mage.Enemy
 
         private IEnumerator SpawnWave()
         {
-            foreach (GameObject enemy in m_EnemyOnScene)
+            WaitForSeconds waitForSeconds = new (0.2f);
+            
+            foreach (GameObject enemy in _enemyOnScene)
             {
                 enemy.SetActive(true);
 
-                yield return new WaitForSeconds(0.2f);
+                yield return waitForSeconds;
             }
 
             yield return null;
@@ -117,22 +119,22 @@ namespace Rebel_Mage.Enemy
     internal class SpawnOneSide
     {
         private const int COUNT_PER_SIDE = 3;
-        private readonly Random m_Rnd;
-        private int m_CurrentCountPerSide;
-        private int m_CurrentRandAngle;
+        private readonly Random _rnd;
+        private int _currentCountPerSide;
+        private int _currentRandAngle;
 
         public SpawnOneSide()
         {
-            m_Rnd = new();
-            m_CurrentRandAngle = m_Rnd.Next(0, 360);
+            _rnd = new Random();
+            _currentRandAngle = _rnd.Next(0, 360);
         }
 
         public Vector3 GetPositionSpawnOneSide(float distanceSpawn)
         {
-            if (m_CurrentCountPerSide < COUNT_PER_SIDE)
+            if (_currentCountPerSide < COUNT_PER_SIDE)
             {
-                m_CurrentCountPerSide++;
-                float angelWithOffset = m_CurrentRandAngle + m_Rnd.Next(-15, 15);
+                _currentCountPerSide++;
+                float angelWithOffset = _currentRandAngle + _rnd.Next(-15, 15);
                 angelWithOffset *= Mathf.Deg2Rad;
                 float x = distanceSpawn * Mathf.Cos(angelWithOffset);
                 float z = distanceSpawn * Mathf.Sin(angelWithOffset);
@@ -140,8 +142,8 @@ namespace Rebel_Mage.Enemy
             }
             else
             {
-                m_CurrentRandAngle = m_Rnd.Next(0, 360);
-                m_CurrentCountPerSide = 0;
+                _currentRandAngle = _rnd.Next(0, 360);
+                _currentCountPerSide = 0;
                 return GetPositionSpawnOneSide(distanceSpawn);
             }
         }

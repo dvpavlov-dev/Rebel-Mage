@@ -53,7 +53,7 @@ namespace Rebel_Mage.UI.Spell_Window
         {
             foreach (SlotSpellInput slot in Slots)
             {
-                _spells.SetSpell(slot.GetSpell(), slot.TypeSpellSlot);
+                _spells.SetActiveSpell(slot.GetSpell(), slot.TypeSpellSlot);
             }
         }
 

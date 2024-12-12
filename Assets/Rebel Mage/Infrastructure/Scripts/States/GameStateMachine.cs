@@ -6,12 +6,13 @@ namespace Rebel_Mage.Infrastructure
 {
     public class GameStateMachine
     {
-        private readonly Dictionary<TypeState, IState> States;
-        private IState activeState;
+        private readonly Dictionary<TypeState, IState> _states;
+        
+        private IState _activeState;
 
         public GameStateMachine(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI)
         {
-            States = new Dictionary<TypeState, IState>
+            _states = new Dictionary<TypeState, IState>
             {
                 [TypeState.START_GAME] = new StartGame(this),
                 [TypeState.CHANGE_ABILITY] = new ChangeAbility(this, spellWindowController),
@@ -26,9 +27,9 @@ namespace Rebel_Mage.Infrastructure
 
         public void ChangeState(TypeState typeState)
         {
-            activeState?.Exit();
-            activeState = States[typeState];
-            activeState.Enter();
+            _activeState?.Exit();
+            _activeState = _states[typeState];
+            _activeState.Enter();
         }
     }
 
@@ -89,12 +90,12 @@ namespace Rebel_Mage.Infrastructure
         
         public void Exit()
         {
+            _spellWindowController.OnFinishedChooseSpells -= ChooseSpellsFinished;
             _spellWindowController.gameObject.SetActive(false);
         }
 
         private void ChooseSpellsFinished()
         {
-            _spellWindowController.OnFinishedChooseSpells -= ChooseSpellsFinished;
             _gameStateMachine.ChangeState(TypeState.START_ROUND);
         }
     }
@@ -123,6 +124,7 @@ namespace Rebel_Mage.Infrastructure
         
         public void Exit()
         {
+            UnsubscribeFromEvents();
             _gameplayUI.SpellsPanel.SetActive(false);
         }
         
@@ -142,22 +144,16 @@ namespace Rebel_Mage.Infrastructure
 
         private void PlayerLost()
         {
-            UnsubscribeFromEvents();
-            
             _gameStateMachine.ChangeState(TypeState.PLAYER_LOST);
         }
 
         private void EndingGame()
         {
-            UnsubscribeFromEvents();
-
             _gameStateMachine.ChangeState(TypeState.END_GAME);
         }
 
         private void FinishTheRound()
         {
-            UnsubscribeFromEvents();
-            
             _gameStateMachine.ChangeState(TypeState.END_ROUND);
         }
     }
@@ -197,7 +193,6 @@ namespace Rebel_Mage.Infrastructure
             _gameStateMachine = gameStateMachine;
             _gameplayUI = gameplayUI;
             _roundProcess = roundProcess;
-
         }
         
         public void Enter()

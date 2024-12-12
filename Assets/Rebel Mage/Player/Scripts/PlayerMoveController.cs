@@ -10,61 +10,51 @@ namespace Rebel_Mage.Player
     [RequireComponent(typeof(Rigidbody), typeof(ZenAutoInjecter))]
     public class PlayerMoveController : MonoBehaviour, IImpact, ICastSpells
     {
-        public bool IsBlockedControl 
-        {
-            get => m_IsBlockedControl;
-            set => m_IsBlockedControl = value;
-        }
-
-        [SerializeField] private Animator AnimMove;
-
-        [SerializeField] private GameObject model;
-        [SerializeField] private GameObject dashEffectPrefab;
+        [SerializeField] private Animator _animMove;
+        [SerializeField] private GameObject _model;
+        [SerializeField] private GameObject _dashEffectPrefab;
         
-        // public GameObject MousePoint;
-
-        private Camera m_Camera;
-        private CameraManager m_CameraManager;
-        private float m_MoveCoefficient = 1;
-        private float m_MoveSpeed;
-        private float m_CooldownDash;
-        private bool m_IsBlockedControl;
-        private bool m_IsPlayerSetup;
-        private Vector3 m_Movement;
-        private Rigidbody m_Rb;
-
-        private IRoundProcess m_RoundProcess;
-
-        private Coroutine m_TimerForSpeedEffects;
-        private PlayerConfigSource m_PlayerConfig;
+        private Camera _camera;
+        private CameraManager _cameraManager;
+        private float _moveCoefficient = 1;
+        private float _moveSpeed;
+        private float _cooldownDash;
+        private bool _isBlockedControl;
+        private bool _isPlayerSetup;
+        private Vector3 _movement;
+        private Rigidbody _rb;
+        private IRoundProcess _roundProcess;
+        private Coroutine _timerForSpeedEffects;
+        private PlayerConfigSource _playerConfig;
+        private Vector3 _rotatePlayerTo;
 
         [Inject]
         private void Constructor(CameraManager cameraManager)
         {
-            m_CameraManager = cameraManager;
+            _cameraManager = cameraManager;
         }
 
         public void Init(PlayerConfigSource playerConfig)
         {
-            m_PlayerConfig = playerConfig;
-            m_MoveSpeed = m_PlayerConfig.MoveSpeed;
+            _playerConfig = playerConfig;
+            _moveSpeed = _playerConfig.MoveSpeed;
 
-            m_Rb = GetComponent<Rigidbody>();
+            _rb = GetComponent<Rigidbody>();
 
-            m_CameraManager.SwitchCamera(TypeCamera.PLAYER_CAMERA);
-            m_Camera = m_CameraManager.CameraPlayer.GetComponent<Camera>();
+            _cameraManager.SwitchCamera(TypeCamera.PLAYER_CAMERA);
+            _camera = _cameraManager.CameraPlayer.GetComponent<Camera>();
             
-            m_IsPlayerSetup = true;
+            _isPlayerSetup = true;
         }
 
         private void Update()
         {
-            if (m_IsBlockedControl || !m_IsPlayerSetup) return;
+            if (_isBlockedControl || !_isPlayerSetup) return;
 
-            if (m_RoundProcess is { IsRoundInProgress: false })
+            if (_roundProcess is { IsRoundInProgress: false })
             {
-                m_Movement.Set(0, 0, 0);
-                m_Rb.velocity = m_Movement;
+                _movement.Set(0, 0, 0);
+                _rb.velocity = _movement;
                 return;
             }
 
@@ -76,20 +66,20 @@ namespace Rebel_Mage.Player
             RotatePlayer();
             CalcMove();
         }
-
+        
         private void OnDisable()
         {
             if (!gameObject.scene.isLoaded) return;
 
             StopAllCoroutines();
-            m_CameraManager.SwitchCamera(TypeCamera.ENVIRONMENT_CAMERA);
+            _cameraManager.SwitchCamera(TypeCamera.ENVIRONMENT_CAMERA);
         }
-        
+
         private bool CheckCooldown()
         {
-            if (m_CooldownDash <= Time.time)
+            if (_cooldownDash <= Time.time)
             {
-                m_CooldownDash = Time.time + m_PlayerConfig.Dash_CooldownTime;
+                _cooldownDash = Time.time + _playerConfig.Dash_CooldownTime;
                 return true;
             }
 
@@ -111,30 +101,39 @@ namespace Rebel_Mage.Player
         {
             StartDash();
 
-            m_Rb.AddExplosionForce(100000, transform.position - dictionary, 10);
+            _rb.AddExplosionForce(100000, transform.position - dictionary, 10);
             Invoke(nameof(EndDash), 0.1f);
         }
 
         private void StartDash()
         {
-            Instantiate(dashEffectPrefab, transform.position, Quaternion.identity);
+            Instantiate(_dashEffectPrefab, transform.position, Quaternion.identity);
             
-            model.SetActive(false);
-            m_IsBlockedControl = true;
+            _model.SetActive(false);
+            _isBlockedControl = true;
         }
-        
+
         private void EndDash()
         {
-            Instantiate(dashEffectPrefab, transform.position, Quaternion.identity);
+            Instantiate(_dashEffectPrefab, transform.position, Quaternion.identity);
             
-            model.SetActive(true);
+            _model.SetActive(true);
             UnblockControl();
         }
 
+        void ICastSpells.OnCastSpell(float castTime)
+        {
+            _isBlockedControl = true;
+            _movement.Set(0, 0, 0);
+            _rb.velocity = _movement;
+            
+            Invoke(nameof(UnblockControl), castTime);
+        }
+        
         void IImpact.ExplosionImpact(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
-            m_IsBlockedControl = true;
-            m_Rb.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
+            _isBlockedControl = true;
+            _rb.AddExplosionForce(explosionForce, positionImpact, maxDistance, 0, ForceMode.Impulse);
             Invoke(nameof(UnblockControl), 0.1f);
         }
 
@@ -142,14 +141,14 @@ namespace Rebel_Mage.Player
         {
             if (!gameObject.activeSelf) return;
 
-            m_MoveCoefficient = 1 - m_MoveCoefficient * slowdown;
+            _moveCoefficient = 1 - _moveCoefficient * slowdown;
 
-            if (m_TimerForSpeedEffects != null)
+            if (_timerForSpeedEffects != null)
             {
-                StopCoroutine(m_TimerForSpeedEffects);
+                StopCoroutine(_timerForSpeedEffects);
             }
 
-            m_TimerForSpeedEffects = StartCoroutine(ReturnSpeed(timeSlowdown));
+            _timerForSpeedEffects = StartCoroutine(ReturnSpeed(timeSlowdown));
         }
 
         private void CalcMove()
@@ -159,15 +158,15 @@ namespace Rebel_Mage.Player
             
             Vector3 move = new(deltaX, 0, deltaZ);
             move.Normalize();
-            move *= m_MoveCoefficient;
+            move *= _moveCoefficient;
 
-            if (AnimMove != null)
+            if (_animMove != null)
             {
                 AnimTransform(move);
             }
 
-            m_Movement.Set(m_MoveSpeed * move.x, 0, m_MoveSpeed * move.z);
-            m_Rb.velocity = m_Movement;
+            _movement.Set(_moveSpeed * move.x, 0, _moveSpeed * move.z);
+            _rb.velocity = _movement;
         }
 
         private void AnimTransform(Vector3 directionMove)
@@ -178,50 +177,41 @@ namespace Rebel_Mage.Player
             float animVert = directionMove.z * forward.z + directionMove.x * forward.x;
             float animHor = directionMove.x * right.x + directionMove.z * right.z;
             
-            AnimMove.SetFloat("Vertical", animVert);
-            AnimMove.SetFloat("Horizontal", animHor);
+            _animMove.SetFloat("Vertical", animVert);
+            _animMove.SetFloat("Horizontal", animHor);
         }
 
         private void RotatePlayer()
         {
-            if(m_IsBlockedControl)
+            if(_isBlockedControl)
                 return;
             
             var groundPlane = new Plane(Vector3.up, Vector3.zero);
-            Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
             if (groundPlane.Raycast(ray, out float position))
             {
                 Vector3 worldPosition = ray.GetPoint(position);
-                // MousePoint.transform.position = new Vector3(worldPosition.x, worldPosition.y + 0.5f, worldPosition.z);
-                transform.rotation = LookAt2D_Y(new Vector3(worldPosition.x, worldPosition.y + 0.5f, worldPosition.z));
+                _rotatePlayerTo.Set(worldPosition.x, worldPosition.y + 0.5f, worldPosition.z);
+                transform.rotation = LookAt2D_Y(_rotatePlayerTo);
             }
         }
 
         private Quaternion LookAt2D_Y(Vector3 target)
         {
-            var rotation = Quaternion.LookRotation(target - transform.position,
-                transform.TransformDirection(Vector3.up));
+            var rotation = Quaternion.LookRotation(target - transform.position, transform.TransformDirection(Vector3.up));
             return new Quaternion(0, rotation.y, 0, rotation.w);
         }
 
         private void UnblockControl()
         {
-            m_IsBlockedControl = false;
+            _isBlockedControl = false;
         }
 
         private IEnumerator ReturnSpeed(float timeWhenReturn)
         {
             yield return new WaitForSeconds(timeWhenReturn);
-            m_MoveCoefficient = 1;
-        }
-        public void OnCastSpell(float castTime)
-        {
-            m_IsBlockedControl = true;
-            m_Movement.Set(0, 0, 0);
-            m_Rb.velocity = m_Movement;
-            
-            Invoke(nameof(UnblockControl), castTime);
+            _moveCoefficient = 1;
         }
     }
 }

@@ -10,10 +10,9 @@ namespace Rebel_Mage.UI.Spell_Window
 {
     public class SpellWindowController : MonoBehaviour
     {
-        public SpellCollection SpellCollection;
-        public SpellInputPanel InputPanel;
-
-        [SerializeField] private Button readyButton;
+        [SerializeField] private SpellCollection _spellCollection;
+        [SerializeField] private SpellInputPanel _inputPanel;
+        [SerializeField] private Button _readyButton;
         
         private IRoundProcess _roundProcess;
         private Spells _spells;
@@ -31,25 +30,25 @@ namespace Rebel_Mage.UI.Spell_Window
 
         public void InitSpellWindow()
         {
-            readyButton.interactable = true;
+            _readyButton.interactable = true;
             
-            SpellCollection.InitSpellCollection(this, _spells, _roundProcess);
-            InputPanel.InitInputPanel(this, _spells);
+            _spellCollection.InitSpellCollection(this, _spells, _roundProcess);
+            _inputPanel.InitInputPanel(this, _spells);
         }
 
         public void SyncWindowState(SpellWindowState state)
         {
             WindowState = state;
 
-            SpellCollection.SyncWindowState(WindowState);
-            InputPanel.SyncWindowState(WindowState);
+            _spellCollection.SyncWindowState(WindowState);
+            _inputPanel.SyncWindowState(WindowState);
         }
 
         public void OnClickReadyButton()
         {
-            readyButton.interactable = false;
+            _readyButton.interactable = false;
             
-            InputPanel.SaveSpellsInSlots();
+            _inputPanel.SaveSpellsInSlots();
             Invoke(nameof(StartGame), 1f);
         }
 

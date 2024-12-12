@@ -12,23 +12,24 @@ namespace Rebel_Mage.UI.Spell_Window
     {
         public GameObject SpellCollectionCellPrefab;
 
-        private List<SpellCollectionСell> _spellCollectionСells = new();
+        private readonly List<SpellCollectionСell> _spellCollectionCells = new();
+        
         private SpellWindowController _spellWindowController;
         private SpellCollectionСell _currentSelectedSpellCell;
 
         private void ClearSpellCollection()
         {
-            if (_spellCollectionСells.IsEmpty())
+            if (_spellCollectionCells.IsEmpty())
             {
                 return;
             }
             
-            foreach (SpellCollectionСell spellCell in _spellCollectionСells)
+            foreach (SpellCollectionСell spellCell in _spellCollectionCells)
             {
                 Destroy(spellCell.gameObject);
             }
             
-            _spellCollectionСells.Clear();
+            _spellCollectionCells.Clear();
         }
 
         private List<SpellConfig> SortByOpenRound(List<SpellConfig> spells)
@@ -47,7 +48,7 @@ namespace Rebel_Mage.UI.Spell_Window
                 GameObject spellSetCellObj = Instantiate(SpellCollectionCellPrefab, transform);
                 SpellCollectionСell spellCollectionCell = spellSetCellObj.GetComponent<SpellCollectionСell>();
                 spellCollectionCell.InitSpellSetCell(spell, this, roundProcess);
-                _spellCollectionСells.Add(spellCollectionCell);
+                _spellCollectionCells.Add(spellCollectionCell);
             }
         }
 
@@ -55,7 +56,7 @@ namespace Rebel_Mage.UI.Spell_Window
         {
             if (state == SpellWindowState.IDLE)
             {
-                foreach (SpellCollectionСell collectionCell in _spellCollectionСells)
+                foreach (SpellCollectionСell collectionCell in _spellCollectionCells)
                 {
                     collectionCell.UnselectedCell();
                 }

@@ -21,9 +21,9 @@ namespace Rebel_Mage.UI.Spell_Window
         private SpellInputPanel _panel;
         private SpellConfig _spell;
 
-        public void SpellSlotInit(string buttonInput, TypeSpell typeSpell)
+        public void SpellSlotInit(string buttonInputName, TypeSpell typeSpell)
         {
-            ButtonInput.text = buttonInput;
+            ButtonInput.text = buttonInputName;
             TypeSpellSlot = typeSpell;
         }
 

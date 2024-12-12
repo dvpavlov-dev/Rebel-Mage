@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using Rebel_Mage.Player;
 using UnityEngine;
 
@@ -11,41 +10,41 @@ namespace Rebel_Mage.Spell_system
         public HealthUI HealthUI;
         public Action OnDead { get; set; }
 
-        private BoxCollider collider;
+        private BoxCollider _collider;
 
         private void Awake()
         {
-            collider = GetComponent<BoxCollider>();
+            _collider = GetComponent<BoxCollider>();
         }
 
         private float Health {
-            get => m_Health;
+            get => _health;
             set 
             {
-                m_Health = value;
+                _health = value;
                 SyncHealth();
             }
         }
 
-        private float m_MaxHealth = 1;
-        private float m_Health;
+        private float _maxHealth = 1;
+        private float _health;
         
         public void InitHealthPoints(float maxHealth)
         {
             HealthUI.gameObject.SetActive(true);
-            collider.enabled = true;
+            _collider.enabled = true;
             
-            m_MaxHealth = maxHealth;
+            _maxHealth = maxHealth;
             InitHealthPoints();
         }
         
         private void InitHealthPoints()
         {
-            Health = m_MaxHealth;
+            Health = _maxHealth;
 
             if (HealthUI != null)
             {
-                HealthUI.Constructor(m_MaxHealth);
+                HealthUI.Constructor(_maxHealth);
                 HealthUI.UpdateHp(Health);
             }
         }
@@ -59,10 +58,9 @@ namespace Rebel_Mage.Spell_system
             
             if (Health <= 0)
             {
-                // gameObject.SetActive(false);
                 HealthUI.gameObject.SetActive(false);
 
-                collider.enabled = false;
+                _collider.enabled = false;
                 OnDead?.Invoke();
             }
         }
@@ -72,22 +70,6 @@ namespace Rebel_Mage.Spell_system
             if (this == null || Health <= 0) return;
             
             Health -= damage;
-        }
-        
-        public void TakePeriodDamage(float damage, float interval, float time)
-        {
-            StartCoroutine( ActivatePeriodDamage(damage,interval,time));
-        }
-        
-        private IEnumerator ActivatePeriodDamage(float damage, float interval, float time)
-        {
-            float currentTime = 0;
-            while (currentTime < time)
-            {
-                TakeDamage(damage);
-                currentTime += interval;
-                yield return new WaitForSeconds(interval);
-            }
         }
     }
 }

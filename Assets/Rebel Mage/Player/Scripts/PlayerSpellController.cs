@@ -9,39 +9,31 @@ public class PlayerSpellController : MonoBehaviour
     public Transform SpellPoint;
     public Animator AnimatorCastSpell;
     
-    private CameraManager m_CameraManager;
-    private Camera m_Camera;
-    private Spells m_Spells;
+    private Camera _camera;
+    private Spells _spells;
 
     [Inject]
     private void Constructor(Spells spells, CameraManager cameraManager)
     {
-        m_Spells = spells;
-        m_CameraManager = cameraManager;
-        m_Camera = cameraManager.CameraPlayer.GetComponent<Camera>();
+        _spells = spells;
+        _camera = cameraManager.CameraPlayer.GetComponent<Camera>();
     }
 
     void Update()
     {
         var groundPlane = new Plane(Vector3.up, Vector3.zero);
-        Ray ray = m_Camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
 
-        if (groundPlane.Raycast(ray, out float position))
+        if (groundPlane.Raycast(ray, out float _))
         {
-            Vector3 worldPosition = ray.GetPoint(position);
-
-            /* || Input.GetTouch(0).phase == TouchPhase.Began*/
             if (Input.GetKeyDown(KeyCode.Mouse0) ||
                 Input.GetKeyDown(KeyCode.Mouse1) ||
                 Input.GetKeyDown(KeyCode.Q) ||
                 Input.GetKeyDown(KeyCode.E) ||
                 Input.GetKeyDown(KeyCode.R))
             {
-                RaycastHit hit;
-                if (Physics.Raycast(m_Camera.transform.position, ray.direction, out hit, Mathf.Infinity))
+                if (Physics.Raycast(_camera.transform.position, ray.direction, out RaycastHit _, Mathf.Infinity))
                 {
-                    Debug.DrawRay(m_Camera.transform.position, ray.direction * hit.distance, Color.yellow);
-
                     if (Input.GetKeyDown(KeyCode.Mouse0))
                     {
                         UseSpell(TypeSpell.BASE_ATTACK);
@@ -73,6 +65,6 @@ public class PlayerSpellController : MonoBehaviour
     
     private void UseSpell(TypeSpell typeSpell)
     {
-        m_Spells.CastSpell(typeSpell, AnimatorCastSpell, SpellPoint, gameObject);
+        _spells.CastSpell(typeSpell, AnimatorCastSpell, SpellPoint, gameObject);
     }
 }

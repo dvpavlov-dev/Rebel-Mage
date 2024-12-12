@@ -8,6 +8,5 @@ namespace Rebel_Mage.Spell_system
 
         void InitHealthPoints(float maxHealth);
         void TakeDamage(float damage);
-        void TakePeriodDamage(float damage, float interval, float time);
     }
 }

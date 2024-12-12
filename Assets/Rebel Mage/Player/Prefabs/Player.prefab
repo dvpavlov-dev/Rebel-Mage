@@ -388,9 +388,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c17279bb0c8b14eb85890ee742b917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnimMove: {fileID: 1777129455179009798}
-  model: {fileID: 4972639927458697158}
-  dashEffectPrefab: {fileID: 2965222256817593503, guid: d26c8ac570ee2d840a1a8d014d0510b3, type: 3}
+  _animMove: {fileID: 1777129455179009798}
+  _model: {fileID: 4972639927458697158}
+  _dashEffectPrefab: {fileID: 2965222256817593503, guid: d26c8ac570ee2d840a1a8d014d0510b3, type: 3}
 --- !u!114 &-3973161460166582864
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,38 +6,41 @@ namespace Rebel_Mage.Spell_system
 {
     public class CooldownController
     {
-        private readonly Dictionary<SpellConfig, float> m_CoolDown = new();
-        private readonly Spells m_Spells;
+        private readonly Dictionary<SpellConfig, float> _coolDown = new();
+        private readonly Spells _spells;
+        
         public CooldownController(Spells spells)
         {
-            m_Spells = spells;
+            _spells = spells;
         }
+        
         public void SetGlobalCooldown(TypeSpell typeSpell)
         {
-            foreach (TypeSpell activeTypeSpell in m_Spells.ActiveSpells.Keys)
+            foreach (TypeSpell activeTypeSpell in _spells.ActiveSpells.Keys)
             {
-                SpellConfig spell = m_Spells.ActiveSpells[activeTypeSpell];
+                SpellConfig spell = _spells.ActiveSpells[activeTypeSpell];
 
                 if (spell != null)
                 {
-                    m_CoolDown.TryAdd(spell, 0);
+                    _coolDown.TryAdd(spell, 0);
 
                     if (activeTypeSpell != typeSpell)
                     {
-                        m_CoolDown[spell] = Time.time + spell.AnimationTime;
-                        m_Spells.OnActivateCooldown?.Invoke(activeTypeSpell, Time.time, m_CoolDown[spell]);
+                        _coolDown[spell] = Time.time + spell.AnimationTime;
+                        _spells.OnActivateCooldown?.Invoke(activeTypeSpell, Time.time, _coolDown[spell]);
                     }
                 }
             }
         }
+        
         public bool CheckCooldown(TypeSpell typeSpell, SpellConfig spell)
         {
-            m_CoolDown.TryAdd(spell, 0);
+            _coolDown.TryAdd(spell, 0);
 
-            if (m_CoolDown[spell] <= Time.time)
+            if (_coolDown[spell] <= Time.time)
             {
-                m_CoolDown[spell] = Time.time + spell.Cooldown;
-                m_Spells.OnActivateCooldown?.Invoke(typeSpell, Time.time, m_CoolDown[spell]);
+                _coolDown[spell] = Time.time + spell.Cooldown;
+                _spells.OnActivateCooldown?.Invoke(typeSpell, Time.time, _coolDown[spell]);
                 return true;
             }
 

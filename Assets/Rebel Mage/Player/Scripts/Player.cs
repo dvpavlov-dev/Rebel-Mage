@@ -13,21 +13,21 @@ namespace Rebel_Mage.Player
     {
         public Action OnDead { get; set; }
 
-        private IDamage m_DmgController;
-        private PlayerConfigSource m_PlayerConfig;
+        private IDamage _dmgController;
+        private PlayerConfigSource _playerConfig;
 
         [Inject]
         private void Constructor(Configs.Configs configs)
         {
-            m_PlayerConfig = configs.PlayerConfig;
+            _playerConfig = configs.PlayerConfig;
         }
 
         public void InitPlayer()
         {
-            m_DmgController = GetComponent<IDamage>();
-            m_DmgController.InitHealthPoints(m_PlayerConfig.Hp);
-            m_DmgController.OnDead += OnDeadAction;
-            GetComponent<PlayerMoveController>().Init(m_PlayerConfig);
+            _dmgController = GetComponent<IDamage>();
+            _dmgController.InitHealthPoints(_playerConfig.Hp);
+            _dmgController.OnDead += OnDeadAction;
+            GetComponent<PlayerMoveController>().Init(_playerConfig);
         }
         
         private void OnDeadAction()
@@ -37,7 +37,7 @@ namespace Rebel_Mage.Player
 
         private void OnDestroy()
         {
-            m_DmgController.OnDead -= OnDead;
+            _dmgController.OnDead -= OnDead;
         }
     }
 }

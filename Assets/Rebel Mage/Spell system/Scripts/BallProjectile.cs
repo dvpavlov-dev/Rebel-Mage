@@ -45,7 +45,7 @@ namespace Rebel_Mage.Spell_system
 
         protected virtual void OnDestroyProjectile()
         {
-            // _debugHitPos = transform.position;
+            // _debugHitPos = transform.position; // For debug
         }
 
         private void DestroyThisObject()

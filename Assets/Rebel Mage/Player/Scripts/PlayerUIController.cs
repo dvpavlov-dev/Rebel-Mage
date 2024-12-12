@@ -5,19 +5,19 @@ using Zenject;
 [RequireComponent(typeof(ZenAutoInjecter))]
 public class PlayerUIController : MonoBehaviour
 {
-    private GameplayUI m_GameplayUI;
+    private GameplayUI _gameplayUI;
 
     [Inject]
     private void Constructor(GameplayUI gameplayUI)
     {
-        m_GameplayUI = gameplayUI;
+        _gameplayUI = gameplayUI;
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            m_GameplayUI.Menu.SetActive(!m_GameplayUI.Menu.activeSelf);
+            _gameplayUI.Menu.SetActive(!_gameplayUI.Menu.activeSelf);
         }
     }
 }
