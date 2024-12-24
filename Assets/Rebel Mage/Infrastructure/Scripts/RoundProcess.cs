@@ -66,7 +66,7 @@ namespace Rebel_Mage.Infrastructure
             {
                 IsRoundInProgress = false;
 
-                _player.transform.position.Set(0,1,0);
+                _player.transform.position = new Vector3(0,1,0);
                 _player.SetActive(false);
 
                 switch (typeEndRound)
