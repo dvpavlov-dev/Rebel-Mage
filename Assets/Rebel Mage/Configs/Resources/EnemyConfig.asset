@@ -13,12 +13,16 @@ MonoBehaviour:
   m_Name: EnemyConfig
   m_EditorClassIdentifier: 
   BaseEnemy:
+    EnemyType: 0
+    EnemyPref: {fileID: 2271899163048147823, guid: 16be38c4f7e27e74f99848d8c183d56f, type: 3}
     Hp: 100
     MoveSpeed: 10
     Damage: 10
     Points: 13
     StoppingDistance: 0
   MeleeEnemy:
+    EnemyType: 1
+    EnemyPref: {fileID: 5958801608821954793, guid: bb78ca888e445e84d8b9880eb4387614, type: 3}
     Hp: 25
     MoveSpeed: 5
     Damage: 15

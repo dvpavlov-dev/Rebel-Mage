@@ -30,7 +30,7 @@ namespace Rebel_Mage.UI.Spell_Window
                 slot.SetEmptySlot();
             }
 
-            foreach (KeyValuePair<TypeSpell, SpellConfig> activeSpell in spells.GetActiveSpells())
+            foreach (KeyValuePair<TypeSpell, SpellConfig> activeSpell in spells.ActiveSpells)
             {
                 foreach (SlotSpellInput slot in Slots)
                 {

@@ -9,12 +9,15 @@ namespace Rebel_Mage.Spell_system
 
     public class Spells : MonoBehaviour
     {
-        public List<SpellConfig> AllSpells = new();
-        public Action<TypeSpell, float, float> OnActivateCooldown;
+        public List<SpellConfig> AllSpells => _allSpells;
+
+        public Action<TypeSpell, float, float> OnActivateCooldown { get; set; }
 
         public Dictionary<TypeSpell, SpellConfig> ActiveSpells { get; } = new();
-        public CooldownController CooldownController => _cooldownController ??= new CooldownController(this);
 
+        [SerializeField] private List<SpellConfig> _allSpells;
+        
+        private CooldownController CooldownController => _cooldownController ??= new CooldownController(this);
         private CooldownController _cooldownController;
         private IFactorySpells _factorySpells;
 
@@ -28,11 +31,6 @@ namespace Rebel_Mage.Spell_system
             ActiveSpells.Clear();
 
             SetActiveSpell(AllSpells[0], TypeSpell.BASE_ATTACK);
-        }
-
-        public Dictionary<TypeSpell, SpellConfig> GetActiveSpells()
-        {
-            return ActiveSpells;
         }
 
         public void SetActiveSpell(SpellConfig spell, TypeSpell typeSpell)

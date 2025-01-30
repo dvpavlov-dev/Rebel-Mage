@@ -1,20 +1,16 @@
 using Rebel_Mage.Spell_system;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Zenject;
 
 namespace Rebel_Mage.Infrastructure
 {
     public class GlobalInstallers : MonoInstaller
     {
-        [FormerlySerializedAs("_spells")]
-        [SerializeField] private Spells m_Spells;
-        [FormerlySerializedAs("_configs")]
-        [SerializeField] private Configs.Configs m_Configs;
-        [FormerlySerializedAs("_prefabs")]
-        [SerializeField] private Prefabs m_Prefabs;
+        [SerializeField] private Spells _spells;
+        [SerializeField] private Configs.Configs _configs;
+        [SerializeField] private Prefabs _prefabs;
 
-        readonly IFactorySpells m_FactorySpells = new FactorySpells();
+        private readonly IFactorySpells _factorySpells = new FactorySpells();
 
         public override void InstallBindings()
         {
@@ -22,42 +18,51 @@ namespace Rebel_Mage.Infrastructure
             BindConfigs();
             BindPrefabs();
             BindFactories();
+            BindLoadingSceneService();
+        }
+        
+        private void BindLoadingSceneService()
+        {
+            Container
+                .Bind<ILoadingScene>()
+                .FromInstance(new LoadingSceneService(_prefabs.LoadingCurtainsPref))
+                .AsSingle();
         }
 
         private void BindPrefabs()
         {
             Container
                 .Bind<Prefabs>()
-                .FromInstance(m_Prefabs)
+                .FromInstance(_prefabs)
                 .AsSingle();
         }
         private void BindConfigs()
         {
             Container
                 .Bind<Configs.Configs>()
-                .FromInstance(m_Configs)
+                .FromInstance(_configs)
                 .AsSingle();
         }
         private void BindSpells()
         {
             Container
                 .Bind<Spells>()
-                .FromInstance(m_Spells)
+                .FromInstance(_spells)
                 .AsSingle();
 
-            m_Spells.Constructor(m_FactorySpells);
+            _spells.Constructor(_factorySpells);
         }
 
         private void BindFactories()
         {
             Container
                 .Bind<IFactoryActors>()
-                .FromInstance(new FactoryActors(m_Prefabs, m_Configs))
+                .FromInstance(new FactoryActors(_prefabs, _configs))
                 .AsSingle();
 
             Container
                 .Bind<IFactorySpells>()
-                .FromInstance(m_FactorySpells)
+                .FromInstance(_factorySpells)
                 .AsSingle();
         }
     }

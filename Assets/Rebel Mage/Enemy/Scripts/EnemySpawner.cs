@@ -149,7 +149,7 @@ namespace Rebel_Mage.Enemy
         }
     }
 
-    internal interface IEnemySpawner
+    public interface IEnemySpawner
     {
         public Action<int> OnAllEnemyDestroyed { get; set; }
 

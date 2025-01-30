@@ -27,7 +27,7 @@ MonoBehaviour:
     EnemyParameters:
     - SpawnType: 1
       EnemyType: 0
-      EnemyCount: 10
+      EnemyCount: 1000
     - SpawnType: 1
       EnemyType: 1
-      EnemyCount: 100
+      EnemyCount: 1000

@@ -9,16 +9,16 @@ namespace Rebel_Mage.Infrastructure
 {
     public class GameplaySceneInstaller : MonoInstaller
     {
-        [FormerlySerializedAs("_roundProcess")]
-        [SerializeField] private RoundProcess m_RoundProcess;
-        [FormerlySerializedAs("_gameplayUI")]
-        [SerializeField] private GameplayUI m_GameplayUI;
-        [FormerlySerializedAs("_spellWindowController")]
-        [SerializeField] private SpellWindowController m_SpellWindowController;
-        [FormerlySerializedAs("_cameraManager")]
-        [SerializeField] private CameraManager m_CameraManager;
-        [FormerlySerializedAs("_enemySpawner")]
-        [SerializeField] private EnemySpawner m_EnemySpawner;
+        [FormerlySerializedAs("m_RoundProcess")]
+        [SerializeField] private RoundProcess _roundProcess;
+        [FormerlySerializedAs("m_GameplayUI")]
+        [SerializeField] private GameplayUI _gameplayUI;
+        [FormerlySerializedAs("m_SpellWindowController")]
+        [SerializeField] private SpellWindowController _spellWindowController;
+        [FormerlySerializedAs("m_CameraManager")]
+        [SerializeField] private CameraManager _cameraManager;
+        [FormerlySerializedAs("m_EnemySpawner")]
+        [SerializeField] private EnemySpawner _enemySpawner;
         
         public override void InstallBindings()
         {
@@ -33,7 +33,7 @@ namespace Rebel_Mage.Infrastructure
         {
             Container
                 .Bind<IEnemySpawner>()
-                .FromInstance(m_EnemySpawner)
+                .FromInstance(_enemySpawner)
                 .AsSingle();
         }
         
@@ -41,7 +41,7 @@ namespace Rebel_Mage.Infrastructure
         {
             Container
                 .Bind<CameraManager>()
-                .FromInstance(m_CameraManager)
+                .FromInstance(_cameraManager)
                 .AsSingle();
         }
 
@@ -49,7 +49,7 @@ namespace Rebel_Mage.Infrastructure
         {
             Container
                 .Bind<IRoundProcess>()
-                .FromInstance(m_RoundProcess)
+                .FromInstance(_roundProcess)
                 .AsSingle();
         }
 
@@ -57,7 +57,7 @@ namespace Rebel_Mage.Infrastructure
         {
             Container
                 .Bind<SpellWindowController>()
-                .FromInstance(m_SpellWindowController)
+                .FromInstance(_spellWindowController)
                 .AsSingle();
         }
         
@@ -65,7 +65,7 @@ namespace Rebel_Mage.Infrastructure
         {
             Container
                 .Bind<GameplayUI>()
-                .FromInstance(m_GameplayUI)
+                .FromInstance(_gameplayUI)
                 .AsSingle();
         }
     }

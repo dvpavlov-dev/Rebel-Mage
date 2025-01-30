@@ -1,3 +1,4 @@
+using Rebel_Mage.Enemy;
 using Rebel_Mage.UI.Gameplay;
 using Rebel_Mage.UI.Spell_Window;
 using UnityEngine;
@@ -11,10 +12,14 @@ namespace Rebel_Mage.Infrastructure
         private IRoundProcess _roundProcess;
         private SpellWindowController _spellWindowController;
         private GameplayUI _gameplayUI;
+        private IEnemySpawner _enemySpawner;
+        private IFactoryActors _factoryActors;
 
         [Inject]
-        private void Constructor(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI)
+        private void Constructor(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI, IEnemySpawner enemySpawner, IFactoryActors factoryActors)
         {
+            _factoryActors = factoryActors;
+            _enemySpawner = enemySpawner;
             _roundProcess = roundProcess;
             _spellWindowController = spellWindowController;
             _gameplayUI = gameplayUI;
@@ -22,7 +27,7 @@ namespace Rebel_Mage.Infrastructure
 
         private void Start()
         {
-            _stateMachine = new GameStateMachine(_roundProcess, _spellWindowController, _gameplayUI);
+            _stateMachine = new GameStateMachine(_roundProcess, _spellWindowController, _gameplayUI, _enemySpawner, _factoryActors);
         }
     }
 }

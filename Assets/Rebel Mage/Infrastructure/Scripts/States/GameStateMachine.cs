@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Rebel_Mage.Enemy;
 using Rebel_Mage.UI.Gameplay;
 using Rebel_Mage.UI.Spell_Window;
 
@@ -6,65 +8,182 @@ namespace Rebel_Mage.Infrastructure
 {
     public class GameStateMachine
     {
-        private readonly Dictionary<TypeState, IState> _states;
+        private readonly Dictionary<Type, IExitableState> _states;
         
-        private IState _activeState;
+        private IExitableState _activeState;
 
-        public GameStateMachine(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI)
+        public GameStateMachine(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI, IEnemySpawner enemySpawner, IFactoryActors factoryActors)
         {
-            _states = new Dictionary<TypeState, IState>
+            _states = new Dictionary<Type, IExitableState>
             {
-                [TypeState.START_GAME] = new StartGame(this),
-                [TypeState.CHANGE_ABILITY] = new ChangeAbility(this, spellWindowController),
-                [TypeState.START_ROUND] = new StartRound(this, roundProcess, gameplayUI),
-                [TypeState.END_ROUND] = new EndRound(this, gameplayUI, roundProcess),
-                [TypeState.END_GAME] = new EndGame(this, gameplayUI, roundProcess),
-                [TypeState.PLAYER_LOST] = new PlayerLoose(this, gameplayUI, roundProcess),
+                // [typeof(BootstrapGame)] = new BootstrapGame(this),
+                [typeof(StartGame)] = new StartGame(this, enemySpawner, factoryActors),
+                [typeof(ChangeAbility)] = new ChangeAbility(this, spellWindowController),
+                [typeof(StartRound)] = new StartRound(this, roundProcess, gameplayUI),
+                [typeof(EndRound)] = new EndRound(this, gameplayUI, roundProcess),
+                [typeof(EndGame)] = new EndGame(this, gameplayUI, roundProcess),
+                [typeof(PlayerLoose)] = new PlayerLoose(this, gameplayUI, roundProcess),
             };
-            
-            ChangeState(TypeState.START_GAME);
+
+            Enter<StartGame>();
+        }
+        
+        public void Enter<TState>() where TState : class, IState
+        {
+            TState state = ChangeState<TState>();
+            state.Enter();
         }
 
-        public void ChangeState(TypeState typeState)
+        // public void Enter<TState, TPayload>(TPayload payload) where TState : class, IPayloadState<TPayload>
+        // {
+        //     TState state = ChangeState<TState>();
+        //     state.Enter(payload);
+        // }        
+        
+        // public void Enter<TState, TPayload1, TPayload2>(TPayload1 payload1, TPayload2 payload2) where TState : class, IPayloadState<TPayload1, TPayload2>
+        // {
+        //     TState state = ChangeState<TState>();
+        //     state.Enter(payload1, payload2);
+        // }
+        
+        private TState ChangeState<TState>() where TState : class, IExitableState
         {
             _activeState?.Exit();
-            _activeState = _states[typeState];
-            _activeState.Enter();
+            TState state = GetState<TState>();
+            _activeState = state;
+                
+            return state;
+        }
+
+        private TState GetState<TState>() where TState : class, IExitableState
+        {
+            return _states[typeof(TState)] as TState;
         }
     }
 
-    public interface IState
+    public interface IState : IExitableState
     {
         public void Enter();
+    }
+
+    public interface IExitableState
+    {
         public void Exit();
     }
 
-    public enum TypeState
-    {
-        START_GAME,
-        CHANGE_ABILITY,
-        START_ROUND,
-        END_ROUND,
-        END_GAME,
-        PLAYER_LOST,
-    }
+    // public interface IPayloadState<TPayload> : IExitableState
+    // {
+    //     public void Enter(TPayload payload);
+    // }
+    //
+    // public interface IPayloadState<TPayload1, TPayload2> : IExitableState
+    // {
+    //     public void Enter(TPayload1 payload, TPayload2 payload2);
+    // }
 
+    // public class PreparingGameScene : IPayloadState<Action>
+    // {
+    //     private GameStateMachine _gameStateMachine;
+    //     
+    //     public PreparingGameScene(GameStateMachine gameStateMachine)
+    //     {
+    //         _gameStateMachine = gameStateMachine;
+    //     }
+    //     
+    //     public void Enter(Action payload)
+    //     {
+    //     }
+    //     
+    //     public void Exit()
+    //     {
+    //     }
+    // }
+
+    // public class LoadSceneState : IPayloadState<string, Action>
+    // {
+    //     private readonly LoadingCurtains _loadingCurtains;
+    //
+    //     public LoadSceneState(IEnemySpawner loadingCurtains)
+    //     {
+    //         _loadingCurtains = loadingCurtains;
+    //     }
+    //
+    //     private readonly CompositeDisposable _disposable = new();
+    //
+    //     public void Enter(string sceneName, Action onLoadedScene)
+    //     {
+    //         _loadingCurtains.Show();
+    //         var waitNextScene = SceneManager.LoadSceneAsync(sceneName);
+    //         StringBuilder progressText = new StringBuilder("0%");
+    //
+    //         Observable
+    //             .EveryUpdate()
+    //             .Subscribe(_ =>
+    //             {
+    //                 progressText.Insert(0, waitNextScene.progress);
+    //                 progressText.Append("%");
+    //                 _loadingCurtains.UpdateProgressText(progressText.ToString());
+    //                 
+    //                 if (waitNextScene.isDone)
+    //                 {
+    //                     _loadingCurtains.Hide();
+    //                     onLoadedScene?.Invoke();
+    //                 }
+    //             })
+    //             .AddTo(_disposable);
+    //     }
+    //     public void Exit()
+    //     {
+    //     }
+    // }
+
+    // public class BootstrapGame : IState
+    // {
+    //     private readonly GameStateMachine _gameStateMachine;
+    //     
+    //     public BootstrapGame(GameStateMachine gameStateMachine)
+    //     {
+    //         _gameStateMachine = gameStateMachine;
+    //     }
+    //     
+    //     public void Enter()
+    //     {
+    //         _gameStateMachine.Enter<LoadSceneState, string, Action>("Gameplay", () =>
+    //         {
+    //             _gameStateMachine.Enter<StartGame>();
+    //         });
+    //     }
+    //     
+    //     public void Exit()
+    //     {
+    //     }
+    // }
+    
     public class StartGame : IState
     {
         private readonly GameStateMachine _gameStateMachine;
-        
-        public StartGame(GameStateMachine gameStateMachine)
+        private readonly IEnemySpawner _enemySpawner;
+        private readonly IFactoryActors _factoryActors;
+
+        public StartGame(GameStateMachine gameStateMachine, IEnemySpawner enemySpawner, IFactoryActors factoryActors)
         {
             _gameStateMachine = gameStateMachine;
+            _enemySpawner = enemySpawner;
+            _factoryActors = factoryActors;
         }
         
         public void Enter()
         {
-            _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
+            _factoryActors.InitFactoryActors(InitFactoryActorsEnded);
         }
         
         public void Exit()
         {
+        }
+
+        private void InitFactoryActorsEnded()
+        {
+            _gameStateMachine.Enter<ChangeAbility>();
         }
     }
 
@@ -96,7 +215,7 @@ namespace Rebel_Mage.Infrastructure
 
         private void ChooseSpellsFinished()
         {
-            _gameStateMachine.ChangeState(TypeState.START_ROUND);
+            _gameStateMachine.Enter<StartRound>();
         }
     }
 
@@ -144,17 +263,17 @@ namespace Rebel_Mage.Infrastructure
 
         private void PlayerLost()
         {
-            _gameStateMachine.ChangeState(TypeState.PLAYER_LOST);
+            _gameStateMachine.Enter<PlayerLoose>();
         }
 
         private void EndingGame()
         {
-            _gameStateMachine.ChangeState(TypeState.END_GAME);
+            _gameStateMachine.Enter<EndGame>();
         }
 
         private void FinishTheRound()
         {
-            _gameStateMachine.ChangeState(TypeState.END_ROUND);
+            _gameStateMachine.Enter<EndRound>();
         }
     }
 
@@ -174,7 +293,7 @@ namespace Rebel_Mage.Infrastructure
         public void Enter()
         {
             _gameplayUI.RoundOver(true, _roundProcess.PointsForAllRounds);
-            _gameplayUI.OnContinuePlay = () => _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
+            _gameplayUI.OnContinuePlay = () => _gameStateMachine.Enter<ChangeAbility>();
         }
         
         public void Exit()
@@ -198,7 +317,7 @@ namespace Rebel_Mage.Infrastructure
         public void Enter()
         {
             _gameplayUI.RoundOver(true, _roundProcess.PointsForAllRounds);
-            _gameplayUI.OnContinuePlay = () => _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
+            _gameplayUI.OnContinuePlay = () => _gameStateMachine.Enter<ChangeAbility>();
         }
         
         public void Exit()
@@ -222,7 +341,7 @@ namespace Rebel_Mage.Infrastructure
         public void Enter()
         {
             _gameplayUI.RoundOver(false, _roundProcess.PointsForAllRounds);
-            _gameplayUI.OnContinuePlay = () => _gameStateMachine.ChangeState(TypeState.CHANGE_ABILITY);
+            _gameplayUI.OnContinuePlay = () => _gameStateMachine.Enter<ChangeAbility>();
         }
         
         public void Exit()

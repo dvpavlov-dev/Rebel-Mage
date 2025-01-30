@@ -1,5 +1,4 @@
 ﻿using System;
-using Rebel_Mage.Configs;
 using UnityEngine;
 
 namespace Rebel_Mage.Enemy
@@ -9,18 +8,18 @@ namespace Rebel_Mage.Enemy
     {
         public override void InitEnemy(Configs.Configs configs, GameObject target, Action onDead)
         {
-            MeleeEnemyParameters config = configs.EnemyConfig.MeleeEnemy;
+            _Config = configs.EnemyConfig.MeleeEnemy;
             
-            PointsForEnemy = config.Points;
+            PointsForEnemy = _Config.Points;
 
-            EnemyAI = gameObject.GetComponent<MeleeEnemyAI>();
-            EnemyAbilities = gameObject.GetComponent<MeleeEnemyAbilities>();
+            _EnemyAI = gameObject.GetComponent<MeleeEnemyAI>();
+            _EnemyAbilities = gameObject.GetComponent<MeleeEnemyAbilities>();
 
             base.InitEnemy(configs, target, onDead);
 
-            DmgController.InitHealthPoints(config.Hp);
-            EnemyAI.SetupEnemyAI(config.MoveSpeed, target, config.StoppingDistance, EnemyView, this);
-            EnemyAbilities.SetupEnemyAbilities(config.Damage, target, EnemyView, this, audioSource);
+            _DmgController.InitHealthPoints(_Config.Hp);
+            _EnemyAI.SetupEnemyAI(_Config.MoveSpeed, target, _Config.StoppingDistance, EnemyView, this);
+            _EnemyAbilities.SetupEnemyAbilities(_Config.Damage, target, EnemyView, this, _AudioSource);
 
             SetMoveState();
         }

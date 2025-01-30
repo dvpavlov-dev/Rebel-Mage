@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Rebel_Mage.Configs;
+using Rebel_Mage.Infrastructure;
 using Rebel_Mage.Spell_system;
 using UnityEngine;
+using Zenject;
 
 namespace Rebel_Mage.Enemy
 {
@@ -11,77 +14,88 @@ namespace Rebel_Mage.Enemy
         [SerializeField] private AudioClip deathSound;
         
         public T EnemyView;
+        
         public int PointsForEnemy { get; protected set; }
         public bool IsEnemyDead { get; private set; }
-        public IDamage DmgController { get; private set; }
+
+        protected GeneralEnemyParameters _Config;
+        protected IDamage _DmgController { get; private set; }
+        protected EnemyAbilities<T> _EnemyAbilities { get; set; }
+        protected EnemyAI<T> _EnemyAI { get; set; }
+        protected AudioSource _AudioSource { get; set; }
+
+        private EnemyStateMachine<T> _enemySm;
+        private IFactoryActors _factoryActors;
+
+        [Inject]
+        private void Constructor(IFactoryActors factoryActors)
+        {
+            _factoryActors = factoryActors;
+        }
         
-        protected EnemyAbilities<T> EnemyAbilities { get; set; }
-        protected EnemyAI<T> EnemyAI { get; set; }
-        protected AudioSource audioSource { get; set; }
-
-        private EnemyStateMachine<T> m_EnemySm;
-
         private void Awake()
         {
-            audioSource = GetComponent<AudioSource>();
-            audioSource.playOnAwake = false;
+            _AudioSource = GetComponent<AudioSource>();
+            _AudioSource.playOnAwake = false;
         }
 
         public virtual void InitEnemy(Configs.Configs configs, GameObject target, Action onDead)
         {
             EnemyView.Init(transform);
-            m_EnemySm = new EnemyStateMachine<T>(this, EnemyAI, EnemyAbilities, EnemyView);
+            _enemySm = new EnemyStateMachine<T>(this, _EnemyAI, _EnemyAbilities, EnemyView);
 
-            DmgController = GetComponent<IDamage>();
-            DmgController.OnDead = () => 
+            _DmgController = GetComponent<IDamage>();
+            _DmgController.OnDead = () => 
             {
                 OnDeadAction(onDead);
             };
         }
-
-        protected virtual void OnDeadAction(Action onDead)
-        {
-            SetDeadState();
-            IsEnemyDead = true;
-
-            audioSource.clip = deathSound;
-            audioSource.Play();
-            
-            onDead?.Invoke();
-        }
-
+        
         public void SetMoveState()
         {
-            m_EnemySm.ChangeState<MoveState<T>>();
+            _enemySm.ChangeState<MoveState<T>>();
         }
 
         public void SetAttackState()
         {
-            m_EnemySm.ChangeState<AttackState<T>>();
+            _enemySm.ChangeState<AttackState<T>>();
         }
 
         public void SetRagdollActivatedState()
         {
-            m_EnemySm.ChangeState<RagdollActivatedState<T>>();
+            _enemySm.ChangeState<RagdollActivatedState<T>>();
+        }
+
+        private void OnDeadAction(Action onDead)
+        {
+            SetDeadState();
+            IsEnemyDead = true;
+
+            _AudioSource.clip = deathSound;
+            _AudioSource.Play();
+            
+            onDead?.Invoke();
+            
+            _factoryActors.DisposeEnemy(_Config.EnemyType, gameObject);
         }
 
         private void SetDeadState()
         {
-            m_EnemySm.ChangeState<DeadState<T>>();
+            _enemySm.ChangeState<DeadState<T>>();
         }
     }
 
     public class EnemyStateMachine<T> where T : EnemyView
     {
-        private readonly Enemy<T> m_Enemy;
-        private readonly Dictionary<Type, IStateEnemy> m_States;
+        private readonly Enemy<T> _enemy;
+        private readonly Dictionary<Type, IStateEnemy> _states;
 
-        private IStateEnemy m_ActiveState;
+        private IStateEnemy _activeState;
 
         public EnemyStateMachine(Enemy<T> enemy, EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T meleeEnemyView)
         {
-            m_Enemy = enemy;
-            m_States = new Dictionary<Type, IStateEnemy>
+            _enemy = enemy;
+            _states = new Dictionary<Type, IStateEnemy>
             {
                 [typeof(MoveState<T>)] = new MoveState<T>(enemyAI, enemyAbilities, meleeEnemyView),
                 [typeof(AttackState<T>)] = new AttackState<T>(enemyAI, enemyAbilities),
@@ -92,44 +106,44 @@ namespace Rebel_Mage.Enemy
 
         public void ChangeState<TState>() where TState : class, IStateEnemy
         {
-            if (m_Enemy.IsEnemyDead) return;
+            if (_enemy.IsEnemyDead) return;
             
-            m_ActiveState?.Exit();
+            _activeState?.Exit();
 
-            m_ActiveState = GetState<TState>();
-            m_ActiveState.Enter();
+            _activeState = GetState<TState>();
+            _activeState.Enter();
         }
 
-        private TState GetState<TState>() where TState : class, IStateEnemy => m_States[typeof(TState)] as TState;
+        private TState GetState<TState>() where TState : class, IStateEnemy => _states[typeof(TState)] as TState;
     }
 
     class MoveState<T> : IStateEnemy where T : EnemyView
     {
-        private readonly EnemyAbilities<T> m_EnemyAbilities;
-        private readonly EnemyAI<T> m_EnemyAI;
-        private readonly T m_EnemyView;
+        private readonly EnemyAbilities<T> _enemyAbilities;
+        private readonly EnemyAI<T> _enemyAI;
+        private readonly T _enemyView;
 
         public MoveState(EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T enemyView)
         {
-            m_EnemyAI = enemyAI;
-            m_EnemyAbilities = enemyAbilities;
-            m_EnemyView = enemyView;
+            _enemyAI = enemyAI;
+            _enemyAbilities = enemyAbilities;
+            _enemyView = enemyView;
         }
 
         public void Enter()
         {
-            m_EnemyAbilities.CanAttack = true;
+            _enemyAbilities.CanAttack = true;
             
-            if(m_EnemyView.IsRigidBodyEnabled)
+            if(_enemyView.IsRigidBodyEnabled)
             {
-                m_EnemyView.DisableRigidbody(() => 
+                _enemyView.DisableRigidbody(() => 
                 {
-                    m_EnemyAI.AgentEnabled = true;
+                    _enemyAI.AgentEnabled = true;
                 });
             }
             else
             {
-                m_EnemyAI.AgentEnabled = true;
+                _enemyAI.AgentEnabled = true;
             }
         }
 
@@ -138,46 +152,46 @@ namespace Rebel_Mage.Enemy
 
     class AttackState<T> : IStateEnemy where T : EnemyView
     {
-        private readonly EnemyAbilities<T> m_EnemyAbilities;
-        private readonly EnemyAI<T> m_EnemyAI;
+        private readonly EnemyAbilities<T> _enemyAbilities;
+        private readonly EnemyAI<T> _enemyAI;
 
         public AttackState(EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities)
         {
-            m_EnemyAI = enemyAI;
-            m_EnemyAbilities = enemyAbilities;
+            _enemyAI = enemyAI;
+            _enemyAbilities = enemyAbilities;
         }
 
         public void Enter()
         {
-            m_EnemyAI.AgentEnabled = false;
-            m_EnemyAbilities.CanAttack = false;
+            _enemyAI.AgentEnabled = false;
+            _enemyAbilities.CanAttack = false;
         }
 
         public void Exit()
         {
-            m_EnemyAbilities.IsAttackInProgress = false;
-            m_EnemyAbilities.StopAllCoroutines();
+            _enemyAbilities.IsAttackInProgress = false;
+            _enemyAbilities.StopAllCoroutines();
         }
     }
 
     class RagdollActivatedState<T> : IStateEnemy where T : EnemyView
     {
-        private readonly EnemyAbilities<T> m_EnemyAbilities;
-        private readonly EnemyAI<T> m_EnemyAI;
-        private readonly T m_EnemyView;
+        private readonly EnemyAbilities<T> _enemyAbilities;
+        private readonly EnemyAI<T> _enemyAI;
+        private readonly T _enemyView;
 
         public RagdollActivatedState(EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, T enemyView)
         {
-            m_EnemyAI = enemyAI;
-            m_EnemyAbilities = enemyAbilities;
-            m_EnemyView = enemyView;
+            _enemyAI = enemyAI;
+            _enemyAbilities = enemyAbilities;
+            _enemyView = enemyView;
         }
         public void Enter()
         {
-            m_EnemyAI.AgentEnabled = false;
-            m_EnemyAbilities.CanAttack = false;
+            _enemyAI.AgentEnabled = false;
+            _enemyAbilities.CanAttack = false;
             
-            m_EnemyView.EnableRigidbody();
+            _enemyView.EnableRigidbody();
         }
 
         public void Exit() {}
@@ -185,22 +199,22 @@ namespace Rebel_Mage.Enemy
 
     class DeadState<T> : IStateEnemy where T : EnemyView
     {
-        private readonly EnemyAI<T> m_EnemyAI;
-        private readonly EnemyAbilities<T> m_EnemyAbilities;
-        private readonly EnemyView m_EnemyView;
+        private readonly EnemyAI<T> _enemyAI;
+        private readonly EnemyAbilities<T> _enemyAbilities;
+        private readonly EnemyView _enemyView;
         
         public DeadState(EnemyAI<T> enemyAI, EnemyAbilities<T> enemyAbilities, EnemyView enemyView)
         {
-            m_EnemyAI = enemyAI;
-            m_EnemyAbilities = enemyAbilities;
-            m_EnemyView = enemyView;
+            _enemyAI = enemyAI;
+            _enemyAbilities = enemyAbilities;
+            _enemyView = enemyView;
         }
         
         public void Enter()
         {
-            m_EnemyAI.AgentEnabled = false;
-            m_EnemyAbilities.CanAttack = false;
-            m_EnemyView.EnableRigidbody();
+            _enemyAI.AgentEnabled = false;
+            _enemyAbilities.CanAttack = false;
+            _enemyView.EnableRigidbody();
         }
         
         public void Exit() {}
