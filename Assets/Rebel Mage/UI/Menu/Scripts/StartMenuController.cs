@@ -3,12 +3,12 @@ using Zenject;
 
 public class StartMenuController : MonoBehaviour
 {
-    private ILoadingScene _loadingSceneService;
+    private ILoadingSceneService _loadingSceneServiceService;
     
     [Inject]
-    private void Constructor(ILoadingScene loadingSceneService)
+    private void Constructor(ILoadingSceneService loadingSceneServiceService)
     {
-        _loadingSceneService = loadingSceneService;
+        _loadingSceneServiceService = loadingSceneServiceService;
     }
     
     public void OnSelectedStart()
@@ -18,8 +18,7 @@ public class StartMenuController : MonoBehaviour
 
     private void LoadGamePlayScene()
     {
-        // SceneManager.LoadSceneAsync(1);
-        _loadingSceneService.LoadScene("Gameplay", null);
+        _loadingSceneServiceService.LoadScene("Gameplay");
     }
 
     public void OnSelectedExit()

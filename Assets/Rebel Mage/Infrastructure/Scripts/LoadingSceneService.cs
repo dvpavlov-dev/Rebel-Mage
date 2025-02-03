@@ -3,19 +3,21 @@ using UnityEngine.SceneManagement;
 using R3;
 using UnityEngine;
 
-public class LoadingSceneService : ILoadingScene
+public class LoadingSceneServiceService : ILoadingSceneService
 {
+    public Action OnSceneLoaded { get; set; }
+    
     private readonly LoadingCurtains _loadingCurtains;
     private readonly CompositeDisposable _disposable = new();
     
-    public LoadingSceneService(IUIFactory uiFactory)
+    public LoadingSceneServiceService(IUIFactory uiFactory)
     {
         _loadingCurtains = uiFactory.CreateLoadingCurtains();
         
         Application.quitting += OnGameQuit;
     }
     
-    public void LoadScene(string sceneName, Action onLoadingScene)
+    public void LoadScene(string sceneName)
     {
         _loadingCurtains.Show();
         var waitNextScene = SceneManager.LoadSceneAsync(sceneName);
@@ -25,11 +27,12 @@ public class LoadingSceneService : ILoadingScene
             .Subscribe(_ =>
             {
                 _loadingCurtains.UpdateProgress(waitNextScene.progress);
+                _loadingCurtains.UpdateDescription("Загрузка сцены, подождите...");
         
                 if (waitNextScene.isDone)
                 {
                     _loadingCurtains.Hide();
-                    onLoadingScene?.Invoke();
+                    OnSceneLoaded?.Invoke();
                     _disposable.Dispose();
                 }
             })
@@ -42,7 +45,9 @@ public class LoadingSceneService : ILoadingScene
     }
 }
 
-public interface ILoadingScene
+public interface ILoadingSceneService
 {
-    public void LoadScene(string sceneName, Action onLoadingScene);
+    Action OnSceneLoaded { get; set;  }
+    
+    void LoadScene(string sceneName);
 }

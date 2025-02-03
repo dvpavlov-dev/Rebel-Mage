@@ -60,8 +60,10 @@ namespace Rebel_Mage.Infrastructure
             {
                 Observable.FromAsync(CreatePool)
                     .Subscribe(
-                        onNext: _ => {},
-                        onCompleted: _ => onEndInitialize?.Invoke()
+                        onNext: _ =>
+                        {
+                            onEndInitialize?.Invoke();
+                        }
                     ).AddTo(_disposable);
             }
             else
@@ -102,7 +104,7 @@ namespace Rebel_Mage.Infrastructure
             if (_enemyPools.TryGetValue(enemyType, out Queue<GameObject> enemyPool) && enemyPool.Count != 0)
             {
                 enemy = enemyPool.Dequeue();
-            } 
+            }
             else
             {
                 enemy = CreateEnemy(enemyType);
@@ -127,20 +129,13 @@ namespace Rebel_Mage.Infrastructure
             {
                 Debug.Log($"Loading started");
 
-                float objectsCount = 0;
-
-                foreach (RoundsConfigSource.RoundParameters roundParameters in _configs.RoundsConfig.RoundParametersList)
-                {
-                    foreach (RoundsConfigSource.EnemyParameters parameters in roundParameters.EnemyParameters)
-                    {
-                        objectsCount += parameters.EnemyCount;
-                    }
-                }
-
                 LoadingCurtains loadingCurtains = _uIFactory.CreateLoadingCurtains();
+                
+                float objectsCount = CalculateObjectsCount();
                 float objectsSpawned = 0;
                 
                 loadingCurtains.Show();
+                loadingCurtains.UpdateDescription($"Идет загрузка врагов, подождите...");
 
                 foreach (RoundsConfigSource.RoundParameters roundParameters in _configs.RoundsConfig.RoundParametersList)
                 {
@@ -176,7 +171,7 @@ namespace Rebel_Mage.Infrastructure
             {
                 foreach (EnemyType enemyPool in _enemyPools.Keys)
                 {
-                    foreach (var enemy in _enemyPools[enemyPool])
+                    foreach (GameObject enemy in _enemyPools[enemyPool])
                     {
                         Object.DestroyImmediate(enemy);
                     }
@@ -184,6 +179,21 @@ namespace Rebel_Mage.Infrastructure
                 
                 Debug.LogError($"Task canceled, reason: {ex}");
             }
+        }
+        
+        private float CalculateObjectsCount()
+        {
+            float objectsCount = 0;
+            
+            foreach (RoundsConfigSource.RoundParameters roundParameters in _configs.RoundsConfig.RoundParametersList)
+            {
+                foreach (RoundsConfigSource.EnemyParameters parameters in roundParameters.EnemyParameters)
+                {
+                    objectsCount += parameters.EnemyCount;
+                }
+            }
+            
+            return objectsCount;
         }
 
         private GameObject CreateMeleeEnemy(Vector3 position, GameObject target, Action onDead, out int pointsForEnemy)

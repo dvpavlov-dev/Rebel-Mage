@@ -28,8 +28,8 @@ namespace Rebel_Mage.Infrastructure
         private void BindLoadingSceneService()
         {
             Container
-                .Bind<ILoadingScene>()
-                .FromInstance(new LoadingSceneService(_uIFactory))
+                .Bind<ILoadingSceneService>()
+                .FromInstance(new LoadingSceneServiceService(_uIFactory))
                 .AsSingle();
         }
 
