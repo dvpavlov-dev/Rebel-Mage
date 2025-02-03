@@ -467,11 +467,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97cf00d9a44a6e546bf4b7610be7f725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RoundProcess: {fileID: 63623262}
-  m_GameplayUI: {fileID: 1695424503}
-  m_SpellWindowController: {fileID: 1443631028}
-  m_CameraManager: {fileID: 738384732}
-  m_EnemySpawner: {fileID: 1684964820}
+  _roundProcess: {fileID: 63623262}
+  _gameplayUI: {fileID: 1695424503}
+  _spellWindowController: {fileID: 1443631028}
+  _cameraManager: {fileID: 738384732}
+  _enemySpawner: {fileID: 1684964820}
 --- !u!114 &63623262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1481,7 +1481,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eb9cf8d444988c4a8998416dcdf9d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _loadingCurtains: {fileID: 0}
 --- !u!4 &1410057959
 Transform:
   m_ObjectHideFlags: 0
@@ -1736,9 +1735,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 935729370656129747, guid: 73d199816ece79749a479d81afbdbec2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 138.67896
+      objectReference: {fileID: 0}
+    - target: {fileID: 935729370656129747, guid: 73d199816ece79749a479d81afbdbec2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -51.60205
+      objectReference: {fileID: 0}
     - target: {fileID: 1537181086094615252, guid: 73d199816ece79749a479d81afbdbec2, type: 3}
       propertyPath: m_Name
       value: '[UI]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890190053176883333, guid: 73d199816ece79749a479d81afbdbec2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 8.500244
       objectReference: {fileID: 0}
     - target: {fileID: 5439932429666988676, guid: 73d199816ece79749a479d81afbdbec2, type: 3}
       propertyPath: m_Pivot.x

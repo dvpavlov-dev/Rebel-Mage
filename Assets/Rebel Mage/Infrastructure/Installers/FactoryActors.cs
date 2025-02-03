@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using Rebel_Mage.Configs;
 using Rebel_Mage.Enemy;
@@ -12,16 +14,21 @@ namespace Rebel_Mage.Infrastructure
     {
         private readonly Prefabs _prefabs;
         private readonly Configs.Configs _configs;
+        private readonly IUIFactory _uIFactory;
         private readonly Dictionary<EnemyType, Queue<GameObject>> _enemyPools = new();
 
+        private CompositeDisposable _disposable = new();
         private Transform _containerForEnemy;
 
-        public FactoryActors(Prefabs prefabs, Configs.Configs configs)
+        public FactoryActors(Prefabs prefabs, Configs.Configs configs, IUIFactory uIFactory)
         {
             _prefabs = prefabs;
             _configs = configs;
+            _uIFactory = uIFactory;
+
+            Application.quitting += OnGameQuit;
         }
-        
+
         public GameObject CreatePlayer(Vector3 position)
         {
             GameObject player = Object.Instantiate(_prefabs.PlayerPref, position, Quaternion.identity, null);
@@ -51,7 +58,11 @@ namespace Rebel_Mage.Infrastructure
         {
             if (_enemyPools.Count == 0)
             {
-                CreatePool(onEndInitialize);
+                Observable.FromAsync(CreatePool)
+                    .Subscribe(
+                        onNext: _ => {},
+                        onCompleted: _ => onEndInitialize?.Invoke()
+                    ).AddTo(_disposable);
             }
             else
             {
@@ -67,7 +78,7 @@ namespace Rebel_Mage.Infrastructure
                     return Object.Instantiate(_configs.EnemyConfig.BaseEnemy.EnemyPref, _containerForEnemy);
 
                 case EnemyType.MELEE_ENEMY:
-                    return Object.Instantiate(_prefabs.MeleeEnemyPref, _containerForEnemy);
+                    return Object.Instantiate(_configs.EnemyConfig.BaseEnemy.EnemyPref, _containerForEnemy);
 
                 default:
                     Debug.LogError("Enemy type not found");
@@ -83,81 +94,96 @@ namespace Rebel_Mage.Infrastructure
                 enemy.SetActive(false);
             }
         }
-        
+
         private GameObject GetEnemy(EnemyType enemyType)
         {
-            GameObject enemy = null;
+            GameObject enemy;
             
-            if (_enemyPools.TryGetValue(enemyType, out Queue<GameObject> enemyPool))
+            if (_enemyPools.TryGetValue(enemyType, out Queue<GameObject> enemyPool) && enemyPool.Count != 0)
             {
                 enemy = enemyPool.Dequeue();
-            }
-
-            if (enemy == null)
+            } 
+            else
             {
                 enemy = CreateEnemy(enemyType);
+                
+                if (!_enemyPools.ContainsKey(enemyType))
+                {
+                    _enemyPools.Add(enemyType, new Queue<GameObject>());
+                }
             }
+            
+            enemy.SetActive(false);
 
             return enemy;
         }
 
-        private void CreatePool(Action onEndCreatedPool)
+        private async ValueTask CreatePool(CancellationToken cancellationToken)
         {
             _containerForEnemy = new GameObject().transform;
             _containerForEnemy.name = "[CONTAINER FOR ENEMY]";
-            
-            // foreach (RoundsConfigSource.RoundParameters roundParameters in _configs.RoundsConfig.RoundParametersList)
-            // {
-            //     foreach (RoundsConfigSource.EnemyParameters parameters in roundParameters.EnemyParameters)
-            //     {
-            //         _enemyPools.TryAdd(parameters.EnemyType, new Queue<GameObject>());
-            //         
-            //         if (_enemyPools.TryGetValue(parameters.EnemyType, out Queue<GameObject> enemyPool))
-            //         {
-            //             for (int i = enemyPool.Count; i < parameters.EnemyCount; i++)
-            //             {
-            //                 GameObject enemy = CreateEnemy(parameters.EnemyType);
-            //                 enemy.SetActive(false);
-            //                 
-            //                 _enemyPools[parameters.EnemyType].Enqueue(enemy); 
-            //                 
-            //                 Debug.Log($"Create {parameters.EnemyType}, count: {enemyPool.Count}");
-            //             }
-            //         }
-            //     }
-            // }
-            
-            // Debug.Log("Thread sleep start");
-            // Thread.Sleep(10000);
-            // Debug.Log("Thread sleep end");
 
-            
-            var arr = _configs.RoundsConfig.RoundParametersList.ToObservable();
-            
-            arr.Subscribe(
-                roundParameters =>
+            try
+            {
+                Debug.Log($"Loading started");
+
+                float objectsCount = 0;
+
+                foreach (RoundsConfigSource.RoundParameters roundParameters in _configs.RoundsConfig.RoundParametersList)
+                {
+                    foreach (RoundsConfigSource.EnemyParameters parameters in roundParameters.EnemyParameters)
+                    {
+                        objectsCount += parameters.EnemyCount;
+                    }
+                }
+
+                LoadingCurtains loadingCurtains = _uIFactory.CreateLoadingCurtains();
+                float objectsSpawned = 0;
+                
+                loadingCurtains.Show();
+
+                foreach (RoundsConfigSource.RoundParameters roundParameters in _configs.RoundsConfig.RoundParametersList)
                 {
                     foreach (RoundsConfigSource.EnemyParameters parameters in roundParameters.EnemyParameters)
                     {
                         _enemyPools.TryAdd(parameters.EnemyType, new Queue<GameObject>());
-                        
+
                         if (_enemyPools.TryGetValue(parameters.EnemyType, out Queue<GameObject> enemyPool))
                         {
                             for (int i = enemyPool.Count; i < parameters.EnemyCount; i++)
                             {
                                 GameObject enemy = CreateEnemy(parameters.EnemyType);
                                 enemy.SetActive(false);
-                                
-                                _enemyPools[parameters.EnemyType].Enqueue(enemy); 
-                                
+
+                                _enemyPools[parameters.EnemyType].Enqueue(enemy);
+
+                                objectsSpawned++;
+                                loadingCurtains.UpdateProgress((float)Math.Truncate(objectsSpawned/objectsCount * 100));
+
                                 Debug.Log($"Create {parameters.EnemyType}, count: {enemyPool.Count}");
+                                
+                                cancellationToken.ThrowIfCancellationRequested();
+                                await Task.Yield();
                             }
                         }
                     }
-                });
-            
-            arr.(() => onEndCreatedPool?.Invoke());
-
+                }
+                
+                loadingCurtains.Hide();
+                Debug.Log($"Loading completed");
+            }
+            catch (Exception ex)
+            {
+                foreach (EnemyType enemyPool in _enemyPools.Keys)
+                {
+                    foreach (var enemy in _enemyPools[enemyPool])
+                    {
+                        Object.DestroyImmediate(enemy);
+                    }
+                }
+                
+                Debug.LogError($"Task canceled, reason: {ex}");
+            }
         }
 
         private GameObject CreateMeleeEnemy(Vector3 position, GameObject target, Action onDead, out int pointsForEnemy)
@@ -182,6 +208,11 @@ namespace Rebel_Mage.Infrastructure
             pointsForEnemy = enemyController.PointsForEnemy;
 
             return baseEnemy;
+        }
+        
+        private void OnGameQuit()
+        {
+            _disposable.Dispose();
         }
     }
 

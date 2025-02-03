@@ -10,22 +10,26 @@ namespace Rebel_Mage.Infrastructure
         [SerializeField] private Configs.Configs _configs;
         [SerializeField] private Prefabs _prefabs;
 
-        private readonly IFactorySpells _factorySpells = new FactorySpells();
+        private IFactorySpells _factorySpells;
+        private IUIFactory _uIFactory;
 
         public override void InstallBindings()
         {
+            _factorySpells = new FactorySpells();
+            _uIFactory = new UIFactory(_prefabs);
+            
             BindSpells();
             BindConfigs();
             BindPrefabs();
             BindFactories();
             BindLoadingSceneService();
         }
-        
+
         private void BindLoadingSceneService()
         {
             Container
                 .Bind<ILoadingScene>()
-                .FromInstance(new LoadingSceneService(_prefabs.LoadingCurtainsPref))
+                .FromInstance(new LoadingSceneService(_uIFactory))
                 .AsSingle();
         }
 
@@ -57,12 +61,17 @@ namespace Rebel_Mage.Infrastructure
         {
             Container
                 .Bind<IFactoryActors>()
-                .FromInstance(new FactoryActors(_prefabs, _configs))
+                .FromInstance(new FactoryActors(_prefabs, _configs, _uIFactory))
                 .AsSingle();
 
             Container
                 .Bind<IFactorySpells>()
                 .FromInstance(_factorySpells)
+                .AsSingle();
+            
+            Container
+                .Bind<IUIFactory>()
+                .FromInstance(new UIFactory(_prefabs))
                 .AsSingle();
         }
     }
