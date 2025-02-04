@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoadingProgressView : MonoBehaviour
+namespace Rebel_Mage.UI
 {
-    [SerializeField] private Image _progressImage;
-
-    public void UpdateProgress(float percentProgress)
+    public class LoadingProgressView : MonoBehaviour
     {
-        _progressImage.fillAmount = percentProgress;
+        [SerializeField] private Image _progressImage;
+
+        public void UpdateProgress(float percentProgress)
+        {
+            _progressImage.fillAmount = percentProgress;
+        }
     }
 }

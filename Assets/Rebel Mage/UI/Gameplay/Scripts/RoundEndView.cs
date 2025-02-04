@@ -1,29 +1,36 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class RoundEndView : MonoBehaviour
+namespace Rebel_Mage.UI
 {
-    [SerializeField] private GameObject VictoryImage;
-    [SerializeField] private GameObject DefeatImage;
-    [SerializeField] private TextMeshProUGUI ScoreText;
-    
-    public void SetTitle(bool isVictory)
+    public class RoundEndView : MonoBehaviour
     {
-        VictoryImage.SetActive(false);
-        DefeatImage.SetActive(false);
+        [FormerlySerializedAs("VictoryImage")]
+        [SerializeField] private GameObject _victoryImage;
+        [FormerlySerializedAs("DefeatImage")]
+        [SerializeField] private GameObject _defeatImage;
+        [FormerlySerializedAs("ScoreText")]
+        [SerializeField] private TextMeshProUGUI _scoreText;
+    
+        public void SetTitle(bool isVictory)
+        {
+            _victoryImage.SetActive(false);
+            _defeatImage.SetActive(false);
         
-        if (isVictory)
-        {
-            VictoryImage.SetActive(true);
+            if (isVictory)
+            {
+                _victoryImage.SetActive(true);
+            }
+            else
+            {
+                _defeatImage.SetActive(true);
+            }
         }
-        else
-        {
-            DefeatImage.SetActive(true);
-        }
-    }
     
-    public void ShowCurrentPoints(int currentPoints)
-    {
-        ScoreText.text = currentPoints.ToString();
+        public void ShowCurrentPoints(int currentPoints)
+        {
+            _scoreText.text = currentPoints.ToString();
+        }
     }
 }

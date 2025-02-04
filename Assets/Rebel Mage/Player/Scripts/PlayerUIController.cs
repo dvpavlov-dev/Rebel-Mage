@@ -1,23 +1,26 @@
-﻿using Rebel_Mage.UI.Gameplay;
+﻿using Rebel_Mage.UI;
 using UnityEngine;
 using Zenject;
 
-[RequireComponent(typeof(ZenAutoInjecter))]
-public class PlayerUIController : MonoBehaviour
+namespace Rebel_Mage.Player
 {
-    private GameplayUI _gameplayUI;
-
-    [Inject]
-    private void Constructor(GameplayUI gameplayUI)
+    [RequireComponent(typeof(ZenAutoInjecter))]
+    public class PlayerUIController : MonoBehaviour
     {
-        _gameplayUI = gameplayUI;
-    }
+        private GameplayUI _gameplayUI;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        [Inject]
+        private void Constructor(GameplayUI gameplayUI)
         {
-            _gameplayUI.Menu.SetActive(!_gameplayUI.Menu.activeSelf);
+            _gameplayUI = gameplayUI;
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                _gameplayUI.Menu.SetActive(!_gameplayUI.Menu.activeSelf);
+            }
         }
     }
 }

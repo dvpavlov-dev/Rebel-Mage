@@ -6,7 +6,7 @@ namespace Rebel_Mage.Enemy
     [RequireComponent(typeof(BaseEnemyAI), typeof(BaseEnemyAbilities))]
     public class BaseEnemy : Enemy <BaseEnemyView>
     {
-        public override void InitEnemy(Configs.Configs configs, GameObject target, Action onDead)
+        public override void InitEnemy(Infrastructure.Configs configs, GameObject target, Action onDead)
         {
             _Config = configs.EnemyConfig.BaseEnemy;
             

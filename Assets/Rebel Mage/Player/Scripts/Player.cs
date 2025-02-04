@@ -17,7 +17,7 @@ namespace Rebel_Mage.Player
         private PlayerConfigSource _playerConfig;
 
         [Inject]
-        private void Constructor(Configs.Configs configs)
+        private void Constructor(Infrastructure.Configs configs)
         {
             _playerConfig = configs.PlayerConfig;
         }

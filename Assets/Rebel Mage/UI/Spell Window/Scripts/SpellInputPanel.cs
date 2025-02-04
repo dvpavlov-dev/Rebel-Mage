@@ -3,7 +3,7 @@ using Rebel_Mage.Configs.Source;
 using Rebel_Mage.Spell_system;
 using UnityEngine;
 
-namespace Rebel_Mage.UI.Spell_Window
+namespace Rebel_Mage.UI
 {
     public class SpellInputPanel : MonoBehaviour
     {

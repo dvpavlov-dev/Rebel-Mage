@@ -39,7 +39,7 @@ namespace Rebel_Mage.Enemy
             _AudioSource.playOnAwake = false;
         }
 
-        public virtual void InitEnemy(Configs.Configs configs, GameObject target, Action onDead)
+        public virtual void InitEnemy(Infrastructure.Configs configs, GameObject target, Action onDead)
         {
             EnemyView.Init(transform);
             _enemySm = new EnemyStateMachine<T>(this, _EnemyAI, _EnemyAbilities, EnemyView);

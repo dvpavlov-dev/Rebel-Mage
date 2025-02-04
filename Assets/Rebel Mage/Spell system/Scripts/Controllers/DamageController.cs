@@ -1,5 +1,5 @@
 using System;
-using Rebel_Mage.Player;
+using Rebel_Mage.UI;
 using UnityEngine;
 
 namespace Rebel_Mage.Spell_system

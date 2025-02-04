@@ -1,39 +1,45 @@
-using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[RequireComponent(typeof(AudioSource))]
-public class BackgroundMusicController : MonoBehaviour
+namespace Rebel_Mage.UI
 {
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip chooseSpellClip;
-    [SerializeField] private AudioClip battleClip;
+    [RequireComponent(typeof(AudioSource))]
+    public class BackgroundMusicController : MonoBehaviour
+    {
+        [FormerlySerializedAs("audioSource")]
+        [SerializeField] private AudioSource _audioSource;
+        [FormerlySerializedAs("chooseSpellClip")]
+        [SerializeField] private AudioClip _chooseSpellClip;
+        [FormerlySerializedAs("battleClip")]
+        [SerializeField] private AudioClip _battleClip;
 
-    public static BackgroundMusicController Instance;
+        public static BackgroundMusicController Instance;
     
-    private void Awake()
-    {
-        if (Instance != null)
+        private void Awake()
         {
-            Destroy(Instance);
-        }
+            if (Instance != null)
+            {
+                Destroy(Instance);
+            }
         
-        Instance = this;
-    }
+            Instance = this;
+        }
 
-    private void Start()
-    {
-        audioSource = GetComponent<AudioSource>();
-    }
+        private void Start()
+        {
+            _audioSource = GetComponent<AudioSource>();
+        }
 
-    public void ActivateChooseSpellClip()
-    {
-        audioSource.clip = chooseSpellClip;
-        audioSource.Play();
-    }
+        public void ActivateChooseSpellClip()
+        {
+            _audioSource.clip = _chooseSpellClip;
+            _audioSource.Play();
+        }
 
-    public void ActivateBattleClip()
-    {
-        audioSource.clip = battleClip;
-        audioSource.Play();
+        public void ActivateBattleClip()
+        {
+            _audioSource.clip = _battleClip;
+            _audioSource.Play();
+        }
     }
 }

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Rebel_Mage.Player
+namespace Rebel_Mage.UI
 {
     public class HealthUI : MonoBehaviour
     {

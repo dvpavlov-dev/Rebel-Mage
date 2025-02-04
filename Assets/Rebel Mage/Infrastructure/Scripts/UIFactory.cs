@@ -1,25 +1,29 @@
-﻿using UnityEngine;
+﻿using Rebel_Mage.UI;
+using UnityEngine;
 
-public class UIFactory : IUIFactory
+namespace Rebel_Mage.Infrastructure
 {
-    private readonly Prefabs _prefabs;
-    private LoadingCurtains _loadingCurtains;
-
-    public UIFactory(Prefabs prefabs) 
+    public class UIFactory : IUIFactory
     {
-        _prefabs = prefabs;
-    }
+        private readonly Prefabs _prefabs;
+        private LoadingCurtains _loadingCurtains;
 
-    public LoadingCurtains CreateLoadingCurtains()
-    {
-        _loadingCurtains ??= GameObject.Instantiate(_prefabs.LoadingCurtainsPref).GetComponent<LoadingCurtains>();
-        _loadingCurtains.Init();
+        public UIFactory(Prefabs prefabs) 
+        {
+            _prefabs = prefabs;
+        }
+
+        public LoadingCurtains CreateLoadingCurtains()
+        {
+            _loadingCurtains ??= GameObject.Instantiate(_prefabs.LoadingCurtainsPref).GetComponent<LoadingCurtains>();
+            _loadingCurtains.Init();
         
-        return _loadingCurtains;
+            return _loadingCurtains;
+        }
     }
-}
-
-public interface IUIFactory
-{
-    LoadingCurtains CreateLoadingCurtains();
+    
+    public interface IUIFactory
+    {
+        LoadingCurtains CreateLoadingCurtains();
+    }
 }

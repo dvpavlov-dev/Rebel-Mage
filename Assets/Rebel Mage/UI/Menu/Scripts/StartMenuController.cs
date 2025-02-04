@@ -1,32 +1,36 @@
+using Rebel_Mage.Infrastructure;
 using UnityEngine;
 using Zenject;
 
-public class StartMenuController : MonoBehaviour
+namespace Rebel_Mage.UI
 {
-    private ILoadingSceneService _loadingSceneServiceService;
+    public class StartMenuController : MonoBehaviour
+    {
+        private ILoadingSceneService _loadingSceneServiceService;
     
-    [Inject]
-    private void Constructor(ILoadingSceneService loadingSceneServiceService)
-    {
-        _loadingSceneServiceService = loadingSceneServiceService;
-    }
+        [Inject]
+        private void Constructor(ILoadingSceneService loadingSceneServiceService)
+        {
+            _loadingSceneServiceService = loadingSceneServiceService;
+        }
     
-    public void OnSelectedStart()
-    {
-        Invoke(nameof(LoadGamePlayScene), 0.2f); 
-    }
+        public void OnSelectedStart()
+        {
+            Invoke(nameof(LoadGamePlayScene), 0.2f); 
+        }
 
-    private void LoadGamePlayScene()
-    {
-        _loadingSceneServiceService.LoadScene("Gameplay");
-    }
+        private void LoadGamePlayScene()
+        {
+            _loadingSceneServiceService.LoadScene("Gameplay");
+        }
 
-    public void OnSelectedExit()
-    {
+        public void OnSelectedExit()
+        {
     #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
+            UnityEditor.EditorApplication.isPlaying = false;
     #else
         Application.Quit();
     #endif
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace Rebel_Mage.Infrastructure
     public class GlobalInstallers : MonoInstaller
     {
         [SerializeField] private Spells _spells;
-        [SerializeField] private Configs.Configs _configs;
+        [SerializeField] private Configs _configs;
         [SerializeField] private Prefabs _prefabs;
 
         private IFactorySpells _factorySpells;
@@ -43,7 +43,7 @@ namespace Rebel_Mage.Infrastructure
         private void BindConfigs()
         {
             Container
-                .Bind<Configs.Configs>()
+                .Bind<Configs>()
                 .FromInstance(_configs)
                 .AsSingle();
         }

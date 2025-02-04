@@ -17,13 +17,13 @@ namespace Rebel_Mage.Infrastructure
 
         private int _difficultyModifier = 1;
         private int _roundCount;
-        private Configs.Configs _configs;
+        private Configs _configs;
         private IEnemySpawner _enemySpawner;
         private IFactoryActors _factoryActors;
         private GameObject _player;
 
         [Inject]
-        private void Constructor(IEnemySpawner enemySpawner, Configs.Configs configs, IFactoryActors factoryActors)
+        private void Constructor(IEnemySpawner enemySpawner, Configs configs, IFactoryActors factoryActors)
         {
             _enemySpawner = enemySpawner;
             _configs = configs;

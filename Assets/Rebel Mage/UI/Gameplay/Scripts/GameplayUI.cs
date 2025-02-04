@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Rebel_Mage.UI.Gameplay
+namespace Rebel_Mage.UI
 {
     public class GameplayUI : MonoBehaviour
     {

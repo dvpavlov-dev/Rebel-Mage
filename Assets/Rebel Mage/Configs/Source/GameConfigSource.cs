@@ -1,8 +1,11 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GameConfig", menuName = "Configs/Game Config")]
-public class GameConfigSource : ScriptableObject
+namespace Rebel_Mage.Configs.Source
 {
-    public float RoundTime;
-    public int RoundsInGame;
+    [CreateAssetMenu(fileName = "GameConfig", menuName = "Configs/Game Config")]
+    public class GameConfigSource : ScriptableObject
+    {
+        public float RoundTime;
+        public int RoundsInGame;
+    }
 }

@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Rebel_Mage.Enemy;
-using Rebel_Mage.UI.Gameplay;
-using Rebel_Mage.UI.Spell_Window;
-using UnityEngine;
+using Rebel_Mage.UI;
 
 namespace Rebel_Mage.Infrastructure 
 {
@@ -13,12 +10,11 @@ namespace Rebel_Mage.Infrastructure
         
         private IExitableState _activeState;
 
-        public GameStateMachine(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI, IEnemySpawner enemySpawner, IFactoryActors factoryActors)
+        public GameStateMachine(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI, IFactoryActors factoryActors)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                // [typeof(BootstrapGame)] = new BootstrapGame(this),
-                [typeof(StartGame)] = new StartGame(this, enemySpawner, factoryActors),
+                [typeof(StartGame)] = new StartGame(this, factoryActors),
                 [typeof(ChangeAbility)] = new ChangeAbility(this, spellWindowController),
                 [typeof(StartRound)] = new StartRound(this, roundProcess, gameplayUI),
                 [typeof(EndRound)] = new EndRound(this, gameplayUI, roundProcess),
@@ -34,18 +30,6 @@ namespace Rebel_Mage.Infrastructure
             TState state = ChangeState<TState>();
             state.Enter();
         }
-
-        // public void Enter<TState, TPayload>(TPayload payload) where TState : class, IPayloadState<TPayload>
-        // {
-        //     TState state = ChangeState<TState>();
-        //     state.Enter(payload);
-        // }        
-        
-        // public void Enter<TState, TPayload1, TPayload2>(TPayload1 payload1, TPayload2 payload2) where TState : class, IPayloadState<TPayload1, TPayload2>
-        // {
-        //     TState state = ChangeState<TState>();
-        //     state.Enter(payload1, payload2);
-        // }
         
         private TState ChangeState<TState>() where TState : class, IExitableState
         {
@@ -71,105 +55,15 @@ namespace Rebel_Mage.Infrastructure
     {
         public void Exit();
     }
-
-    // public interface IPayloadState<TPayload> : IExitableState
-    // {
-    //     public void Enter(TPayload payload);
-    // }
-    //
-    // public interface IPayloadState<TPayload1, TPayload2> : IExitableState
-    // {
-    //     public void Enter(TPayload1 payload, TPayload2 payload2);
-    // }
-
-    // public class PreparingGameScene : IPayloadState<Action>
-    // {
-    //     private GameStateMachine _gameStateMachine;
-    //     
-    //     public PreparingGameScene(GameStateMachine gameStateMachine)
-    //     {
-    //         _gameStateMachine = gameStateMachine;
-    //     }
-    //     
-    //     public void Enter(Action payload)
-    //     {
-    //     }
-    //     
-    //     public void Exit()
-    //     {
-    //     }
-    // }
-
-    // public class LoadSceneState : IPayloadState<string, Action>
-    // {
-    //     private readonly LoadingCurtains _loadingCurtains;
-    //
-    //     public LoadSceneState(IEnemySpawner loadingCurtains)
-    //     {
-    //         _loadingCurtains = loadingCurtains;
-    //     }
-    //
-    //     private readonly CompositeDisposable _disposable = new();
-    //
-    //     public void Enter(string sceneName, Action onLoadedScene)
-    //     {
-    //         _loadingCurtains.Show();
-    //         var waitNextScene = SceneManager.LoadSceneAsync(sceneName);
-    //         StringBuilder progressText = new StringBuilder("0%");
-    //
-    //         Observable
-    //             .EveryUpdate()
-    //             .Subscribe(_ =>
-    //             {
-    //                 progressText.Insert(0, waitNextScene.progress);
-    //                 progressText.Append("%");
-    //                 _loadingCurtains.UpdateProgressText(progressText.ToString());
-    //                 
-    //                 if (waitNextScene.isDone)
-    //                 {
-    //                     _loadingCurtains.Hide();
-    //                     onLoadedScene?.Invoke();
-    //                 }
-    //             })
-    //             .AddTo(_disposable);
-    //     }
-    //     public void Exit()
-    //     {
-    //     }
-    // }
-
-    // public class BootstrapGame : IState
-    // {
-    //     private readonly GameStateMachine _gameStateMachine;
-    //     
-    //     public BootstrapGame(GameStateMachine gameStateMachine)
-    //     {
-    //         _gameStateMachine = gameStateMachine;
-    //     }
-    //     
-    //     public void Enter()
-    //     {
-    //         _gameStateMachine.Enter<LoadSceneState, string, Action>("Gameplay", () =>
-    //         {
-    //             _gameStateMachine.Enter<StartGame>();
-    //         });
-    //     }
-    //     
-    //     public void Exit()
-    //     {
-    //     }
-    // }
     
     public class StartGame : IState
     {
         private readonly GameStateMachine _gameStateMachine;
-        private readonly IEnemySpawner _enemySpawner;
         private readonly IFactoryActors _factoryActors;
 
-        public StartGame(GameStateMachine gameStateMachine, IEnemySpawner enemySpawner, IFactoryActors factoryActors)
+        public StartGame(GameStateMachine gameStateMachine, IFactoryActors factoryActors)
         {
             _gameStateMachine = gameStateMachine;
-            _enemySpawner = enemySpawner;
             _factoryActors = factoryActors;
         }
         

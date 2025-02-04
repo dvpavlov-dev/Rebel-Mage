@@ -1,6 +1,7 @@
+using Rebel_Mage.Configs;
 using UnityEngine;
 
-namespace Rebel_Mage.Configs
+namespace Rebel_Mage.Infrastructure
 {
     public class Configs : MonoBehaviour
     {

@@ -1,10 +1,13 @@
 using UnityEngine;
 
-public class Prefabs : MonoBehaviour
+namespace Rebel_Mage.Infrastructure
 {
-    [Header("UI")]
-    public GameObject LoadingCurtainsPref;
+    public class Prefabs : MonoBehaviour
+    {
+        [Header("UI")]
+        public GameObject LoadingCurtainsPref;
     
-    [Header("Player")]
-    public GameObject PlayerPref;
+        [Header("Player")]
+        public GameObject PlayerPref;
+    }
 }

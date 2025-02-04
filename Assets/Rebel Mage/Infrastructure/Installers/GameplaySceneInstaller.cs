@@ -1,6 +1,5 @@
 using Rebel_Mage.Enemy;
-using Rebel_Mage.UI.Gameplay;
-using Rebel_Mage.UI.Spell_Window;
+using Rebel_Mage.UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Zenject;

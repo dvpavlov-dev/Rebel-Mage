@@ -6,7 +6,7 @@ namespace Rebel_Mage.Enemy
     [RequireComponent(typeof(MeleeEnemyAI), typeof(MeleeEnemyAbilities))]
     public class MeleeEnemy : Enemy<MeleeEnemyView>
     {
-        public override void InitEnemy(Configs.Configs configs, GameObject target, Action onDead)
+        public override void InitEnemy(Infrastructure.Configs configs, GameObject target, Action onDead)
         {
             _Config = configs.EnemyConfig.MeleeEnemy;
             

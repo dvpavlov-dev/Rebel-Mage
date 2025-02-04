@@ -1,14 +1,17 @@
 using UnityEngine;
 
-public class DashEffectController : MonoBehaviour
+namespace Rebel_Mage.Player
 {
-    void Start()
+    public class DashEffectController : MonoBehaviour
     {
-        Invoke(nameof(DestroyEffect), 1f);
-    }
+        void Start()
+        {
+            Invoke(nameof(DestroyEffect), 1f);
+        }
 
-    private void DestroyEffect()
-    {
-        Destroy(gameObject);
+        private void DestroyEffect()
+        {
+            Destroy(gameObject);
+        }
     }
 }

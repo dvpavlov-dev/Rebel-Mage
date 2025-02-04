@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Rebel_Mage.UI.Spell_Window
+namespace Rebel_Mage.UI
 {
     public class SlotSpellInput : MonoBehaviour
     {

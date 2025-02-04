@@ -7,20 +7,21 @@ using Rebel_Mage.Configs;
 using Rebel_Mage.Enemy;
 using Object = UnityEngine.Object;
 using R3;
+using Rebel_Mage.UI;
 
 namespace Rebel_Mage.Infrastructure
 {
     public class FactoryActors : IFactoryActors
     {
         private readonly Prefabs _prefabs;
-        private readonly Configs.Configs _configs;
+        private readonly Configs _configs;
         private readonly IUIFactory _uIFactory;
         private readonly Dictionary<EnemyType, Queue<GameObject>> _enemyPools = new();
 
         private CompositeDisposable _disposable = new();
         private Transform _containerForEnemy;
 
-        public FactoryActors(Prefabs prefabs, Configs.Configs configs, IUIFactory uIFactory)
+        public FactoryActors(Prefabs prefabs, Configs configs, IUIFactory uIFactory)
         {
             _prefabs = prefabs;
             _configs = configs;

@@ -6,7 +6,7 @@ using Rebel_Mage.Configs.Source;
 using Rebel_Mage.Infrastructure;
 using Rebel_Mage.Spell_system;
 
-namespace Rebel_Mage.UI.Spell_Window
+namespace Rebel_Mage.UI
 {
     public class SpellCollection : MonoBehaviour
     {

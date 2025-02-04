@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace Rebel_Mage.UI.Spell_Window
+namespace Rebel_Mage.UI
 {
     public class SpellWindowController : MonoBehaviour
     {
