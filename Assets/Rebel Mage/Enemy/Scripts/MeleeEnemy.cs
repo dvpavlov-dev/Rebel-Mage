@@ -1,4 +1,5 @@
 ﻿using System;
+using Rebel_Mage.Infrastructure;
 using UnityEngine;
 
 namespace Rebel_Mage.Enemy
@@ -6,7 +7,7 @@ namespace Rebel_Mage.Enemy
     [RequireComponent(typeof(MeleeEnemyAI), typeof(MeleeEnemyAbilities))]
     public class MeleeEnemy : Enemy<MeleeEnemyView>
     {
-        public override void InitEnemy(Infrastructure.Configs configs, GameObject target, Action onDead)
+        public override void InitEnemy(Infrastructure.Configs configs, GameObject target, Action onDead, FactoryActors factoryActors)
         {
             _Config = configs.EnemyConfig.MeleeEnemy;
             
@@ -15,7 +16,7 @@ namespace Rebel_Mage.Enemy
             _EnemyAI = gameObject.GetComponent<MeleeEnemyAI>();
             _EnemyAbilities = gameObject.GetComponent<MeleeEnemyAbilities>();
 
-            base.InitEnemy(configs, target, onDead);
+            base.InitEnemy(configs, target, onDead, factoryActors);
 
             _DmgController.InitHealthPoints(_Config.Hp);
             _EnemyAI.SetupEnemyAI(_Config.MoveSpeed, target, _Config.StoppingDistance, EnemyView, this);

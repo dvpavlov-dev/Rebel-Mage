@@ -48,7 +48,7 @@ namespace Rebel_Mage.Enemy
         {
             for (int i = _enemyOnScene.Count - 1; i >= 0; i--)
             {
-                Destroy(_enemyOnScene[i]);
+                _enemyOnScene[i].SetActive(false);
             }
 
             _enemyOnScene.Clear();

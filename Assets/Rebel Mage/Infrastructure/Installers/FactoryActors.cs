@@ -81,7 +81,7 @@ namespace Rebel_Mage.Infrastructure
                     return Object.Instantiate(_configs.EnemyConfig.BaseEnemy.EnemyPref, _containerForEnemy);
 
                 case EnemyType.MELEE_ENEMY:
-                    return Object.Instantiate(_configs.EnemyConfig.BaseEnemy.EnemyPref, _containerForEnemy);
+                    return Object.Instantiate(_configs.EnemyConfig.MeleeEnemy.EnemyPref, _containerForEnemy);
 
                 default:
                     Debug.LogError("Enemy type not found");
@@ -203,7 +203,7 @@ namespace Rebel_Mage.Infrastructure
             meleeEnemy.transform.position = position;
             
             MeleeEnemy enemyController = meleeEnemy.GetComponent<MeleeEnemy>();
-            enemyController.InitEnemy(_configs, target, onDead);
+            enemyController.InitEnemy(_configs, target, onDead, this);
             pointsForEnemy = enemyController.PointsForEnemy;
             
             return meleeEnemy;
@@ -215,7 +215,7 @@ namespace Rebel_Mage.Infrastructure
             baseEnemy.transform.position = position;
             
             var enemyController = baseEnemy.GetComponent<BaseEnemy>();
-            enemyController.InitEnemy(_configs, target, onDead);
+            enemyController.InitEnemy(_configs, target, onDead, this);
             pointsForEnemy = enemyController.PointsForEnemy;
 
             return baseEnemy;

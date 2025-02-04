@@ -750,9 +750,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3505dd638012f249a287655e368229c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Menu: {fileID: 8888858294811106551}
-  RoundEnd: {fileID: 7066592302561479080}
-  SpellsPanel: {fileID: 6858859783069115663}
+  _menu: {fileID: 8888858294811106551}
+  _roundEnd: {fileID: 7066592302561479080}
+  _spellsPanel: {fileID: 6858859783069115663}
 --- !u!1 &1893334127914812477
 GameObject:
   m_ObjectHideFlags: 0
@@ -1884,9 +1884,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b1f620917831446ac5de9b533c48d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VictoryImage: {fileID: 6738260672320899779}
-  DefeatImage: {fileID: 3478388988020939375}
-  ScoreText: {fileID: 1570114016991649437}
+  _victoryImage: {fileID: 6738260672320899779}
+  _defeatImage: {fileID: 3478388988020939375}
+  _scoreText: {fileID: 1570114016991649437}
 --- !u!1 &7985063712655169196
 GameObject:
   m_ObjectHideFlags: 0
@@ -2010,6 +2010,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5439932429666988676}
     m_Modifications:
+    - target: {fileID: 3413104364242449761, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 8.500244
+      objectReference: {fileID: 0}
     - target: {fileID: 3596289024339043010, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2090,10 +2094,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4150882228233031479, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 138.67896
+      objectReference: {fileID: 0}
+    - target: {fileID: 4150882228233031479, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -51.60205
+      objectReference: {fileID: 0}
+    - target: {fileID: 5429566716803663832, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
+      propertyPath: _inputPanel
+      value: 
+      objectReference: {fileID: 4923191873608575950}
     - target: {fileID: 5429566716803663832, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
       propertyPath: readyButton
       value: 
       objectReference: {fileID: 5319669441537402583}
+    - target: {fileID: 5429566716803663832, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
+      propertyPath: _readyButton
+      value: 
+      objectReference: {fileID: 5319669441537402583}
+    - target: {fileID: 5429566716803663832, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
+      propertyPath: _spellCollection
+      value: 
+      objectReference: {fileID: 8427774203945349237}
     - target: {fileID: 8511244310422121670, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
       propertyPath: m_Name
       value: Spell Window
@@ -2128,6 +2152,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3596289024339043010, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
   m_PrefabInstance: {fileID: 3847909730556317156}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4923191873608575950 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8157203578248980010, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
+  m_PrefabInstance: {fileID: 3847909730556317156}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d22c403654ed1134681cb2168fe67f82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5319669441537402583 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8986307087764187955, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
@@ -2137,6 +2172,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8427774203945349237 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4725387062135029137, guid: 8b49e4eecd9e133488300d27d65794fe, type: 3}
+  m_PrefabInstance: {fileID: 3847909730556317156}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ac443ccb8e5ecb449b4b311dcbfd5d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &8098813953633213263

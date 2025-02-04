@@ -27,8 +27,6 @@ namespace Rebel_Mage.UI
 
         public void Show()
         {
-            Debug.Log("Loading screen show");
-        
             _loadingScreen
                 .DOFade(1, 1);
         
@@ -40,8 +38,6 @@ namespace Rebel_Mage.UI
 
         public void Hide()
         {
-            Debug.Log("Loading screen hide");
-
             _loadingScreen
                 .DOFade(0, 1);
         

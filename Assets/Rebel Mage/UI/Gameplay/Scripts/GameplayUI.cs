@@ -6,35 +6,33 @@ namespace Rebel_Mage.UI
 {
     public class GameplayUI : MonoBehaviour
     {
-        public GameObject Menu;
-        public GameObject RoundEnd;
-        public GameObject SpellsPanel;
+        [SerializeField] private GameObject _menu;
+        [SerializeField] private GameObject _roundEnd;
+        [SerializeField] private GameObject _spellsPanel;
 
-        public Action OnContinuePlay;
+        public GameObject Menu => _menu;
+        public GameObject SpellsPanel => _spellsPanel;
+        
+        public Action OnContinuePlay { get; set; }
 
         public void RoundOver(bool isVictory, int currentPointsCollected)
         {
-            Menu.SetActive(false);
-            RoundEnd.SetActive(true);
+            _menu.SetActive(false);
+            _roundEnd.SetActive(true);
 
-            RoundEndView roundEndView = RoundEnd.GetComponent<RoundEndView>();
+            RoundEndView roundEndView = _roundEnd.GetComponent<RoundEndView>();
             roundEndView.SetTitle(isVictory);
             roundEndView.ShowCurrentPoints(currentPointsCollected);
         }
 
-        public void OpenMenu()
-        {
-            Menu.SetActive(true);
-        }
-
         public void OnClickContinue()
         {
-            Menu.SetActive(false);
+            _menu.SetActive(false);
         }
 
         public void OnClickContinueRound()
         {
-            RoundEnd.SetActive(false);
+            _roundEnd.SetActive(false);
             OnContinuePlay?.Invoke();
         }
         
