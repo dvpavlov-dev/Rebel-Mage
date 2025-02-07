@@ -27,52 +27,29 @@ namespace Rebel_Mage.Infrastructure
 
         private void BindLoadingSceneService()
         {
-            Container
-                .Bind<ILoadingSceneService>()
-                .FromInstance(new LoadingSceneServiceService(_uIFactory))
-                .AsSingle();
+            Container.BindInterfacesTo<LoadingSceneServiceService>().AsSingle().WithArguments(_uIFactory).NonLazy();
         }
 
         private void BindPrefabs()
         {
-            Container
-                .Bind<Prefabs>()
-                .FromInstance(_prefabs)
-                .AsSingle();
+            Container.BindInstance(_prefabs).AsSingle().NonLazy();
         }
+        
         private void BindConfigs()
         {
-            Container
-                .Bind<Configs>()
-                .FromInstance(_configs)
-                .AsSingle();
+            Container.BindInstance(_configs).AsSingle().NonLazy();
         }
+        
         private void BindSpells()
         {
-            Container
-                .Bind<Spells>()
-                .FromInstance(_spells)
-                .AsSingle();
-
-            _spells.Constructor(_factorySpells);
+            Container.BindInstance(_spells).AsSingle().WithArguments(_factorySpells).NonLazy();
         }
 
         private void BindFactories()
         {
-            Container
-                .Bind<IFactoryActors>()
-                .FromInstance(new FactoryActors(_prefabs, _configs, _uIFactory))
-                .AsSingle();
-
-            Container
-                .Bind<IFactorySpells>()
-                .FromInstance(_factorySpells)
-                .AsSingle();
-            
-            Container
-                .Bind<IUIFactory>()
-                .FromInstance(new UIFactory(_prefabs))
-                .AsSingle();
+            Container.BindInterfacesTo<FactoryActors>().AsSingle().WithArguments(_prefabs, _configs, _uIFactory).NonLazy();
+            Container.BindInstance(_factorySpells).AsSingle().NonLazy();
+            Container.BindInterfacesTo<UIFactory>().AsSingle().WithArguments(_prefabs).NonLazy();
         }
     }
 }

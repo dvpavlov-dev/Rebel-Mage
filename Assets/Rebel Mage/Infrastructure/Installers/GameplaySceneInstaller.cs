@@ -30,42 +30,27 @@ namespace Rebel_Mage.Infrastructure
 
         private void BindEnemySpawner()
         {
-            Container
-                .Bind<IEnemySpawner>()
-                .FromInstance(_enemySpawner)
-                .AsSingle();
+            Container.Bind<IEnemySpawner>().FromInstance(_enemySpawner).AsSingle().NonLazy();
         }
         
         private void BindCameraManager()
         {
-            Container
-                .Bind<CameraManager>()
-                .FromInstance(_cameraManager)
-                .AsSingle();
+            Container.BindInstance(_cameraManager).AsSingle().NonLazy();
         }
 
         private void BindRoundProcess()
         {
-            Container
-                .Bind<IRoundProcess>()
-                .FromInstance(_roundProcess)
-                .AsSingle();
+            Container.Bind<IRoundProcess>().FromInstance(_roundProcess).AsSingle().NonLazy();
         }
 
         private void BindSpellWindow()
         {
-            Container
-                .Bind<SpellWindowController>()
-                .FromInstance(_spellWindowController)
-                .AsSingle();
+            Container.BindInstance(_spellWindowController).AsSingle().NonLazy();
         }
         
         private void BindGameplayUI()
         {
-            Container
-                .Bind<GameplayUI>()
-                .FromInstance(_gameplayUI)
-                .AsSingle();
+            Container.BindInstance(_gameplayUI).AsSingle().NonLazy();
         }
     }
 }

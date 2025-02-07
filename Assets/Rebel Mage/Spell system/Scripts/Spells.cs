@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Rebel_Mage.Configs.Source;
 using Rebel_Mage.Infrastructure;
 using UnityEngine;
+using Zenject;
 
 namespace Rebel_Mage.Spell_system
 {
@@ -21,6 +22,7 @@ namespace Rebel_Mage.Spell_system
         private CooldownController _cooldownController;
         private IFactorySpells _factorySpells;
 
+        [Inject]
         public void Constructor(IFactorySpells factorySpells)
         {
             _factorySpells = factorySpells;
