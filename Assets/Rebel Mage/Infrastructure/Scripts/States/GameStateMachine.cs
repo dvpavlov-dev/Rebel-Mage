@@ -10,11 +10,11 @@ namespace Rebel_Mage.Infrastructure
         
         private IExitableState _activeState;
 
-        public GameStateMachine(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI, IFactoryActors factoryActors)
+        public GameStateMachine(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI, IActorsFactory actorsFactory)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(StartGame)] = new StartGame(this, factoryActors),
+                [typeof(StartGame)] = new StartGame(this, actorsFactory),
                 [typeof(ChangeAbility)] = new ChangeAbility(this, spellWindowController),
                 [typeof(StartRound)] = new StartRound(this, roundProcess, gameplayUI),
                 [typeof(EndRound)] = new EndRound(this, gameplayUI, roundProcess),
@@ -59,17 +59,17 @@ namespace Rebel_Mage.Infrastructure
     public class StartGame : IState
     {
         private readonly GameStateMachine _gameStateMachine;
-        private readonly IFactoryActors _factoryActors;
+        private readonly IActorsFactory _actorsFactory;
 
-        public StartGame(GameStateMachine gameStateMachine, IFactoryActors factoryActors)
+        public StartGame(GameStateMachine gameStateMachine, IActorsFactory actorsFactory)
         {
             _gameStateMachine = gameStateMachine;
-            _factoryActors = factoryActors;
+            _actorsFactory = actorsFactory;
         }
         
         public void Enter()
         {
-            _factoryActors.InitFactoryActors(InitFactoryActorsEnded);
+            _actorsFactory.InitFactoryActors(InitFactoryActorsEnded);
         }
         
         public void Exit()

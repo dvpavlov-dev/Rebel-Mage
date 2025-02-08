@@ -7,7 +7,7 @@ namespace Rebel_Mage.Enemy
     [RequireComponent(typeof(BaseEnemyAI), typeof(BaseEnemyAbilities))]
     public class BaseEnemy : Enemy <BaseEnemyView>
     {
-        public override void InitEnemy(Infrastructure.Configs configs, GameObject target, Action onDead, FactoryActors factoryActors)
+        public override void InitEnemy(Infrastructure.Configs configs, GameObject target, Action onDead, ActorsFactory actorsFactory)
         {
             _Config = configs.EnemyConfig.BaseEnemy;
             
@@ -16,7 +16,7 @@ namespace Rebel_Mage.Enemy
             _EnemyAI = gameObject.GetComponent<BaseEnemyAI>();
             _EnemyAbilities = gameObject.GetComponent<BaseEnemyAbilities>();
             
-            base.InitEnemy(configs, target, onDead, factoryActors);
+            base.InitEnemy(configs, target, onDead, actorsFactory);
 
             _DmgController.InitHealthPoints(_Config.Hp);
             _EnemyAI.SetupEnemyAI(_Config.MoveSpeed, target, _Config.StoppingDistance, EnemyView, this);

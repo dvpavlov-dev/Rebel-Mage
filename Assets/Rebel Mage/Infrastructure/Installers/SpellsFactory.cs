@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace Rebel_Mage.Infrastructure
 {
-    public class FactorySpells : IFactorySpells
+    public class SpellsFactory : ISpellsFactory
     {
-        private IFactorySpells _factorySpellsImplementation;
-        
         public void CastSpell(GameObject owner, Animator animator, Transform spellPoint, SpellConfig spellConfig)
         {
             switch (spellConfig)
@@ -30,7 +28,7 @@ namespace Rebel_Mage.Infrastructure
             }
         }
 
-        private static void CastFireBall(GameObject owner, Animator animator, Transform spellPoint, FireBallConfigSource config)
+        private void CastFireBall(GameObject owner, Animator animator, Transform spellPoint, FireBallConfigSource config)
         {
             FireBallController controller = owner.GetComponent<FireBallController>();
             if (controller == null)
@@ -42,7 +40,7 @@ namespace Rebel_Mage.Infrastructure
             controller.CastSpell();
         }
         
-        private static void CastIceBall(GameObject owner, Animator animator, Transform spellPoint, IceBallConfigSource config)
+        private void CastIceBall(GameObject owner, Animator animator, Transform spellPoint, IceBallConfigSource config)
         {
             IceBallController controller = owner.GetComponent<IceBallController>();
             if (controller == null)
@@ -54,7 +52,7 @@ namespace Rebel_Mage.Infrastructure
             controller.CastSpell();
         }
 
-        private static void CastMagicSurge(GameObject owner, Animator animator, Transform spellPoint, MagicSurgeConfigSource config)
+        private void CastMagicSurge(GameObject owner, Animator animator, Transform spellPoint, MagicSurgeConfigSource config)
         {
             MagicSurgeController controller = owner.GetComponent<MagicSurgeController>();
             if (controller == null)
@@ -67,7 +65,7 @@ namespace Rebel_Mage.Infrastructure
         }
     }
 
-    public interface IFactorySpells
+    public interface ISpellsFactory
     {
         public void CastSpell(GameObject owner, Animator animator, Transform spellPoint, SpellConfig spellConfig);
     }

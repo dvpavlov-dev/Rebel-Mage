@@ -10,12 +10,12 @@ namespace Rebel_Mage.Infrastructure
         [SerializeField] private Configs _configs;
         [SerializeField] private Prefabs _prefabs;
 
-        private IFactorySpells _factorySpells;
+        private ISpellsFactory _spellsFactory;
         private IUIFactory _uIFactory;
 
         public override void InstallBindings()
         {
-            _factorySpells = new FactorySpells();
+            _spellsFactory = new SpellsFactory();
             _uIFactory = new UIFactory(_prefabs);
             
             BindSpells();
@@ -42,13 +42,13 @@ namespace Rebel_Mage.Infrastructure
         
         private void BindSpells()
         {
-            Container.BindInstance(_spells).AsSingle().WithArguments(_factorySpells).NonLazy();
+            Container.BindInstance(_spells).AsSingle().WithArguments(_spellsFactory).NonLazy();
         }
 
         private void BindFactories()
         {
-            Container.BindInterfacesTo<FactoryActors>().AsSingle().WithArguments(_prefabs, _configs, _uIFactory).NonLazy();
-            Container.BindInstance(_factorySpells).AsSingle().NonLazy();
+            Container.BindInterfacesTo<ActorsFactory>().AsSingle().WithArguments(_prefabs, _configs, _uIFactory).NonLazy();
+            Container.BindInstance(_spellsFactory).AsSingle().NonLazy();
             Container.BindInterfacesTo<UIFactory>().AsSingle().WithArguments(_prefabs).NonLazy();
         }
     }

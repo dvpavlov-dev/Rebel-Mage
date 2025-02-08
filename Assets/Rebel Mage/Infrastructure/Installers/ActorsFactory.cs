@@ -11,7 +11,7 @@ using Rebel_Mage.UI;
 
 namespace Rebel_Mage.Infrastructure
 {
-    public class FactoryActors : IFactoryActors
+    public class ActorsFactory : IActorsFactory
     {
         private readonly Prefabs _prefabs;
         private readonly Configs _configs;
@@ -21,7 +21,7 @@ namespace Rebel_Mage.Infrastructure
         private CompositeDisposable _disposable = new();
         private Transform _containerForEnemy;
 
-        public FactoryActors(Prefabs prefabs, Configs configs, IUIFactory uIFactory)
+        public ActorsFactory(Prefabs prefabs, Configs configs, IUIFactory uIFactory)
         {
             _prefabs = prefabs;
             _configs = configs;
@@ -227,7 +227,7 @@ namespace Rebel_Mage.Infrastructure
         }
     }
 
-    public interface IFactoryActors
+    public interface IActorsFactory
     {
         void InitFactoryActors(Action onEndInitialize);
 

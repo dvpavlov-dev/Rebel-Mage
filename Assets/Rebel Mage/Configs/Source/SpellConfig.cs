@@ -12,5 +12,4 @@ namespace Rebel_Mage.Configs.Source
         public string AnimationName;
         public float AnimationTime;
     }
-
 }

@@ -8,11 +8,11 @@ namespace Rebel_Mage.Spell_system
     {
         public GameObject SpellEffect;
         
-        private Rigidbody m_Rb;
+        private Rigidbody _rb;
 
         private void Awake()
         {
-            m_Rb = GetComponent<Rigidbody>();
+            _rb = GetComponent<Rigidbody>();
         }
 
         private void Start()
@@ -21,7 +21,7 @@ namespace Rebel_Mage.Spell_system
 
             Vector3 position = transform.position;
             
-            m_Rb.AddExplosionForce(Config.ExplosionForce, position, Config.ExplosionRadius, 0, ForceMode.Acceleration);
+            _rb.AddExplosionForce(Config.ExplosionForce, position, Config.ExplosionRadius, 0, ForceMode.Acceleration);
             Instantiate(SpellEffect, position, Quaternion.identity);
             
             Destroy(gameObject);
@@ -33,6 +33,5 @@ namespace Rebel_Mage.Spell_system
 
             ExplosionImpact(hitObject);
         }
-
     }
 }

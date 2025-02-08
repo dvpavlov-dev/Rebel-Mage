@@ -10,14 +10,14 @@ namespace Rebel_Mage.Infrastructure
         private IRoundProcess _roundProcess;
         private SpellWindowController _spellWindowController;
         private GameplayUI _gameplayUI;
-        private IFactoryActors _factoryActors;
+        private IActorsFactory _actorsFactory;
         private ILoadingSceneService _loadingSceneService;
 
         [Inject]
-        private void Constructor(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI, IFactoryActors factoryActors, ILoadingSceneService loadingSceneService)
+        private void Constructor(IRoundProcess roundProcess, SpellWindowController spellWindowController, GameplayUI gameplayUI, IActorsFactory actorsFactory, ILoadingSceneService loadingSceneService)
         {
             _loadingSceneService = loadingSceneService;
-            _factoryActors = factoryActors;
+            _actorsFactory = actorsFactory;
             _roundProcess = roundProcess;
             _spellWindowController = spellWindowController;
             _gameplayUI = gameplayUI;
@@ -27,7 +27,7 @@ namespace Rebel_Mage.Infrastructure
 
         private void StartGame()
         {
-            _stateMachine = new GameStateMachine(_roundProcess, _spellWindowController, _gameplayUI, _factoryActors);
+            _stateMachine = new GameStateMachine(_roundProcess, _spellWindowController, _gameplayUI, _actorsFactory);
         }
     }
 }

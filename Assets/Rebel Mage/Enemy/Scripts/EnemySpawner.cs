@@ -17,7 +17,7 @@ namespace Rebel_Mage.Enemy
         private readonly List<GameObject> _enemyOnScene = new();
         
         private int _enemyDestroyed;
-        private IFactoryActors _factoryActors;
+        private IActorsFactory _actorsFactory;
         private int _pointsForRound;
         private Random _rnd;
         private SpawnOneSide _spawnOneSide;
@@ -28,9 +28,9 @@ namespace Rebel_Mage.Enemy
             _spawnOneSide = new SpawnOneSide();
         }
 
-        public void SpawnEnemy(IFactoryActors factoryActors, RoundsConfigSource.RoundParameters roundParameters, int difficultyModifier, GameObject target)
+        public void SpawnEnemy(IActorsFactory actorsFactory, RoundsConfigSource.RoundParameters roundParameters, int difficultyModifier, GameObject target)
         {
-            _factoryActors ??= factoryActors;
+            _actorsFactory ??= actorsFactory;
             ClearEnemyList();
 
             foreach (RoundsConfigSource.EnemyParameters enemyParameters in roundParameters.EnemyParameters)
@@ -65,7 +65,7 @@ namespace Rebel_Mage.Enemy
             {
                 Vector3 position = SetPositionEnemy(spawnType);
 
-                GameObject enemy = _factoryActors.CreateEnemy(enemyType, position, target, SyncEnemyCount, out int pointsForEnemy);
+                GameObject enemy = _actorsFactory.CreateEnemy(enemyType, position, target, SyncEnemyCount, out int pointsForEnemy);
                 _enemyOnScene.Add(enemy);
 
                 enemy.SetActive(false);
@@ -153,6 +153,6 @@ namespace Rebel_Mage.Enemy
     {
         public Action<int> OnAllEnemyDestroyed { get; set; }
 
-        void SpawnEnemy(IFactoryActors factoryActors, RoundsConfigSource.RoundParameters roundParameters, int difficultyModifier, GameObject target);
+        void SpawnEnemy(IActorsFactory actorsFactory, RoundsConfigSource.RoundParameters roundParameters, int difficultyModifier, GameObject target);
     }
 }

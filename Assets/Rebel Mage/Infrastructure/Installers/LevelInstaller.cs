@@ -6,7 +6,7 @@ using Zenject;
 
 namespace Rebel_Mage.Infrastructure
 {
-    public class GameplaySceneInstaller : MonoInstaller
+    public class LevelInstaller : MonoInstaller
     {
         [FormerlySerializedAs("m_RoundProcess")]
         [SerializeField] private RoundProcess _roundProcess;

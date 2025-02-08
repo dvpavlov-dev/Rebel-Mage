@@ -20,12 +20,12 @@ namespace Rebel_Mage.Spell_system
         
         private CooldownController CooldownController => _cooldownController ??= new CooldownController(this);
         private CooldownController _cooldownController;
-        private IFactorySpells _factorySpells;
+        private ISpellsFactory _spellsFactory;
 
         [Inject]
-        public void Constructor(IFactorySpells factorySpells)
+        public void Constructor(ISpellsFactory spellsFactory)
         {
-            _factorySpells = factorySpells;
+            _spellsFactory = spellsFactory;
         }
         
         public void ClearSpells()
@@ -57,7 +57,7 @@ namespace Rebel_Mage.Spell_system
             if (TryGetSpell(typeSpell, out SpellConfig useSpell) && CooldownController.CheckCooldown(typeSpell, useSpell))
             {
                 CooldownController.SetGlobalCooldown(typeSpell);
-                _factorySpells.CastSpell(owner, animatorCastSpell, spellPoint, useSpell);
+                _spellsFactory.CastSpell(owner, animatorCastSpell, spellPoint, useSpell);
             }
         }
     }

@@ -25,10 +25,10 @@ namespace Rebel_Mage.Enemy
         protected AudioSource _AudioSource { get; set; }
 
         private EnemyStateMachine<T> _enemySm;
-        private IFactoryActors _factoryActors;
+        private IActorsFactory _actorsFactory;
 
         [Inject]
-        private void Constructor(IFactoryActors factoryActors)
+        private void Constructor(IActorsFactory actorsFactory)
         {
             // _factoryActors = factoryActors;
         }
@@ -39,9 +39,9 @@ namespace Rebel_Mage.Enemy
             _AudioSource.playOnAwake = false;
         }
 
-        public virtual void InitEnemy(Infrastructure.Configs configs, GameObject target, Action onDead, FactoryActors factoryActors)
+        public virtual void InitEnemy(Infrastructure.Configs configs, GameObject target, Action onDead, ActorsFactory actorsFactory)
         {
-            _factoryActors = factoryActors;
+            _actorsFactory = actorsFactory;
             EnemyView.Init(transform);
             _enemySm = new EnemyStateMachine<T>(this, _EnemyAI, _EnemyAbilities, EnemyView);
 
@@ -89,7 +89,7 @@ namespace Rebel_Mage.Enemy
         {
             if(gameObject.activeSelf)
             {
-                _factoryActors.DisposeEnemy(_Config.EnemyType, gameObject);
+                _actorsFactory.DisposeEnemy(_Config.EnemyType, gameObject);
             }
         }
     }

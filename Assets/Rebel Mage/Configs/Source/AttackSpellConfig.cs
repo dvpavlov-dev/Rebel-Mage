@@ -9,5 +9,4 @@ namespace Rebel_Mage.Configs.Source
         public float ExplosionRadius;
         public float ExplosionForce;
     }
-
 }

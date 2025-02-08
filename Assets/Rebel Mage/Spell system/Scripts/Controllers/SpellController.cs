@@ -1,4 +1,3 @@
-using Rebel_Mage.Configs.Source;
 using UnityEngine;
 
 namespace Rebel_Mage.Spell_system

@@ -147,7 +147,6 @@ namespace Rebel_Mage.UI
                                 SpellConfig changeSlot = _currentSelectedSlot.GetSpell();
                                 _currentSelectedSlot.SetSlot(slot.GetSpell());
                                 slot.SetSlot(changeSlot);
-                                // _currentSelectedSlot = null;
                             }
                             else
                             {

@@ -19,15 +19,15 @@ namespace Rebel_Mage.Infrastructure
         private int _roundCount;
         private Configs _configs;
         private IEnemySpawner _enemySpawner;
-        private IFactoryActors _factoryActors;
+        private IActorsFactory _actorsFactory;
         private GameObject _player;
 
         [Inject]
-        private void Constructor(IEnemySpawner enemySpawner, Configs configs, IFactoryActors factoryActors)
+        private void Constructor(IEnemySpawner enemySpawner, Configs configs, IActorsFactory actorsFactory)
         {
             _enemySpawner = enemySpawner;
             _configs = configs;
-            _factoryActors = factoryActors;
+            _actorsFactory = actorsFactory;
 
             _enemySpawner.OnAllEnemyDestroyed += EndRound;
         }
@@ -36,7 +36,7 @@ namespace Rebel_Mage.Infrastructure
         {
             if (_player == null)
             {
-                _player = _factoryActors.CreatePlayer(new Vector3(0, 0.1f, 0));
+                _player = _actorsFactory.CreatePlayer(new Vector3(0, 0.1f, 0));
                 _player.GetComponent<Player.Player>().OnDead = () => {
                     EndRound(TypeEndRound.PLAYER_LOST);
                 };
@@ -48,7 +48,7 @@ namespace Rebel_Mage.Infrastructure
                 _player.GetComponent<Player.Player>().InitPlayer();
             }
 
-            _enemySpawner.SpawnEnemy(_factoryActors, _configs.RoundsConfig.RoundParametersList[_roundCount], _difficultyModifier, _player);
+            _enemySpawner.SpawnEnemy(_actorsFactory, _configs.RoundsConfig.RoundParametersList[_roundCount], _difficultyModifier, _player);
 
             IsRoundInProgress = true;
         }
