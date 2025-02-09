@@ -1,3 +1,4 @@
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +13,7 @@ namespace Rebel_Mage.UI
 
         private float _maxHp;
         
-        private void Update()
+        private void LateUpdate()
         {
             if (Camera.main != null)
             {
@@ -20,22 +21,16 @@ namespace Rebel_Mage.UI
             }
         }
 
-        public void Constructor(float _maxHp)
+        public void Constructor(float maxHp)
         {
-            this._maxHp = _maxHp;
-            HpText.text = this._maxHp.ToString();
-
-            // if (Camera.main != null)
-            // {
-            //     cameraPosition = Camera.main.transform;
-            //     Debug.Log($"CameraPos: {cameraPosition}");
-            // }
+            _maxHp = maxHp;
+            HpText.text = _maxHp.ToString(CultureInfo.CurrentCulture);
         }
 
         public void UpdateHp(float currentHp)
         {
             ForegroundHp.fillAmount = currentHp / _maxHp;
-            HpText.text = currentHp.ToString();
+            HpText.text = currentHp.ToString(CultureInfo.CurrentCulture);
         }
     }
 }

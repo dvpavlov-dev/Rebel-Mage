@@ -9,53 +9,53 @@ namespace Rebel_Mage.Enemy
     public class EnemyAI<T> : MonoBehaviour, IImpact where T : EnemyView
     {
         public bool AgentEnabled {
-            get => m_Agent.enabled;
+            get => _agent.enabled;
             set 
             {
                 if (value)
                 {
-                    m_Agent.speed = 0;
-                    m_Agent.enabled = true;
-                    m_Agent.speed = m_MoveSpeed * MoveCoefficient;
+                    _agent.speed = 0;
+                    _agent.enabled = true;
+                    _agent.speed = _moveSpeed * MoveCoefficient;
                 }
                 else
                 {
-                    m_Agent.speed = m_MoveSpeed * MoveCoefficient;
-                    m_Agent.enabled = false;
-                    m_Agent.speed = 0;
+                    _agent.speed = _moveSpeed * MoveCoefficient;
+                    _agent.enabled = false;
+                    _agent.speed = 0;
                 }
             }
         }
         
         protected bool IsEnemySetup;
-        protected GameObject Target;
         protected float MoveCoefficient = 1;
-        protected Enemy<T> EnemyController;
         protected T EnemyView;
+        protected NavMeshAgent _agent;
 
-        protected NavMeshAgent m_Agent;
-        private float m_MoveSpeed;
-        private Coroutine m_TimerForSpeedEffects;
+        private GameObject _target;
+        private Enemy<T> _enemyController;
+        private float _moveSpeed;
+        private Coroutine _timerForSpeedEffects;
         
         public void SetupEnemyAI(float moveSpeed, GameObject target, float stoppingDistance, T enemyView, Enemy<T> enemy)
         {
-            Target = target;
-            m_MoveSpeed = moveSpeed;
+            _target = target;
+            _moveSpeed = moveSpeed;
             EnemyView = enemyView;
-            EnemyController = enemy;
+            _enemyController = enemy;
 
-            m_Agent = GetComponent<NavMeshAgent>();
-            m_Agent.speed = m_MoveSpeed;
-            m_Agent.stoppingDistance = stoppingDistance;
+            _agent = GetComponent<NavMeshAgent>();
+            _agent.speed = _moveSpeed;
+            _agent.stoppingDistance = stoppingDistance;
             
             IsEnemySetup = true;
         }
 
         protected virtual void FixedUpdate()
         {
-            if (!IsEnemySetup || !m_Agent.enabled) return;
+            if (!IsEnemySetup || !_agent.enabled) return;
 
-            m_Agent.SetDestination(Target.transform.position);
+            _agent.SetDestination(_target.transform.position);
         }
 
         private void OnDisable()
@@ -67,7 +67,7 @@ namespace Rebel_Mage.Enemy
 
         void IImpact.ExplosionImpact(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
-            EnemyController.SetRagdollActivatedState();
+            _enemyController.SetRagdollActivatedState();
             Hit(positionImpact, maxDistance, explosionForce);
         }
 
@@ -76,19 +76,19 @@ namespace Rebel_Mage.Enemy
             if (!gameObject.activeSelf) return;
 
             MoveCoefficient = 1 - slowdownPercentage;
-            m_Agent.speed = m_MoveSpeed * MoveCoefficient;
+            _agent.speed = _moveSpeed * MoveCoefficient;
 
-            if (m_TimerForSpeedEffects != null)
+            if (_timerForSpeedEffects != null)
             {
-                StopCoroutine(m_TimerForSpeedEffects);
+                StopCoroutine(_timerForSpeedEffects);
             }
 
-            m_TimerForSpeedEffects = StartCoroutine(ReturnSpeed(timeSlowdown));
+            _timerForSpeedEffects = StartCoroutine(ReturnSpeed(timeSlowdown));
         }
         
         private void Hit(Vector3 positionImpact, float maxDistance, float explosionForce)
         {
-            EnemyController.EnemyView.ReactionOnExplosion(positionImpact,maxDistance,explosionForce);
+            _enemyController.EnemyView.ReactionOnExplosion(positionImpact,maxDistance,explosionForce);
             
             if (!gameObject.activeSelf) return;
             
@@ -97,15 +97,15 @@ namespace Rebel_Mage.Enemy
 
         private IEnumerator ReturnControl()
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(0.1f);
             
-            EnemyController.SetMoveState();
+            _enemyController.SetMoveState();
         }
 
         private IEnumerator ReturnSpeed(float timeWhenReturn)
         {
             yield return new WaitForSeconds(timeWhenReturn);
-            m_Agent.speed = m_MoveSpeed;
+            _agent.speed = _moveSpeed;
             MoveCoefficient = 1;
         }
     }

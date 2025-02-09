@@ -7,7 +7,6 @@ namespace Rebel_Mage.Enemy
     [RequireComponent(typeof(Animator))]
     public class EnemyView : MonoBehaviour
     {
-
         protected Animator AnimationController;
         protected List<Rigidbody> Rigidbodies;
         public bool IsRigidBodyEnabled { get; protected set; }

@@ -67,6 +67,11 @@ namespace Rebel_Mage.Enemy
             _enemySm.ChangeState<RagdollActivatedState<T>>();
         }
 
+        private void SetDeadState()
+        {
+            _enemySm.ChangeState<DeadState<T>>();
+        }
+        
         private void OnDeadAction(Action onDead)
         {
             SetDeadState();
@@ -79,12 +84,7 @@ namespace Rebel_Mage.Enemy
             
             // _factoryActors.DisposeEnemy(_Config.EnemyType, gameObject);
         }
-
-        private void SetDeadState()
-        {
-            _enemySm.ChangeState<DeadState<T>>();
-        }
-
+        
         private void OnDisable()
         {
             if(gameObject.activeSelf)
@@ -200,7 +200,7 @@ namespace Rebel_Mage.Enemy
             _enemyAI.AgentEnabled = false;
             _enemyAbilities.CanAttack = false;
             
-            _enemyView.EnableRigidbody();
+            // _enemyView.EnableRigidbody();
         }
 
         public void Exit() {}
