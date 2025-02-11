@@ -8,21 +8,30 @@ namespace Rebel_Mage.Enemy
     [RequireComponent(typeof(NavMeshAgent))]
     public class EnemyAI<T> : MonoBehaviour, IImpact where T : EnemyView
     {
+        [SerializeField] private Rigidbody _rb;
+        
         public bool AgentEnabled {
             get => _agent.enabled;
             set 
             {
                 if (value)
                 {
+                    _rb.isKinematic = true;
+                    _rb.useGravity = false;
+                    
                     _agent.speed = 0;
                     _agent.enabled = true;
                     _agent.speed = _moveSpeed * MoveCoefficient;
                 }
                 else
                 {
-                    _agent.speed = _moveSpeed * MoveCoefficient;
-                    _agent.enabled = false;
+                    // _agent.speed = _moveSpeed * MoveCoefficient;
                     _agent.speed = 0;
+                    _agent.enabled = false;
+                    
+                    _rb.isKinematic = false;
+                    _rb.useGravity = true;
+                    _rb.velocity = Vector3.zero;
                 }
             }
         }
@@ -97,7 +106,7 @@ namespace Rebel_Mage.Enemy
 
         private IEnumerator ReturnControl()
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.2f);
             
             _enemyController.SetMoveState();
         }
